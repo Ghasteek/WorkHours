@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Settings">
+
+    <EditText
+        android:id="@+id/defaultInTimeEdit"
+        android:layout_width="65dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="200dp"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="44dp"
+        android:ems="10"
+        android:hint="6:00"
+        android:inputType="time"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/defaultOutTimeEdit"
+        android:layout_width="65dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="200dp"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="14:30"
+        android:inputType="time"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/defaultInTimeEdit" />
+
+    <EditText
+        android:id="@+id/defaultPause"
+        android:layout_width="65dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="200dp"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="0:30"
+        android:inputType="time"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/defaultOutTimeEdit" />
+
+</android.support.constraint.ConstraintLayout>
