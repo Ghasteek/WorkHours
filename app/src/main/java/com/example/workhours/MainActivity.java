@@ -147,6 +147,13 @@ public class MainActivity extends AppCompatActivity
             // pets table in the database).
             TextView displayView = (TextView) findViewById(R.id.text_view_table);
             displayView.setText("Number of rows in pets database table: " + cursor.getCount());
+            /*int i=0;                                                                                  // vypsani jmen sloupcu
+            String [] columnsArray = cursor.getColumnNames();
+            String columns = "";
+            for (i=0;i<cursor.getColumnCount();i++){
+                columns = columns + columnsArray[i] + ", ";
+            }
+            displayView.setText("jména slooupců: " + columns);*/
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
             // resources and makes it invalid.
