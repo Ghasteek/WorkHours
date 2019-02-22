@@ -15,8 +15,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.example.workhours.data.ShiftsContract.ShiftEntry;
+import com.example.workhours.data.ShiftsDbHelper;
 
 
 public class Shift extends AppCompatActivity {
@@ -26,6 +29,7 @@ public class Shift extends AppCompatActivity {
     private EditText breakLenght;
     private TextView shiftLenght;
     private EditText holidayType;
+    private ShiftsDbHelper mDbHelper;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -37,8 +41,7 @@ public class Shift extends AppCompatActivity {
                 onBackPressed();
                 return true;
             case (R.id.action_save):
-                //save_settings();
-                //onBackPressed();
+                addShift();
                 finish();
                 return true;
         }
@@ -66,6 +69,19 @@ public class Shift extends AppCompatActivity {
         shiftLenght = (TextView) findViewById(R.id.shiftLenghtView);
         holidayType = (EditText) findViewById(R.id.holidayTypeEdit);
         // TODO spinner??
+    }
+
+    public void addShift (){
+        int dateInt =
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        ContentValues shiftValues = new ContentValues();
+        shiftValues.put(ShiftEntry.COLUMN_DATE, dateInt);
+        shiftValues.put(ShiftEntry.COLUMN_ARRIVAL, arriveTimeInt);
+        shiftValues.put(ShiftEntry.COLUMN_DEPARTURE, departureTimeInt);
+        shiftValues.put(ShiftEntry.COLUMN_BREAK_LENGHT, breakLenghtInt);
+        shiftValues.put(ShiftEntry.COLUMN_SHIFT_LENGHT, shiftLenghtInt);
+        shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, holidayTypeInt);
+        long newRowId =  db.insert(ShiftEntry.TABLE_NAME, null, shiftValues);
     }
 
 }
