@@ -7,7 +7,7 @@
     tools:context=".Settings">
 
     <EditText
-        android:id="@+id/defaultInTimeEdit"
+        android:id="@+id/dateEdit"
         android:layout_width="65dp"
         android:layout_height="52dp"
         android:layout_marginStart="200dp"
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/defaultOutTimeEdit"
+        android:id="@+id/arrivalEdit"
         android:layout_width="65dp"
         android:layout_height="52dp"
         android:layout_marginStart="200dp"
@@ -32,7 +32,7 @@
         android:inputType="time"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/defaultInTimeEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/dateEdit" />
 
     <EditText
         android:id="@+id/defaultPause"
@@ -46,6 +46,6 @@
         android:inputType="time"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/defaultOutTimeEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/arrivalEdit" />
 
 </android.support.constraint.ConstraintLayout>

@@ -2,6 +2,8 @@ package com.example.workhours.data;
 
 import android.provider.BaseColumns;
 
+import java.lang.reflect.Array;
+
 public final class ShiftsContract {
 
     private ShiftsContract(){}
@@ -24,5 +26,6 @@ public final class ShiftsContract {
         public final static int HOLIDAY_COMPENSATION = 1;                                               // nahradni volno
         public final static int HOLIDAY_PUBLIC = 2;                                                     // statni svatek
         public final static int HOLIDAY_VACATION = 3;                                                   // dovolena
+        public final static int[] arrayHolidayOptions = {0, 1, 2, 3};
     }
 }

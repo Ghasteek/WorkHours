@@ -2,6 +2,7 @@ package com.example.workhours;
 
 import android.app.Application;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity
     TextView pickedTimeIn;
     TextView pickedTimeOut;
     SharedPreferences pref;
+    private ShiftsDbHelper mDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +125,7 @@ public class MainActivity extends AppCompatActivity
         }
 
     // testovaci kus kodu
+        mDbHelper = new ShiftsDbHelper(this);
 
         displayDatabaseInfo();
     }
@@ -134,7 +137,7 @@ public class MainActivity extends AppCompatActivity
     private void displayDatabaseInfo() {
         // To access our database, we instantiate our subclass of SQLiteOpenHelper
         // and pass the context, which is the current activity.
-        ShiftsDbHelper mDbHelper = new ShiftsDbHelper(this);
+        //ShiftsDbHelper mDbHelper = new ShiftsDbHelper(this);
 
         // Create and/or open a database to read from it
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
@@ -190,6 +193,12 @@ public class MainActivity extends AppCompatActivity
             } else {calculatedView.setText(hours + ":0" + minutes);}
         }
     }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        displayDatabaseInfo();
+    }
                                                                                                         // po sem je definice buttonu a jeho onclickListeneru + onTimeSet abz vratil cas
     @Override
     public void onBackPressed() {
@@ -217,8 +226,16 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         switch (item.getItemId()){                                                                     // akce po kliknutí na Settings z menu/main
             case R.id.action_settings:
-                Intent intent = new Intent(MainActivity.this, Settings.class);
-                startActivity(intent);
+                Intent settings = new Intent(MainActivity.this, Settings.class);
+                startActivity(settings);
+                return true;
+            case R.id.action_dummyData:
+                insertDummyData();
+                displayDatabaseInfo();
+                return true;
+            case R.id.action_add:
+                Intent addIntent = new Intent(MainActivity.this, Shift.class);
+                startActivity(addIntent);
                 return true;
         }
 
@@ -249,6 +266,19 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    public void insertDummyData (){
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        ContentValues shiftValues = new ContentValues();
+            shiftValues.put(ShiftEntry.COLUMN_DATE, 20190222);
+            shiftValues.put(ShiftEntry.COLUMN_ARRIVAL, 360);
+            shiftValues.put(ShiftEntry.COLUMN_DEPARTURE, 915);
+            shiftValues.put(ShiftEntry.COLUMN_BREAK_LENGHT, 30);
+            shiftValues.put(ShiftEntry.COLUMN_SHIFT_LENGHT, 525);
+            shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, ShiftEntry.HOLIDAY_SHIFT);
+        long newRowId =  db.insert(ShiftEntry.TABLE_NAME, null, shiftValues);
     }
 
     public void plusH(View view) {

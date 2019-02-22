@@ -1,20 +1,12 @@
 package com.example.workhours;
 
-import android.app.ActionBar;
-import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Toast;
 
 public class Settings extends AppCompatActivity {
 
@@ -41,7 +33,8 @@ public class Settings extends AppCompatActivity {
         MainActivity.Globals.timeInMinutes = Integer.parseInt(timeInArray[1]);
         MainActivity.Globals.timeOutHours = Integer.parseInt(timeOutArray[0]);
         MainActivity.Globals.timeOutMinutes = Integer.parseInt(timeOutArray[1]);
-        editor.commit();                                                                                    // TODO snackBar info o ulozeni
+        editor.commit();
+        Toast.makeText(this, "Settings saved.", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -56,6 +49,7 @@ public class Settings extends AppCompatActivity {
             case (R.id.action_save):
                 save_settings();
                 //onBackPressed();
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -76,8 +70,8 @@ public class Settings extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
         pref = getApplicationContext().getSharedPreferences("Settings", 0);             // definovani SharedPreference a dvou editu
-        timeIn = (EditText) findViewById(R.id.defaultInTimeEdit);
-        timeOut = (EditText) findViewById(R.id.defaultOutTimeEdit);
+        timeIn = (EditText) findViewById(R.id.dateEdit);
+        timeOut = (EditText) findViewById(R.id.arrivalEdit);
         pause = (EditText) findViewById(R.id.defaultPause);
         if (pref.contains("defaultInTime")){
             timeIn.setText(pref.getString("defaultInTime", ""));

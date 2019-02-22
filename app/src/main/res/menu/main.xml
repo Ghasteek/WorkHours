@@ -8,4 +8,18 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_dummyData"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_upload"
+        android:orderInCategory="100"
+        android:title="@string/action_dummy"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_add"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_upload"
+        android:orderInCategory="100"
+        android:title="@string/action_add"
+        app:showAsAction="never" />
 </menu>
