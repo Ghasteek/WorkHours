@@ -1,5 +1,6 @@
 package com.example.workhours.data;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 import java.lang.reflect.Array;
@@ -8,7 +9,13 @@ public final class ShiftsContract {
 
     private ShiftsContract(){}
 
+    public final static String CONTENT_AUTHORITY = "com.example.workhours";
+    public final static Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    public final static String PATH_SHIFTS = "shifts";
+
+
     public static final class ShiftEntry implements BaseColumns{
+        public final static Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_SHIFTS);
 
         public final static String TABLE_NAME = "shifts";
 

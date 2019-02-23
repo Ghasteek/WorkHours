@@ -125,8 +125,8 @@ public class MainActivity extends AppCompatActivity
         }
 
     // testovaci kus kodu
-        mDbHelper = new ShiftsDbHelper(this);
 
+        mDbHelper = new ShiftsDbHelper(this);
         displayDatabaseInfo();
     }
 
@@ -135,31 +135,53 @@ public class MainActivity extends AppCompatActivity
      * the pets database.
      */
     private void displayDatabaseInfo() {
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity.
-        //ShiftsDbHelper mDbHelper = new ShiftsDbHelper(this);
-
-        // Create and/or open a database to read from it
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
-        // Perform this raw SQL query "SELECT * FROM pets"
-        // to get a Cursor that contains all rows from the pets table.
-        Cursor cursor = db.rawQuery("SELECT * FROM " + ShiftEntry.TABLE_NAME, null);
+        String[] projection = {
+                ShiftEntry.COLUMN_DATE,
+                ShiftEntry.COLUMN_ARRIVAL,
+                ShiftEntry.COLUMN_DEPARTURE,
+                ShiftEntry.COLUMN_BREAK_LENGHT,
+                ShiftEntry.COLUMN_SHIFT_LENGHT,
+                ShiftEntry.COLUMN_HOLIDAY
+        };
+
+        String selection = ShiftEntry.COLUMN_HOLIDAY + "=?";
+
+        String[] selectionArgs = new String[] { String.valueOf(ShiftEntry.HOLIDAY_PUBLIC) };
+
+        Cursor cursor = db.query(ShiftEntry.TABLE_NAME, projection,  selection, selectionArgs, null, null,null);
+
+        TextView displayView = (TextView) findViewById(R.id.text_view_table);
+
+        int dateColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_DATE);
+        int arrivalColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_ARRIVAL);
+        int departureColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_DEPARTURE);
+        int breakColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_BREAK_LENGHT);
+        int shiftColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_SHIFT_LENGHT);
+        int holidayColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_HOLIDAY);
+
         try {
-            // Display the number of rows in the Cursor (which reflects the number of rows in the
-            // pets table in the database).
-            TextView displayView = (TextView) findViewById(R.id.text_view_table);
-            displayView.setText("Number of rows in pets database table: " + cursor.getCount());
-            /*int i=0;                                                                                  // vypsani jmen sloupcu
+            displayView.setText("Number of rows in shifts database table: " + cursor.getCount() + "\n\n");
+            int i=0;                                                                                  // vypsani jmen sloupcu
             String [] columnsArray = cursor.getColumnNames();
             String columns = "";
             for (i=0;i<cursor.getColumnCount();i++){
                 columns = columns + columnsArray[i] + ", ";
             }
-            displayView.setText("jména slooupců: " + columns);*/
+            displayView.append("jména slooupců: " + columns);
+
+            while (cursor.moveToNext()){
+                int date = cursor.getInt(dateColumnIndex);
+                int arrival = cursor.getInt(arrivalColumnIndex);
+                int departure = cursor.getInt(departureColumnIndex);
+                int breakLenght = cursor.getInt(breakColumnIndex);
+                int shift = cursor.getInt(shiftColumnIndex);
+                int holiday = cursor.getInt(holidayColumnIndex);
+
+                displayView.append(("\n" + date + " - " + arrival + " - " + departure + " - " + breakLenght + " - " + shift + " - " + holiday));
+            }
         } finally {
-            // Always close the cursor when you're done reading from it. This releases all its
-            // resources and makes it invalid.
             cursor.close();
         }
     }
@@ -170,7 +192,7 @@ public class MainActivity extends AppCompatActivity
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         if (Globals.whichTinme == "IN"){
             TextView timeInView = (TextView) findViewById(R.id.pickedTimeInView);
-            int minLength = (int) (Math.log10(minute) + 1);                                                     // logarztmicka metoda yjisteni poctu cifer v cisle
+            int minLength = (int) (Math.log10(minute) + 1);                                                     // logarytmicka metoda zjisteni poctu cifer v cisle
             if (minLength == 2){
                 timeInView.setText(hourOfDay + ":" + minute);
             } else {timeInView.setText(hourOfDay + ":0" + minute);}

@@ -20,6 +20,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.workhours.data.ShiftsContract.ShiftEntry;
 import com.example.workhours.data.ShiftsDbHelper;
+import com.example.workhours.Tools;
 
 
 public class Shift extends AppCompatActivity {
@@ -69,10 +70,29 @@ public class Shift extends AppCompatActivity {
         shiftLenght = (TextView) findViewById(R.id.shiftLenghtView);
         holidayType = (EditText) findViewById(R.id.holidayTypeEdit);
         // TODO spinner??
+
+        mDbHelper = new ShiftsDbHelper(this);
     }
 
     public void addShift (){
-        int dateInt =
+        String dateHELP = date.getText().toString();                                                    // prevod datumu na integer ve formatu RRRRMMDD
+        int dateInt = Tools.dateStrToInt(dateHELP);
+
+        String arrivalHelp = arriveTime.getText().toString();                                           // prevod casu prichodu na integer v minutach
+        int arriveTimeInt = Tools.timeStrToInt(arrivalHelp);
+
+        String departureHelp = departureTime.getText().toString();                                      // prevod casu odchodu na integer v minutach
+        int departureTimeInt = Tools.timeStrToInt(departureHelp);
+
+        String breakHelp = breakLenght.getText().toString();                                            // prevod delky pauzy na integer v minutach
+        int breakLenghtInt = Tools.timeStrToInt(breakHelp);
+
+        int shiftLenghtInt = departureTimeInt - arriveTimeInt - breakLenghtInt;                         // vypocet delky smeny
+
+        String holidayHelp = holidayType.getText().toString();                                          // prevod zadaneho typu (smena/dovolena/nahradni volno) na integer
+        int holidayTypeInt = Integer.parseInt(holidayHelp);
+
+
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         ContentValues shiftValues = new ContentValues();
         shiftValues.put(ShiftEntry.COLUMN_DATE, dateInt);
@@ -82,6 +102,9 @@ public class Shift extends AppCompatActivity {
         shiftValues.put(ShiftEntry.COLUMN_SHIFT_LENGHT, shiftLenghtInt);
         shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, holidayTypeInt);
         long newRowId =  db.insert(ShiftEntry.TABLE_NAME, null, shiftValues);
+        if (newRowId == -1) {
+            Toast.makeText(this, "Error while putting data to db!", Toast.LENGTH_SHORT).show();
+        } else {Toast.makeText(this, "Data added to db on row " + newRowId + ".", Toast.LENGTH_SHORT).show();}
     }
 
 }
