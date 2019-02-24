@@ -34,4 +34,4 @@ public class ShiftsDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
         //TODO dokoncit on upgrade classu
     }
-} //TODO dokoncit helper class
+}

@@ -2,9 +2,11 @@ package com.example.workhours;
 
 import android.app.Application;
 import android.app.TimePickerDialog;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,9 +26,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 import com.example.workhours.data.ShiftsContract.ShiftEntry;
 import com.example.workhours.data.ShiftsDbHelper;
+import com.example.workhours.data.ShiftsProvider;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener {    // pro time picker t5eba implementovat TimePickerDialog.OnTimeSetListener
@@ -135,22 +139,27 @@ public class MainActivity extends AppCompatActivity
      * the pets database.
      */
     private void displayDatabaseInfo() {
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
         String[] projection = {
                 ShiftEntry.COLUMN_DATE,
                 ShiftEntry.COLUMN_ARRIVAL,
                 ShiftEntry.COLUMN_DEPARTURE,
                 ShiftEntry.COLUMN_BREAK_LENGHT,
                 ShiftEntry.COLUMN_SHIFT_LENGHT,
-                ShiftEntry.COLUMN_HOLIDAY
-        };
+                ShiftEntry.COLUMN_HOLIDAY};
 
         String selection = ShiftEntry.COLUMN_HOLIDAY + "=?";
 
         String[] selectionArgs = new String[] { String.valueOf(ShiftEntry.HOLIDAY_PUBLIC) };
 
-        Cursor cursor = db.query(ShiftEntry.TABLE_NAME, projection,  selection, selectionArgs, null, null,null);
+        Cursor cursor = getContentResolver().query(
+                ShiftEntry.CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
+                null);
+
+        /*SQLiteDatabase db = mDbHelper.getReadableDatabase();                                                          // kontakt primo na db
+        Cursor cursor = db.query(ShiftEntry.TABLE_NAME, projection,  selection, selectionArgs, null, null,null);*/
 
         TextView displayView = (TextView) findViewById(R.id.text_view_table);
 
@@ -163,15 +172,14 @@ public class MainActivity extends AppCompatActivity
 
         try {
             displayView.setText("Number of rows in shifts database table: " + cursor.getCount() + "\n\n");
-            int i=0;                                                                                  // vypsani jmen sloupcu
-            String [] columnsArray = cursor.getColumnNames();
-            String columns = "";
-            for (i=0;i<cursor.getColumnCount();i++){
-                columns = columns + columnsArray[i] + ", ";
-            }
-            displayView.append("jména slooupců: " + columns);
+            displayView.append(ShiftEntry.COLUMN_DATE + " - " +
+                    ShiftEntry.COLUMN_ARRIVAL + " - " +
+                    ShiftEntry.COLUMN_DEPARTURE + " - " +
+                    ShiftEntry.COLUMN_BREAK_LENGHT + " - " +
+                    ShiftEntry.COLUMN_SHIFT_LENGHT + " - " +
+                    ShiftEntry.COLUMN_HOLIDAY + "/n");                                                  // vypsani jmen sloupcu
 
-            while (cursor.moveToNext()){
+            while (cursor.moveToNext()){                                                                // vypsani obsahu cursoru
                 int date = cursor.getInt(dateColumnIndex);
                 int arrival = cursor.getInt(arrivalColumnIndex);
                 int departure = cursor.getInt(departureColumnIndex);
@@ -292,15 +300,17 @@ public class MainActivity extends AppCompatActivity
 
 
     public void insertDummyData (){
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
         ContentValues shiftValues = new ContentValues();
-            shiftValues.put(ShiftEntry.COLUMN_DATE, 20190222);
+            shiftValues.put(ShiftEntry.COLUMN_DATE, 20190123);
             shiftValues.put(ShiftEntry.COLUMN_ARRIVAL, 360);
             shiftValues.put(ShiftEntry.COLUMN_DEPARTURE, 915);
             shiftValues.put(ShiftEntry.COLUMN_BREAK_LENGHT, 30);
             shiftValues.put(ShiftEntry.COLUMN_SHIFT_LENGHT, 525);
-            shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, ShiftEntry.HOLIDAY_SHIFT);
-        long newRowId =  db.insert(ShiftEntry.TABLE_NAME, null, shiftValues);
+            shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, ShiftEntry.HOLIDAY_PUBLIC);
+        Uri newUri = getContentResolver().insert(ShiftEntry.CONTENT_URI, shiftValues);
+        if (newUri == null) {
+            Toast.makeText(this, getText(R.string.editor_insert_shift_failed), Toast.LENGTH_SHORT).show();
+        } else {Toast.makeText(this, getText(R.string.editor_insert_shift_successful), Toast.LENGTH_SHORT).show();}
     }
 
     public void plusH(View view) {
