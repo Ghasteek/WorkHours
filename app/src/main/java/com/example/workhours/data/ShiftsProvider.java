@@ -8,6 +8,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
+import android.app.Application;
+import android.content.res.Resources;
 
 import com.example.workhours.data.ShiftsContract.ShiftEntry;
 
@@ -66,27 +68,53 @@ public class ShiftsProvider extends ContentProvider {
                         sortOrder);
                 break;
             default:
-                throw new IllegalArgumentException("@string/message_wrong_uri" + uri);
+                throw new IllegalArgumentException( "Cannot query unknown URI " + uri);
         }
         return cursor;
     }
 
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {                                           // TODO dodělat validaci input dat z contentValues
+
         final int match = sUriMatcher.match(uri);
         switch (match){
             case SHIFTS:
                 return insertShift(uri, contentValues);
             default:
-                throw new IllegalArgumentException("@string/message_query_not_supported" + uri);
+                throw new IllegalArgumentException( "Insertion is not supported for " + uri);
         }
     }
 
     private Uri insertShift(Uri uri, ContentValues values){
+        // data check
+        int date =  values.getAsInteger(ShiftEntry.COLUMN_DATE);
+        if (date == 0){
+            throw new IllegalArgumentException( "Date needed.");
+        }
+        int arrival = values.getAsInteger(ShiftEntry.COLUMN_ARRIVAL);
+        if ((arrival > 1439) || (arrival == 0)){
+            throw new IllegalArgumentException( "Arrival time invalid.");
+        }
+        int departure = values.getAsInteger(ShiftEntry.COLUMN_DEPARTURE);
+        if ((departure > 1439) || (departure == 0)){
+            throw new IllegalArgumentException( "Departure time invalid.");
+        }
+        if (arrival > departure){
+            throw new IllegalArgumentException( "Arrival time must be before departure.");
+        }
+        int breakLenght = values.getAsInteger(ShiftEntry.COLUMN_BREAK_LENGHT);
+        if ((breakLenght > 1439) || (breakLenght == 0)){
+            throw new IllegalArgumentException( "Break lenght invalid.");
+        }
+        int holiday = values.getAsInteger(ShiftEntry.COLUMN_HOLIDAY);
+        if (!ShiftEntry.isValidHoliday(holiday)){
+            throw new IllegalArgumentException( "Holiday selection invalid.");
+        }
+
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
         long id = database.insert(ShiftEntry.TABLE_NAME, null, values);
         if (id == -1) {
-            Log.e(LOG_TAG, "@string/message_query_failed" + uri);
+            Log.e(LOG_TAG, "Failed to insert row for " + uri);
         }
         return ContentUris.withAppendedId(uri, id);
     }

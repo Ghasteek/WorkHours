@@ -108,5 +108,4 @@ public class Shift extends AppCompatActivity {
             Toast.makeText(this, getText(R.string.editor_insert_shift_failed), Toast.LENGTH_SHORT).show();
         } else {Toast.makeText(this, getText(R.string.editor_insert_shift_successful), Toast.LENGTH_SHORT).show();}
     }
-
 }

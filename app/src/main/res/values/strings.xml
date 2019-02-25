@@ -8,9 +8,6 @@
     <string name="action_settings">Settings</string>
     <string name="action_dummy">Insert Dummy Data</string>
     <string name="action_add">Add new shift data</string>
-    <string name="message_query_failed">Failed to insert row for </string>
-    <string name="message_query_not_supported">Insertionis not supported for </string>
-    <string name="message_wrong_uri">Cannot query unknown URI </string>
     <string name="editor_insert_shift_failed">Error while saving shift</string>
     <string name="editor_insert_shift_successful">Shift saved</string>
 </resources>

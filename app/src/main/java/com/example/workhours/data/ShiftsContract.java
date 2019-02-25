@@ -34,5 +34,12 @@ public final class ShiftsContract {
         public final static int HOLIDAY_PUBLIC = 2;                                                     // statni svatek
         public final static int HOLIDAY_VACATION = 3;                                                   // dovolena
         public final static int[] arrayHolidayOptions = {0, 1, 2, 3};
+
+        public static boolean isValidHoliday(int holiday) {
+            if (holiday == HOLIDAY_SHIFT || holiday == HOLIDAY_COMPENSATION || holiday == HOLIDAY_PUBLIC || holiday == HOLIDAY_VACATION ) {
+                return true;
+            }
+            return false;
+        }
     }
 }
