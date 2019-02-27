@@ -111,6 +111,8 @@ public class ShiftsProvider extends ContentProvider {
             throw new IllegalArgumentException( "Holiday selection invalid.");
         }
 
+        //data insertion into the database
+
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
         long id = database.insert(ShiftEntry.TABLE_NAME, null, values);
         if (id == -1) {
@@ -124,7 +126,50 @@ public class ShiftsProvider extends ContentProvider {
      */
     @Override
     public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
-        return 0;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case SHIFTS:
+                return updateShift(uri, contentValues, selection, selectionArgs);
+            case SHIFT_ID:
+                selection = ShiftEntry._ID + "=?";
+                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                return updateShift(uri, contentValues, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Update is not supported for " + uri);
+        }
+    }
+
+    public int updateShift (Uri uri, ContentValues values, String selection, String[] selectionArgs ){
+        // data check
+        int date =  values.getAsInteger(ShiftEntry.COLUMN_DATE);
+        if (date == 0){
+            throw new IllegalArgumentException( "Date needed.");
+        }
+        int arrival = values.getAsInteger(ShiftEntry.COLUMN_ARRIVAL);
+        if ((arrival > 1439) || (arrival == 0)){
+            throw new IllegalArgumentException( "Arrival time invalid.");
+        }
+        int departure = values.getAsInteger(ShiftEntry.COLUMN_DEPARTURE);
+        if ((departure > 1439) || (departure == 0)){
+            throw new IllegalArgumentException( "Departure time invalid.");
+        }
+        if (arrival > departure){
+            throw new IllegalArgumentException( "Arrival time must be before departure.");
+        }
+        int breakLenght = values.getAsInteger(ShiftEntry.COLUMN_BREAK_LENGHT);
+        if ((breakLenght > 1439) || (breakLenght == 0)){
+            throw new IllegalArgumentException( "Break lenght invalid.");
+        }
+        int holiday = values.getAsInteger(ShiftEntry.COLUMN_HOLIDAY);
+        if (!ShiftEntry.isValidHoliday(holiday)){
+            throw new IllegalArgumentException( "Holiday selection invalid.");
+        }
+        if (values.size() == 0){
+            return 0;
+        }
+
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        return database.update(ShiftEntry.TABLE_NAME, values, selection, selectionArgs);
     }
 
     /**
