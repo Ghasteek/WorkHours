@@ -1,6 +1,7 @@
 package com.example.workhours.data;
 
 import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -12,6 +13,7 @@ import android.app.Application;
 import android.content.res.Resources;
 
 import com.example.workhours.data.ShiftsContract.ShiftEntry;
+import android.content.ContentResolver;
 
 /**
  * {@link ContentProvider} for Pets app.
@@ -27,6 +29,7 @@ public class ShiftsProvider extends ContentProvider {
         sUriMatcher.addURI(ShiftsContract.CONTENT_AUTHORITY, ShiftsContract.PATH_SHIFTS, SHIFTS);
         sUriMatcher.addURI(ShiftsContract.CONTENT_AUTHORITY, ShiftsContract.PATH_SHIFTS + "/#", SHIFT_ID);
     }
+
     /** Tag for the log messages */
     public static final String LOG_TAG = ShiftsProvider.class.getSimpleName();
 
@@ -177,7 +180,18 @@ public class ShiftsProvider extends ContentProvider {
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case SHIFTS:
+                return database.delete(ShiftEntry.TABLE_NAME, selection, selectionArgs);
+            case SHIFT_ID:
+                selection = ShiftEntry._ID + "=?";
+                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                return database.delete(ShiftEntry.TABLE_NAME, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+        }
     }
 
     /**
@@ -185,6 +199,14 @@ public class ShiftsProvider extends ContentProvider {
      */
     @Override
     public String getType(Uri uri) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case SHIFTS:
+                return ShiftEntry.CONTENT_LIST_TYPE;
+            case SHIFT_ID:
+                return ShiftEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+        }
     }
 }
