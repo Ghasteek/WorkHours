@@ -11,9 +11,6 @@ import android.text.format.DateFormat;
 import java.util.Calendar;
 
 public class TimePickerFragment extends DialogFragment {
-
-
-
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

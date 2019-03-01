@@ -10,4 +10,7 @@
     <string name="action_add">Add new shift data</string>
     <string name="editor_insert_shift_failed">Error while saving shift</string>
     <string name="editor_insert_shift_successful">Shift saved</string>
+    <string name="action_shiftsTable">Shifts Table</string>
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
 </resources>

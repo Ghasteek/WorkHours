@@ -267,6 +267,10 @@ public class MainActivity extends AppCompatActivity
                 Intent addIntent = new Intent(MainActivity.this, Shift.class);
                 startActivity(addIntent);
                 return true;
+            case R.id.action_shiftsTable:
+                Intent ShiftTable = new Intent(MainActivity.this, ShiftTable.class);
+                startActivity(ShiftTable);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
