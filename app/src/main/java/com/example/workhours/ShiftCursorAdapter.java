@@ -9,6 +9,7 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import com.example.workhours.data.ShiftsContract;
+import com.example.workhours.Tools;
 
 public class ShiftCursorAdapter extends CursorAdapter {
 
@@ -29,8 +30,8 @@ public class ShiftCursorAdapter extends CursorAdapter {
         int shiftLength = cursor.getInt(cursor.getColumnIndexOrThrow(ShiftsContract.ShiftEntry.COLUMN_SHIFT_LENGHT));
         int date = cursor.getInt(cursor.getColumnIndexOrThrow(ShiftsContract.ShiftEntry.COLUMN_DATE));
         int holidayType = cursor.getInt(cursor.getColumnIndexOrThrow(ShiftsContract.ShiftEntry.COLUMN_HOLIDAY));
-        shiftLengthView.setText(String.valueOf(shiftLength));
-        dateView.setText(String.valueOf(date));
+        shiftLengthView.setText(Tools.timeIntToStr(shiftLength));
+        dateView.setText(Tools.dateIntToStr(date));
         holidayTypeView.setText(String.valueOf(holidayType));
     }
 }

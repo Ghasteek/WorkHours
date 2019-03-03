@@ -8,9 +8,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -33,28 +38,19 @@ import com.example.workhours.data.ShiftsDbHelper;
 import com.example.workhours.data.ShiftsProvider;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener {    // pro time picker t5eba implementovat TimePickerDialog.OnTimeSetListener
+        implements NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener{    // pro time picker t5eba implementovat TimePickerDialog.OnTimeSetListener
 
     TextView pickedTimeIn;
     TextView pickedTimeOut;
     SharedPreferences pref;
     private ShiftsDbHelper mDbHelper;
+    private static final int SHIFT_LOADER = 0;
+    ShiftCursorAdapter mCursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
-        /*Button next = (Button) findViewById(R.id.button);
-        next.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent myIntent = new Intent(view.getContext(), Settings.class);
-                startActivityForResult(myIntent, 0);
-            }
-
-        });*/
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -130,9 +126,12 @@ public class MainActivity extends AppCompatActivity
 
     // testovaci kus kodu
 
-        mDbHelper = new ShiftsDbHelper(this);
+        //mDbHelper = new ShiftsDbHelper(this);
         displayDatabaseInfo();
+
     }
+
+
 
     /**
      * Temporary helper method to display information in the onscreen TextView about the state of
@@ -157,9 +156,6 @@ public class MainActivity extends AppCompatActivity
                 selection,
                 selectionArgs,
                 null);
-
-        /*SQLiteDatabase db = mDbHelper.getReadableDatabase();                                                          // kontakt primo na db
-        Cursor cursor = db.query(ShiftEntry.TABLE_NAME, projection,  selection, selectionArgs, null, null,null);*/
 
         TextView displayView = (TextView) findViewById(R.id.text_view_table);
 
@@ -479,6 +475,7 @@ public class MainActivity extends AppCompatActivity
         tv5.setText(hStr + hhStr + ":" + mStr + mmStr);
 
     }
+
 
     public static class Globals {
         public static String whichTinme;

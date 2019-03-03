@@ -1,19 +1,25 @@
 package com.example.workhours;
 
+import android.content.ContentUris;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import android.widget.TextView;
@@ -23,7 +29,8 @@ import com.example.workhours.data.ShiftsContract;
 
 public class ShiftTable extends AppCompatActivity {
 
-    Button click_me;
+    TextView showMonthYear;
+    ImageButton changeSelection;
     String monthYearStr;
 
     SimpleDateFormat sdf = new SimpleDateFormat("MMM yyyy");
@@ -36,44 +43,50 @@ public class ShiftTable extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        /*Spinner spinnerMonths = (Spinner) findViewById(R.id.spinnerMonth);
-        ArrayAdapter<String> spinnerMonthsArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, getResources().getStringArray(R.array.months));
-        spinnerMonths.setAdapter(spinnerMonthsArrayAdapter);*/
+        final TextView showMonthYear = findViewById(R.id.textView);
+        final ImageButton changeSelection = findViewById(R.id.button);
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH) + 1;
+        String [] monthArray = getResources().getStringArray(R.array.months);
+        int i = month - 1;
+        showMonthYear.setText(monthArray[i] + " " + String.valueOf(year));
+        showData(year, month);
 
-
-        // od sem je to month year picker https://github.com/abhinav011085/MonthYearPicker
-        final TextView click_me = findViewById(R.id.textView);
-
-        click_me.setOnClickListener(new View.OnClickListener() {
+        changeSelection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MonthYearPickerDialog pickerDialog = new MonthYearPickerDialog();
                 pickerDialog.setListener(new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int i2) {
-                        Toast.makeText(ShiftTable.this, year + " - " + month, Toast.LENGTH_SHORT).show();
-                        monthYearStr = year + "-" + (month + 1) + "-" + i2;
-                        click_me.setText(formatMonthYear(monthYearStr));
+                        //Toast.makeText(ShiftTable.this, year + " - " + month, Toast.LENGTH_SHORT).show();
+                        String [] monthArray = getResources().getStringArray(R.array.months);
+                        int i = month - 1;
+                        showMonthYear.setText(monthArray[i] + " " + String.valueOf(year));
                         showData(year, month);
                     }
                 });
                 pickerDialog.show(getSupportFragmentManager(), "MonthYearPickerDialog");
             }
         });
-        //po sem
+        //setting emptyView if no data in cursor
+        ListView lvItems = (ListView) findViewById(R.id.ListViewItems);
+        View emptyView = findViewById(R.id.empty_view);
+        lvItems.setEmptyView(emptyView);
 
-        //showData();
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent addIntent = new Intent(ShiftTable.this, Shift.class);
+                Uri clickedShiftUri = ContentUris.withAppendedId(ShiftsContract.ShiftEntry.CONTENT_URI, id);
+                addIntent.setData(clickedShiftUri);
+                startActivity(addIntent);
+                //Toast.makeText(ShiftTable.this, "URI - " + clickedShiftUri, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    public String formatMonthYear(String str) {
-        Date date = null;
-        try {
-            date = input.parse(str);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return sdf.format(date);
-    }
 
     public void showData(int year, int month) {
         String[] projection = {
