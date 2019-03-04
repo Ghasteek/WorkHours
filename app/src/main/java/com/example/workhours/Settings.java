@@ -17,23 +17,22 @@ public class Settings extends AppCompatActivity {
 
     public void save_settings(){
         SharedPreferences.Editor editor = pref.edit();
+
         String timeInStr = timeIn.getText().toString();
         String timeOutStr = timeOut.getText().toString();
         String defaultPauseStr = breakTime.getText().toString();
 
-        String[] defaultPauseArray = defaultPauseStr.split(":");
-        int defaultPauseInt = (Integer.parseInt(defaultPauseArray[0])*60) + (Integer.parseInt(defaultPauseArray[1])) ;
-
         editor.putString("defaultInTime", timeInStr);
         editor.putString("defaultOutTime", timeOutStr);
-        editor.putInt("defaultPause", defaultPauseInt);
+        editor.putInt("defaultPause", Tools.timeStrToInt(defaultPauseStr));
+
         String[] timeInArray = timeInStr.split(":");
         String[] timeOutArray = timeOutStr.split(":");
         MainActivity.Globals.timeInHours = Integer.parseInt(timeInArray[0]);
         MainActivity.Globals.timeInMinutes = Integer.parseInt(timeInArray[1]);
         MainActivity.Globals.timeOutHours = Integer.parseInt(timeOutArray[0]);
         MainActivity.Globals.timeOutMinutes = Integer.parseInt(timeOutArray[1]);
-        editor.commit();
+        editor.apply();                                                                        // apply() nevraci true pokud vse probehne v poradku, pokud chci hlidat vysledek, pouyit commit() + hlidat navrat true
         Toast.makeText(this, "Settings saved.", Toast.LENGTH_SHORT).show();
     }
 
@@ -69,21 +68,19 @@ public class Settings extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        pref = getApplicationContext().getSharedPreferences("Settings", 0);             // definovani SharedPreference a dvou editu
+        pref = getApplicationContext().getSharedPreferences("Settings", 0);             // definovani SharedPreference a editu
         timeIn = (EditText) findViewById(R.id.defaultArrivalTimeEdit);
         timeOut = (EditText) findViewById(R.id.defaultDepartureTimeEdit);
         breakTime = (EditText) findViewById(R.id.defaultBreakTimeEdit);
+
         if (pref.contains("defaultInTime")){
             timeIn.setText(pref.getString("defaultInTime", ""));
         }
         if (pref.contains("defaultOutTime")){
             timeOut.setText(pref.getString("defaultOutTime", ""));
         }
-        int pauseInt = pref.getInt("defaultPause",0);
-        int pauseHours = pauseInt / 60;
-        int pauseMinutes = pauseInt - (pauseHours*60);
         if (pref.contains("defaultPause")){
-            breakTime.setText(pauseHours + ":" + pauseMinutes); //Integer.toString(pref.getInt("defaultPause",0))
+            breakTime.setText(Tools.timeIntToStr(pref.getInt("defaultPause",0)));
         }
     }
 }

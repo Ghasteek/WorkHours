@@ -74,10 +74,15 @@ public class Shift extends AppCompatActivity {
 
         if (clickedShiftUri == null){
             setTitle(getString(R.string.addShift));
+            setDefault();
         } else {
             setTitle(getString(R.string.editShift));
             fillUp(clickedShiftUri);
         }
+    }
+
+    public void setDefault() {
+
     }
 
     public void fillUp (Uri uri){

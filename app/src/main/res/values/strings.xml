@@ -22,4 +22,11 @@
     <string name="settingsDefaultArrivalTime">Default arrival time : </string>
     <string name="settingsDefaultDepartureTime">Default departure time : </string>
     <string name="settingsDefaultBreakLength">Default break length : </string>
+    <string name="date">Date : </string>
+    <string name="arrivalTime">Arrival : </string>
+    <string name="departureTime">Departure : </string>
+    <string name="breakLength">Break length : </string>
+    <string name="shiftLength">Shift length : </string>
+    <string name="overtimeLength">Overtime : </string>
+    <string name="holidayType">Holiday type : </string>
 </resources>
