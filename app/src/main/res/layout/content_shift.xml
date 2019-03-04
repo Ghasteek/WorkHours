@@ -10,9 +10,9 @@
         android:id="@+id/dateEdit"
         android:layout_width="132dp"
         android:layout_height="52dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="76dp"
         android:ems="10"
         android:hint="22.2.2019"
         android:inputType="date"
@@ -24,68 +24,75 @@
         android:id="@+id/arrivalEdit"
         android:layout_width="65dp"
         android:layout_height="52dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:ems="10"
         android:hint="6:00"
         android:inputType="time"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateEdit" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/departureEdit"
         android:layout_width="65dp"
         android:layout_height="52dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginLeft="34dp"
         android:ems="10"
         android:hint="14:30"
         android:inputType="time"
         android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/arrivalEdit"
-        app:layout_constraintTop_toBottomOf="@+id/dateEdit" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/breakLenghtEdit"
         android:layout_width="65dp"
         android:layout_height="52dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="29dp"
+        android:layout_marginLeft="29dp"
         android:ems="10"
         android:hint="0:30"
         android:inputType="time"
         android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/departureEdit"
-        app:layout_constraintTop_toBottomOf="@+id/dateEdit" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/holidayTypeEdit"
         android:layout_width="65dp"
         android:layout_height="52dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="76dp"
         android:ems="10"
         android:hint="0"
         android:inputType="number"
         android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/arrivalEdit" />
+        app:layout_constraintStart_toEndOf="@+id/dateEdit"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/shiftLenghtView"
         android:layout_width="78dp"
         android:layout_height="52dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginLeft="43dp"
         android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/breakLenghtEdit"
-        app:layout_constraintTop_toBottomOf="@+id/dateEdit" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/overtimeLengthView"
+        android:layout_width="78dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginTop="24dp"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/holidayTypeEdit"
+        app:layout_constraintTop_toBottomOf="@+id/shiftLenghtView" />
 
 
 </android.support.constraint.ConstraintLayout>

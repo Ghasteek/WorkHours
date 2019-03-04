@@ -144,11 +144,12 @@ public class MainActivity extends AppCompatActivity
                 ShiftEntry.COLUMN_DEPARTURE,
                 ShiftEntry.COLUMN_BREAK_LENGHT,
                 ShiftEntry.COLUMN_SHIFT_LENGHT,
+                ShiftEntry.COLUMN_OVERTIME,
                 ShiftEntry.COLUMN_HOLIDAY};
 
         String selection = ShiftEntry.COLUMN_HOLIDAY + "=?";
 
-        String[] selectionArgs = new String[] { String.valueOf(ShiftEntry.HOLIDAY_PUBLIC) };
+        String[] selectionArgs = new String[] { String.valueOf(ShiftEntry.HOLIDAY_SHIFT) };
 
         Cursor cursor = getContentResolver().query(
                 ShiftEntry.CONTENT_URI,
@@ -164,6 +165,7 @@ public class MainActivity extends AppCompatActivity
         int departureColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_DEPARTURE);
         int breakColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_BREAK_LENGHT);
         int shiftColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_SHIFT_LENGHT);
+        int overtimeColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_OVERTIME);
         int holidayColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_HOLIDAY);
 
         try {
@@ -173,6 +175,7 @@ public class MainActivity extends AppCompatActivity
                     ShiftEntry.COLUMN_DEPARTURE + " - " +
                     ShiftEntry.COLUMN_BREAK_LENGHT + " - " +
                     ShiftEntry.COLUMN_SHIFT_LENGHT + " - " +
+                    ShiftEntry.COLUMN_OVERTIME + " - " +
                     ShiftEntry.COLUMN_HOLIDAY + "/n");                                                  // vypsani jmen sloupcu
 
             while (cursor.moveToNext()){                                                                // vypsani obsahu cursoru
@@ -181,9 +184,10 @@ public class MainActivity extends AppCompatActivity
                 int departure = cursor.getInt(departureColumnIndex);
                 int breakLenght = cursor.getInt(breakColumnIndex);
                 int shift = cursor.getInt(shiftColumnIndex);
+                int overtime = cursor.getInt(overtimeColumnIndex);
                 int holiday = cursor.getInt(holidayColumnIndex);
 
-                displayView.append(("\n" + date + " - " + arrival + " - " + departure + " - " + breakLenght + " - " + shift + " - " + holiday));
+                displayView.append(("\n" + date + " - " + arrival + " - " + departure + " - " + breakLenght + " - " + shift + " - " + overtime + " - " + holiday));
             }
         } finally {
             cursor.close();
@@ -301,12 +305,13 @@ public class MainActivity extends AppCompatActivity
 
     public void insertDummyData (){
         ContentValues shiftValues = new ContentValues();
-            shiftValues.put(ShiftEntry.COLUMN_DATE, 20190123);
+            shiftValues.put(ShiftEntry.COLUMN_DATE, 20190302);
             shiftValues.put(ShiftEntry.COLUMN_ARRIVAL, 360);
             shiftValues.put(ShiftEntry.COLUMN_DEPARTURE, 915);
             shiftValues.put(ShiftEntry.COLUMN_BREAK_LENGHT, 30);
             shiftValues.put(ShiftEntry.COLUMN_SHIFT_LENGHT, 525);
-            shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, ShiftEntry.HOLIDAY_PUBLIC);
+            shiftValues.put(ShiftEntry.COLUMN_OVERTIME, 45);
+            shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, ShiftEntry.HOLIDAY_SHIFT);
         Uri newUri = getContentResolver().insert(ShiftEntry.CONTENT_URI, shiftValues);
         if (newUri == null) {
             Toast.makeText(this, getText(R.string.editor_insert_shift_failed), Toast.LENGTH_SHORT).show();

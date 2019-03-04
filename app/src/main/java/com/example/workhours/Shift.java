@@ -2,29 +2,18 @@ package com.example.workhours;
 
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Spinner;
 import android.widget.Toast;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
-import com.example.workhours.data.ShiftsContract;
 import com.example.workhours.data.ShiftsContract.ShiftEntry;
 import com.example.workhours.data.ShiftsDbHelper;
-import com.example.workhours.Tools;
-import com.example.workhours.data.ShiftsProvider;
 
 
 public class Shift extends AppCompatActivity {
@@ -33,6 +22,7 @@ public class Shift extends AppCompatActivity {
     private EditText departureTime;
     private EditText breakLenght;
     private TextView shiftLenght;
+    private TextView overtimeLegth;
     private EditText holidayType;
     private ShiftsDbHelper mDbHelper;
 
@@ -73,6 +63,7 @@ public class Shift extends AppCompatActivity {
         departureTime = (EditText) findViewById(R.id.departureEdit);
         breakLenght = (EditText) findViewById(R.id.breakLenghtEdit);
         shiftLenght = (TextView) findViewById(R.id.shiftLenghtView);
+        overtimeLegth = (TextView) findViewById(R.id.overtimeLengthView);
         holidayType = (EditText) findViewById(R.id.holidayTypeEdit);
         // TODO spinner??
 
@@ -101,15 +92,17 @@ public class Shift extends AppCompatActivity {
                 int dateColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_DATE);
                 int arrivalColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_ARRIVAL);
                 int departureColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_DEPARTURE);
-                int breakLenghtColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_BREAK_LENGHT);
-                int shiftLenghtColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_SHIFT_LENGHT);
+                int breakLengthColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_BREAK_LENGHT);
+                int shiftLengthColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_SHIFT_LENGHT);
+                int overtimeLengthColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_OVERTIME);
                 int holidayTypeColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_HOLIDAY);
 
                 String dateStr = Tools.dateIntToStr(cursor.getInt(dateColumnIndex));
                 String arrivalStr = Tools.timeIntToStr(cursor.getInt(arrivalColumnIndex));
                 String departureStr = Tools.timeIntToStr(cursor.getInt(departureColumnIndex));
-                String breakLenghtStr = Tools.timeIntToStr(cursor.getInt(breakLenghtColumnIndex));
-                String shiftLenghtStr = Tools.timeIntToStr(cursor.getInt(shiftLenghtColumnIndex));
+                String breakLenghtStr = Tools.timeIntToStr(cursor.getInt(breakLengthColumnIndex));
+                String shiftLenghtStr = Tools.timeIntToStr(cursor.getInt(shiftLengthColumnIndex));
+                String overtimeLengthStr = Tools.timeIntToStr(cursor.getInt(overtimeLengthColumnIndex));
                 String holidayTypeStr = String.valueOf(cursor.getInt(holidayTypeColumnIndex));
 
                 date.setText(dateStr);
@@ -117,6 +110,7 @@ public class Shift extends AppCompatActivity {
                 departureTime.setText(departureStr);
                 breakLenght.setText(breakLenghtStr);
                 shiftLenght.setText(shiftLenghtStr);
+                overtimeLegth.setText(overtimeLengthStr);
                 holidayType.setText(holidayTypeStr);
             }
     }
@@ -132,9 +126,11 @@ public class Shift extends AppCompatActivity {
         int departureTimeInt = Tools.timeStrToInt(departureHelp);
 
         String breakHelp = breakLenght.getText().toString();                                            // prevod delky pauzy na integer v minutach
-        int breakLenghtInt = Tools.timeStrToInt(breakHelp);
+        int breakLengthInt = Tools.timeStrToInt(breakHelp);
 
-        int shiftLenghtInt = departureTimeInt - arriveTimeInt - breakLenghtInt;                         // vypocet delky smeny
+        int shiftLengthInt = departureTimeInt - arriveTimeInt - breakLengthInt;                         // vypocet delky smeny
+
+        int overtimeLengthInt = shiftLengthInt - 480 ;
 
         String holidayHelp = holidayType.getText().toString();                                          // prevod zadaneho typu (smena/dovolena/nahradni volno) na integer
         int holidayTypeInt = Integer.parseInt(holidayHelp);
@@ -143,8 +139,9 @@ public class Shift extends AppCompatActivity {
         shiftValues.put(ShiftEntry.COLUMN_DATE, dateInt);
         shiftValues.put(ShiftEntry.COLUMN_ARRIVAL, arriveTimeInt);
         shiftValues.put(ShiftEntry.COLUMN_DEPARTURE, departureTimeInt);
-        shiftValues.put(ShiftEntry.COLUMN_BREAK_LENGHT, breakLenghtInt);
-        shiftValues.put(ShiftEntry.COLUMN_SHIFT_LENGHT, shiftLenghtInt);
+        shiftValues.put(ShiftEntry.COLUMN_BREAK_LENGHT, breakLengthInt);
+        shiftValues.put(ShiftEntry.COLUMN_SHIFT_LENGHT, shiftLengthInt);
+        shiftValues.put(ShiftEntry.COLUMN_OVERTIME, overtimeLengthInt);
         shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, holidayTypeInt);
 
         Uri newUri = getContentResolver().insert(ShiftEntry.CONTENT_URI, shiftValues);

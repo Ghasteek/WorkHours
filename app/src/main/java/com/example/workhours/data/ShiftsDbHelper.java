@@ -25,6 +25,7 @@ public class ShiftsDbHelper extends SQLiteOpenHelper {
                         + ShiftEntry.COLUMN_DEPARTURE + " INTEGER, "
                         + ShiftEntry.COLUMN_BREAK_LENGHT + " INTEGER, "
                         + ShiftEntry.COLUMN_SHIFT_LENGHT + " INTEGER, "
+                        + ShiftEntry.COLUMN_OVERTIME + " INTEGER, "
                         + ShiftEntry.COLUMN_HOLIDAY + " INTEGER);";
 
         db.execSQL(SQL_CREATE_SHIFTS_TABLE);

@@ -12,11 +12,14 @@
     <string name="editor_insert_shift_successful">Shift saved</string>
     <string name="action_shiftsTable">Shifts Table</string>
     <string name="ok">OK</string>
-    <string name="cancel">CANCEL</string>
+    <string name="cancel">Cancel</string>
     <string name="empty_view_title_text">No shifts this month</string>
     <string name="empty_view_subtitle_text">Add shifts data</string>
     <string name="shiftsTableLabel">Shifts table</string>
     <string name="settingsLabel">Settings</string>
     <string name="addShift">Add shift</string>
     <string name="editShift">Edit shift</string>
+    <string name="settingsDefaultArrivalTime">Default arrival time : </string>
+    <string name="settingsDefaultDepartureTime">Default departure time : </string>
+    <string name="settingsDefaultBreakLength">Default break length : </string>
 </resources>

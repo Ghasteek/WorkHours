@@ -29,6 +29,7 @@ public final class ShiftsContract {
         public final static String COLUMN_DEPARTURE = "departure";      //integer, time of departure in seconds
         public final static String COLUMN_BREAK_LENGHT = "break";       //integer, lenght of break (launch, doctor, etc.) in seconds
         public final static String COLUMN_SHIFT_LENGHT = "shift";       //integer, lengt of shift in seconds
+        public final static String COLUMN_OVERTIME = "overtime";       //integer, lengt of shift in seconds
         public final static String COLUMN_HOLIDAY = "holiday";          //integer, description for not be in work, viz. down
 
         //possible values for COLUMN_HOLIDAY

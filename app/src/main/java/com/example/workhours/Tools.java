@@ -28,6 +28,13 @@ public class Tools {
     }
 
     public static String timeIntToStr (int timeInput){
+        boolean isNegative = false;
+        String newTime;
+        if (timeInput < 0 ) {
+            timeInput = Math.abs(timeInput);
+            isNegative = true;
+        }
+
         int hours = timeInput / 60;
         int minutes = timeInput - (hours * 60);
 
@@ -39,7 +46,11 @@ public class Tools {
         if (minutes == 0) {
             minutesStr = "00";
         }
-        String newTime = hours + ":" + minutesStr;
-        return(newTime);
+        if (isNegative) {
+            newTime = "-" + hours + ":" + minutesStr;
+        } else {
+            newTime = hours + ":" + minutesStr;
+        }
+        return (newTime);
     }
 }

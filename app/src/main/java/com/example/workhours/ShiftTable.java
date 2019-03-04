@@ -93,6 +93,7 @@ public class ShiftTable extends AppCompatActivity {
                 ShiftsContract.ShiftEntry._ID,
                 ShiftsContract.ShiftEntry.COLUMN_DATE,
                 ShiftsContract.ShiftEntry.COLUMN_SHIFT_LENGHT,
+                ShiftsContract.ShiftEntry.COLUMN_OVERTIME,
                 ShiftsContract.ShiftEntry.COLUMN_HOLIDAY};
 
         String selection = ShiftsContract.ShiftEntry.COLUMN_DATE + " LIKE ?";

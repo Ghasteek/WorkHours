@@ -14,7 +14,7 @@
         android:fontFamily="sans-serif-medium"
         android:textAppearance="?android:textAppearanceMedium"
         android:padding="10dp"
-        android:textColor="#2B3D4D"  />
+        android:textColor="#2B3D4D" />
 
     <TextView
         android:id="@+id/date"
@@ -23,7 +23,7 @@
         android:fontFamily="sans-serif-medium"
         android:textAppearance="?android:textAppearanceMedium"
         android:padding="10dp"
-        android:textColor="#2B3D4D"  />
+        android:textColor="#2B3D4D" />
 
     <TextView
         android:id="@+id/holidayType"
@@ -32,5 +32,14 @@
         android:fontFamily="sans-serif"
         android:textAppearance="?android:textAppearanceSmall"
         android:padding="10dp"
-        android:textColor="#AEB6BD"  />
+        android:textColor="#AEB6BD" />
+
+    <TextView
+        android:id="@+id/overtime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:padding="10dp"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textColor="#2B3D4D" />
 </LinearLayout>

@@ -12,14 +12,14 @@ public class Settings extends AppCompatActivity {
 
     EditText timeIn;
     EditText timeOut;
-    EditText pause;
+    EditText breakTime;
     SharedPreferences pref;
 
     public void save_settings(){
         SharedPreferences.Editor editor = pref.edit();
         String timeInStr = timeIn.getText().toString();
         String timeOutStr = timeOut.getText().toString();
-        String defaultPauseStr = pause.getText().toString();
+        String defaultPauseStr = breakTime.getText().toString();
 
         String[] defaultPauseArray = defaultPauseStr.split(":");
         int defaultPauseInt = (Integer.parseInt(defaultPauseArray[0])*60) + (Integer.parseInt(defaultPauseArray[1])) ;
@@ -70,9 +70,9 @@ public class Settings extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
         pref = getApplicationContext().getSharedPreferences("Settings", 0);             // definovani SharedPreference a dvou editu
-        timeIn = (EditText) findViewById(R.id.dateEdit);
-        timeOut = (EditText) findViewById(R.id.arrivalEdit);
-        pause = (EditText) findViewById(R.id.defaultPause);
+        timeIn = (EditText) findViewById(R.id.defaultArrivalTimeEdit);
+        timeOut = (EditText) findViewById(R.id.defaultDepartureTimeEdit);
+        breakTime = (EditText) findViewById(R.id.defaultBreakTimeEdit);
         if (pref.contains("defaultInTime")){
             timeIn.setText(pref.getString("defaultInTime", ""));
         }
@@ -83,7 +83,7 @@ public class Settings extends AppCompatActivity {
         int pauseHours = pauseInt / 60;
         int pauseMinutes = pauseInt - (pauseHours*60);
         if (pref.contains("defaultPause")){
-            pause.setText(pauseHours + ":" + pauseMinutes); //Integer.toString(pref.getInt("defaultPause",0))
+            breakTime.setText(pauseHours + ":" + pauseMinutes); //Integer.toString(pref.getInt("defaultPause",0))
         }
     }
 }
