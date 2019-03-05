@@ -4,8 +4,8 @@ public class Tools {
 
     public static int dateStrToInt (String dateInput){                                              // TODO dodelat hlidani vlozeneho datumu
         String[] dateArray = dateInput.split("\\.");
-        int dayLength = (int) (Math.log10(Integer.parseInt(dateArray[0])) + 1);                     // logarytmicka metoda zjisteni poctu cifer v cisle
-        int monthLength = (int) (Math.log10(Integer.parseInt(dateArray[1])) + 1);                   // logarytmicka metoda zjisteni poctu cifer v cisle
+        int dayLength = dateArray[0].length();
+        int monthLength = dateArray[1].length();
         if (dayLength == 1) {
             dateArray[0] = "0" + dateArray[0];
         }

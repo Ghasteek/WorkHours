@@ -13,7 +13,7 @@ import android.widget.Toast;
 import android.database.Cursor;
 
 import com.example.workhours.data.ShiftsContract.ShiftEntry;
-import com.example.workhours.data.ShiftsDbHelper;
+//import com.example.workhours.data.ShiftsDbHelper;
 
 
 public class Shift extends AppCompatActivity {
@@ -24,7 +24,8 @@ public class Shift extends AppCompatActivity {
     private TextView shiftLenght;
     private TextView overtimeLegth;
     private EditText holidayType;
-    private ShiftsDbHelper mDbHelper;
+    //private ShiftsDbHelper mDbHelper;
+    private Uri clickedShiftUri;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -37,7 +38,7 @@ public class Shift extends AppCompatActivity {
                 onBackPressed();
                 return true;
             case (R.id.action_save):
-                addShift();
+                saveShift();
                 finish();
                 return true;
         }
@@ -67,10 +68,10 @@ public class Shift extends AppCompatActivity {
         holidayType = (EditText) findViewById(R.id.holidayTypeEdit);
         // TODO spinner??
 
-        mDbHelper = new ShiftsDbHelper(this);
+        //mDbHelper = new ShiftsDbHelper(this);
 
         Intent intent = getIntent();
-        Uri clickedShiftUri = intent.getData();
+        clickedShiftUri = intent.getData();
 
         if (clickedShiftUri == null){
             setTitle(getString(R.string.addShift));
@@ -82,6 +83,7 @@ public class Shift extends AppCompatActivity {
     }
 
     public void setDefault() {
+        Toast.makeText(this, getText(R.string.defaults_loaded), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -120,7 +122,7 @@ public class Shift extends AppCompatActivity {
             }
     }
 
-    public void addShift (){
+    public void saveShift (){
         String dateHELP = date.getText().toString();                                                    // prevod datumu na integer ve formatu RRRRMMDD
         int dateInt = Tools.dateStrToInt(dateHELP);
 
@@ -149,10 +151,18 @@ public class Shift extends AppCompatActivity {
         shiftValues.put(ShiftEntry.COLUMN_OVERTIME, overtimeLengthInt);
         shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, holidayTypeInt);
 
-        Uri newUri = getContentResolver().insert(ShiftEntry.CONTENT_URI, shiftValues);
+        if (clickedShiftUri == null) {
+            Uri newUri = getContentResolver().insert(ShiftEntry.CONTENT_URI, shiftValues);
+            if (newUri == null) {
+                Toast.makeText(this, getText(R.string.editor_insert_shift_failed), Toast.LENGTH_SHORT).show();
+            } else {Toast.makeText(this, getText(R.string.editor_insert_shift_successful), Toast.LENGTH_SHORT).show();}
+        } else {
+            int rowsAffected = getContentResolver().update(clickedShiftUri, shiftValues, null, null);
+            if (rowsAffected == 0) {
+                Toast.makeText(this, getText(R.string.editor_update_shift_failed), Toast.LENGTH_SHORT).show();
+            } else {Toast.makeText(this, getText(R.string.editor_update_shift_successful), Toast.LENGTH_SHORT).show();}
+        }
 
-        if (newUri == null) {
-            Toast.makeText(this, getText(R.string.editor_insert_shift_failed), Toast.LENGTH_SHORT).show();
-        } else {Toast.makeText(this, getText(R.string.editor_insert_shift_successful), Toast.LENGTH_SHORT).show();}
+
     }
 }

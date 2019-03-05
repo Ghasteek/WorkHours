@@ -10,6 +10,8 @@
     <string name="action_add">Add new shift data</string>
     <string name="editor_insert_shift_failed">Error while saving shift</string>
     <string name="editor_insert_shift_successful">Shift saved</string>
+    <string name="editor_update_shift_failed">Error while updating shift</string>
+    <string name="editor_update_shift_successful">Shift updated</string>
     <string name="action_shiftsTable">Shifts Table</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -29,4 +31,5 @@
     <string name="shiftLength">Shift length : </string>
     <string name="overtimeLength">Overtime : </string>
     <string name="holidayType">Holiday type : </string>
+    <string name="defaults_loaded">Loaded default times from settings.</string>
 </resources>

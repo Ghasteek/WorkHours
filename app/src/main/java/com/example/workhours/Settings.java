@@ -47,7 +47,6 @@ public class Settings extends AppCompatActivity {
                 return true;
             case (R.id.action_save):
                 save_settings();
-                //onBackPressed();
                 finish();
                 return true;
         }
