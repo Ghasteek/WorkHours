@@ -5,25 +5,16 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_dummy">Insert Dummy Data</string>
-    <string name="action_add">Add new shift data</string>
-    <string name="editor_insert_shift_failed">Error while saving shift</string>
-    <string name="editor_insert_shift_successful">Shift saved</string>
-    <string name="editor_update_shift_failed">Error while updating shift</string>
-    <string name="editor_update_shift_successful">Shift updated</string>
-    <string name="action_shiftsTable">Shifts Table</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <!-- EMPTY VIEW popisek -->
     <string name="empty_view_title_text">No shifts this month</string>
     <string name="empty_view_subtitle_text">Add shifts data</string>
-    <string name="shiftsTableLabel">Shifts table</string>
-    <string name="settingsLabel">Settings</string>
-    <string name="addShift">Add shift</string>
-    <string name="editShift">Edit shift</string>
+    <!-- SETTINGS stranka -->
     <string name="settingsDefaultArrivalTime">Default arrival time : </string>
     <string name="settingsDefaultDepartureTime">Default departure time : </string>
     <string name="settingsDefaultBreakLength">Default break length : </string>
+    <!-- SHIFT stranka -->
     <string name="date">Date : </string>
     <string name="arrivalTime">Arrival : </string>
     <string name="departureTime">Departure : </string>
@@ -31,5 +22,29 @@
     <string name="shiftLength">Shift length : </string>
     <string name="overtimeLength">Overtime : </string>
     <string name="holidayType">Holiday type : </string>
+    <!-- TOASTS -->
     <string name="defaults_loaded">Loaded default times from settings.</string>
+    <string name="editor_insert_shift_failed">Error while saving shift</string>
+    <string name="editor_insert_shift_successful">Shift saved</string>
+    <string name="editor_update_shift_failed">Error while updating shift</string>
+    <string name="editor_update_shift_successful">Shift updated</string>
+    <string name="empty_date_warning">Date cannot be empty</string>
+    <string name="empty_arrival_warning">Arrival time cannot be empty</string>
+    <string name="empty_departure_warning">Departure time cannot be empty</string>
+    <string name="empty_break_warning">Break length cannot be empty</string>
+    <string name="empty_holiday_warning">Holiday typ cannot be empty</string>
+    <!-- popisky menu -->
+    <string name="action_settings">Settings</string>
+    <string name="action_dummy">Insert Dummy Data</string>
+    <string name="action_add">Add new shift data</string>
+    <string name="action_shiftsTable">Shifts Table</string>
+    <!-- Popisky stranek -->
+    <string name="shiftsTableLabel">Shifts table</string>
+    <string name="settingsLabel">Settings</string>
+    <string name="addShift">Add shift</string>
+    <string name="editShift">Edit shift</string>
+    <!-- DISCARD DIALOG -->
+    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+    <string name="discard">Discard</string>
+    <string name="keep_editing">Keep Editing</string>
 </resources>
