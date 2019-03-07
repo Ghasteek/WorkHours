@@ -17,11 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.database.Cursor;
 import android.content.DialogInterface;
-
 import com.example.workhours.data.ShiftsContract.ShiftEntry;
-
 import java.util.Calendar;
-//import com.example.workhours.data.ShiftsDbHelper;
 
 
 public class Shift extends AppCompatActivity {
@@ -130,13 +127,13 @@ public class Shift extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        date = (EditText) findViewById(R.id.dateEdit);
-        arriveTime = (EditText) findViewById(R.id.arrivalEdit);
-        departureTime = (EditText) findViewById(R.id.departureEdit);
-        breakLenght = (EditText) findViewById(R.id.breakLenghtEdit);
-        shiftLenght = (TextView) findViewById(R.id.shiftLenghtView);
-        overtimeLegth = (TextView) findViewById(R.id.overtimeLengthView);
-        holidayType = (EditText) findViewById(R.id.holidayTypeEdit);
+        date = findViewById(R.id.dateEdit);
+        arriveTime = findViewById(R.id.arrivalEdit);
+        departureTime = findViewById(R.id.departureEdit);
+        breakLenght = findViewById(R.id.breakLenghtEdit);
+        shiftLenght = findViewById(R.id.shiftLenghtView);
+        overtimeLegth = findViewById(R.id.overtimeLengthView);
+        holidayType = findViewById(R.id.holidayTypeEdit);
         // TODO spinner??
 
         date.setOnTouchListener(mTouchListener);
@@ -160,12 +157,12 @@ public class Shift extends AppCompatActivity {
     }
 
     public void setDefault() {
-        SharedPreferences pref = (SharedPreferences) getApplicationContext().getSharedPreferences("Settings", 0);             // definovani SharedPreference a editu
-        EditText date = (EditText) findViewById(R.id.dateEdit);
-        EditText timeIn = (EditText) findViewById(R.id.arrivalEdit);
-        EditText timeOut = (EditText) findViewById(R.id.departureEdit);
-        EditText breakTime = (EditText) findViewById(R.id.breakLenghtEdit);
-        EditText holidayType = (EditText) findViewById(R.id.holidayTypeEdit);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("Settings", 0);             // definovani SharedPreference a editu
+        EditText date = findViewById(R.id.dateEdit);
+        EditText timeIn = findViewById(R.id.arrivalEdit);
+        EditText timeOut = findViewById(R.id.departureEdit);
+        EditText breakTime = findViewById(R.id.breakLenghtEdit);
+        EditText holidayType = findViewById(R.id.holidayTypeEdit);
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH) + 1;
@@ -220,6 +217,7 @@ public class Shift extends AppCompatActivity {
                 overtimeLegth.setText(overtimeLengthStr);
                 holidayType.setText(holidayTypeStr);
             }
+        cursor.close();
     }
 
     public void saveShift (){
