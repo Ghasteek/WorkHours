@@ -69,6 +69,17 @@ public class Shift extends AppCompatActivity {
                 saveShift();
                 finish();
                 return true;
+            case (R.id.action_delete):
+                DialogInterface.OnClickListener deleteButtonClickListener =
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                finish();
+                            }
+                        };
+                showDeleteShiftDialog(deleteButtonClickListener);
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -292,5 +303,37 @@ public class Shift extends AppCompatActivity {
         // Create and show the AlertDialog
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private void showDeleteShiftDialog(
+            DialogInterface.OnClickListener deleteButtonClickListener) {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the postivie and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_acceptance_dialog_msg);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                deleteShift();
+            }
+        });
+        builder.setNegativeButton(R.string.keep_shift, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Keep editing" button, so dismiss the dialog
+                // and continue editing the pet.
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        // Create and show the AlertDialog
+        AlertDialog deleteDialog = builder.create();
+        deleteDialog.show();
+    }
+
+    private void deleteShift(){
+        // todo
+        int rowsDeleted = getContentResolver().delete(clickedShiftUri, null, null);
+        Toast.makeText(this, "Smazano " + rowsDeleted + " zaznamu.", Toast.LENGTH_SHORT).show();
+        finish();
     }
 }

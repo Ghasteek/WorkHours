@@ -47,4 +47,8 @@
     <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
     <string name="discard">Discard</string>
     <string name="keep_editing">Keep Editing</string>
+    <!-- DELETE acceptance dialog -->
+    <string name="delete_acceptance_dialog_msg">Do you really want to delete this shift?</string>
+    <string name="delete">Delete</string>
+    <string name="keep_shift">No</string>
 </resources>

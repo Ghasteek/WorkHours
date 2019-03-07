@@ -32,9 +32,17 @@ public class ShiftTable extends AppCompatActivity {
     TextView showMonthYear;
     ImageButton changeSelection;
     String monthYearStr;
+    int year;
+    int month;
 
     SimpleDateFormat sdf = new SimpleDateFormat("MMM yyyy");
     SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd");
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        showData(year, month);
+    }
 
 
     @Override
@@ -46,9 +54,11 @@ public class ShiftTable extends AppCompatActivity {
 
         final TextView showMonthYear = findViewById(R.id.textView);
         final ImageButton changeSelection = findViewById(R.id.button);
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
+        if (year == 0) {
+            Calendar cal = Calendar.getInstance();
+            year = cal.get(Calendar.YEAR);
+            month = cal.get(Calendar.MONTH) + 1;
+        }
         String [] monthArray = getResources().getStringArray(R.array.months);
         int i = month - 1;
         showMonthYear.setText(monthArray[i] + " " + String.valueOf(year));
@@ -60,8 +70,10 @@ public class ShiftTable extends AppCompatActivity {
                 MonthYearPickerDialog pickerDialog = new MonthYearPickerDialog();
                 pickerDialog.setListener(new DatePickerDialog.OnDateSetListener() {
                     @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int i2) {
+                    public void onDateSet(DatePicker datePicker, int year2, int month2, int i2) {
                         //Toast.makeText(ShiftTable.this, year + " - " + month, Toast.LENGTH_SHORT).show();
+                        year = year2;
+                        month = month2;
                         String [] monthArray = getResources().getStringArray(R.array.months);
                         int i = month - 1;
                         showMonthYear.setText(monthArray[i] + " " + String.valueOf(year));
