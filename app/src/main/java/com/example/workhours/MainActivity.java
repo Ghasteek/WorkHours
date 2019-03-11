@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity
     private static final int SHIFT_LOADER = 0;
     ShiftCursorAdapter mCursorAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,11 +124,7 @@ public class MainActivity extends AppCompatActivity
         if (pref.contains("defaultOutTime")){
             pickedTimeOut.setText(pref.getString("defaultOutTime", ""));
         }
-
-    // testovaci kus kodu
-
-        //mDbHelper = new ShiftsDbHelper(this);
-        displayDatabaseInfo();
+          displayDatabaseInfo();
 
     }
 

@@ -51,4 +51,6 @@
     <string name="delete_acceptance_dialog_msg">Do you really want to delete this shift?</string>
     <string name="delete">Delete</string>
     <string name="keep_shift">No</string>
+    <!-- SPINNER Shift types -->
+    <string name="regular_shift">Regular shift</string>
 </resources>

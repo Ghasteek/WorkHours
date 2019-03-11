@@ -4,6 +4,8 @@ import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import com.example.workhours.R;
+
 import java.lang.reflect.Array;
 
 public final class ShiftsContract {
@@ -38,7 +40,7 @@ public final class ShiftsContract {
         public final static int HOLIDAY_COMPENSATION = 1;                                               // nahradni volno
         public final static int HOLIDAY_PUBLIC = 2;                                                     // statni svatek
         public final static int HOLIDAY_VACATION = 3;                                                   // dovolena
-        public final static int[] arrayHolidayOptions = {0, 1, 2, 3};
+        public final static String[] arrayHolidayOptions = {"Regular Shift", "free overtime", "Public Holiday", "Vacation"};
 
         public static boolean isValidHoliday(int holiday) {
             if (holiday == HOLIDAY_SHIFT || holiday == HOLIDAY_COMPENSATION || holiday == HOLIDAY_PUBLIC || holiday == HOLIDAY_VACATION ) {

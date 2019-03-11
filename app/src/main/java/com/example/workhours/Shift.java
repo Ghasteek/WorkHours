@@ -12,7 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.database.Cursor;
@@ -28,9 +31,9 @@ public class Shift extends AppCompatActivity {
     private EditText breakLenght;
     private TextView shiftLenght;
     private TextView overtimeLegth;
-    private EditText holidayType;
     private Uri clickedShiftUri;
     private boolean mShiftChanged = false;
+    private Spinner holidayTypeSpinner;
 
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {                      // listener to any user touch on a view for editing
         @Override
@@ -133,14 +136,19 @@ public class Shift extends AppCompatActivity {
         breakLenght = findViewById(R.id.breakLenghtEdit);
         shiftLenght = findViewById(R.id.shiftLenghtView);
         overtimeLegth = findViewById(R.id.overtimeLengthView);
-        holidayType = findViewById(R.id.holidayTypeEdit);
+        holidayTypeSpinner = findViewById(R.id.holidaySpinner);
+
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+                (this, android.R.layout.simple_spinner_dropdown_item, ShiftEntry.arrayHolidayOptions);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        holidayTypeSpinner.setAdapter(spinnerArrayAdapter);
         // TODO spinner??
 
         date.setOnTouchListener(mTouchListener);
         arriveTime.setOnTouchListener(mTouchListener);
         departureTime.setOnTouchListener(mTouchListener);
         breakLenght.setOnTouchListener(mTouchListener);
-        holidayType.setOnTouchListener(mTouchListener);
+        holidayTypeSpinner.setOnTouchListener(mTouchListener);
 
         Intent intent = getIntent();
         clickedShiftUri = intent.getData();
@@ -162,7 +170,6 @@ public class Shift extends AppCompatActivity {
         EditText timeIn = findViewById(R.id.arrivalEdit);
         EditText timeOut = findViewById(R.id.departureEdit);
         EditText breakTime = findViewById(R.id.breakLenghtEdit);
-        EditText holidayType = findViewById(R.id.holidayTypeEdit);
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH) + 1;
@@ -177,8 +184,7 @@ public class Shift extends AppCompatActivity {
         if (pref.contains("defaultPause")){
             breakTime.setText(Tools.timeIntToStr(pref.getInt("defaultPause",0)));
         }
-        holidayType.setText("0");
-        date.setText(day + "." + month + "." + year);
+        holidayTypeSpinner.setSelection(0);
 
         Toast.makeText(this, getText(R.string.defaults_loaded), Toast.LENGTH_SHORT).show();
 
@@ -207,7 +213,7 @@ public class Shift extends AppCompatActivity {
                 String breakLenghtStr = Tools.timeIntToStr(cursor.getInt(breakLengthColumnIndex));
                 String shiftLenghtStr = Tools.timeIntToStr(cursor.getInt(shiftLengthColumnIndex));
                 String overtimeLengthStr = Tools.timeIntToStr(cursor.getInt(overtimeLengthColumnIndex));
-                String holidayTypeStr = String.valueOf(cursor.getInt(holidayTypeColumnIndex));
+                //String holidayTypeStr = String.valueOf(cursor.getInt(holidayTypeColumnIndex));
 
                 date.setText(dateStr);
                 arriveTime.setText(arrivalStr);
@@ -215,7 +221,7 @@ public class Shift extends AppCompatActivity {
                 breakLenght.setText(breakLenghtStr);
                 shiftLenght.setText(shiftLenghtStr);
                 overtimeLegth.setText(overtimeLengthStr);
-                holidayType.setText(holidayTypeStr);
+                holidayTypeSpinner.setSelection(cursor.getInt(holidayTypeColumnIndex));
             }
         cursor.close();
     }
@@ -253,12 +259,7 @@ public class Shift extends AppCompatActivity {
 
         int overtimeLengthInt = shiftLengthInt - 480 ;
 
-        String holidayHelp = holidayType.getText().toString();
-        if (holidayHelp.length() == 0){
-            Toast.makeText(this, getText(R.string.empty_holiday_warning), Toast.LENGTH_LONG).show();
-            return;
-        }
-        int holidayTypeInt = Integer.parseInt(holidayHelp);                                            // prevod zadaneho typu (smena/dovolena/nahradni volno) na integer
+        int holidayTypeInt = holidayTypeSpinner.getSelectedItemPosition();
 
         ContentValues shiftValues = new ContentValues();
         shiftValues.put(ShiftEntry.COLUMN_DATE, dateInt);
