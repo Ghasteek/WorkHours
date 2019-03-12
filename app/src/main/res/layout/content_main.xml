@@ -14,9 +14,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="52dp"
         android:layout_marginLeft="52dp"
+        android:layout_marginTop="101dp"
         android:text="Příchod"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="101dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/pickedTimeInView"
@@ -35,9 +36,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="101dp"
         android:text="Odchod"
         app:layout_constraintStart_toEndOf="@+id/showTimePickerIn"
-        tools:layout_editor_absoluteY="101dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/pickedTimeOutView"
@@ -56,9 +58,10 @@
         android:layout_height="25dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="104dp"
         android:text="Celkem: "
         app:layout_constraintStart_toEndOf="@+id/showTimePickerOut"
-        tools:layout_editor_absoluteY="104dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/calculatedTimeView"

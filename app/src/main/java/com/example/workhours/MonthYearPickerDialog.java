@@ -31,20 +31,24 @@ public class MonthYearPickerDialog extends DialogFragment {
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
 
         View dialog = inflater.inflate(R.layout.month_year_picker_dialog, null);
         final NumberPicker monthPicker = (NumberPicker) dialog.findViewById(R.id.picker_month);
         final NumberPicker yearPicker = (NumberPicker) dialog.findViewById(R.id.picker_year);
 
+        int monthHelp = ShiftTable.month;
+
         monthPicker.setMinValue(1);
         monthPicker.setMaxValue(12);
-        monthPicker.setValue(cal.get(Calendar.MONTH) + 1);
+        monthPicker.setValue(monthHelp);
+
+        int yearHelp = ShiftTable.year;
 
         int year = cal.get(Calendar.YEAR);
         yearPicker.setMinValue(2000);
         yearPicker.setMaxValue(year);
-        yearPicker.setValue(year);
+        yearPicker.setValue(yearHelp);
 
         builder.setView(dialog)
                 // Add action buttons
@@ -52,6 +56,14 @@ public class MonthYearPickerDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         listener.onDateSet(null, yearPicker.getValue(), monthPicker.getValue(), 0);
+                    }
+                })
+                .setNeutralButton(R.string.today, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        int todayYear = cal.get(Calendar.YEAR);
+                        int todayMonth = cal.get(Calendar.MONTH) + 1;
+                        listener.onDateSet(null, todayYear, todayMonth, 0);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

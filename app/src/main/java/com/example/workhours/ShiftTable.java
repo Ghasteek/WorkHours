@@ -29,11 +29,11 @@ import com.example.workhours.data.ShiftsContract;
 
 public class ShiftTable extends AppCompatActivity {
 
-    TextView showMonthYear;
+    /*TextView showMonthYear;
     ImageButton changeSelection;
-    String monthYearStr;
-    int year;
-    int month;
+    String monthYearStr;*/
+    public static int year;
+    public static int month;
 
     SimpleDateFormat sdf = new SimpleDateFormat("MMM yyyy");
     SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd");
