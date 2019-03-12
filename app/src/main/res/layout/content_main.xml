@@ -8,196 +8,23 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <ImageButton
-        android:id="@+id/hUpButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:onClick="plusH"
-        android:tag="2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/arrow_up_float" />
-
-    <ImageButton
-        android:id="@+id/hhUpButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:onClick="plusHH"
-        app:layout_constraintStart_toEndOf="@+id/hUpButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/arrow_up_float" />
-
-    <ImageButton
-        android:id="@+id/mUpButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:onClick="plusM"
-        app:layout_constraintStart_toEndOf="@+id/hhUpButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/arrow_up_float" />
-
-    <ImageButton
-        android:id="@+id/mmUpButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:onClick="plusMM"
-        app:layout_constraintStart_toEndOf="@+id/mUpButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/arrow_up_float" />
-
-    <ImageButton
-        android:id="@+id/hDownButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="4dp"
-        android:onClick="minusH"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hView"
-        app:srcCompat="@android:drawable/arrow_down_float" />
-
-    <ImageButton
-        android:id="@+id/hhDownButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="4dp"
-        android:onClick="minusHH"
-        app:layout_constraintStart_toEndOf="@+id/hDownButton"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:srcCompat="@android:drawable/arrow_down_float" />
-
-    <ImageButton
-        android:id="@+id/mDownButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="4dp"
-        android:onClick="minusM"
-        app:layout_constraintStart_toEndOf="@+id/hhDownButton"
-        app:layout_constraintTop_toBottomOf="@+id/mView"
-        app:srcCompat="@android:drawable/arrow_down_float" />
-
-    <ImageButton
-        android:id="@+id/mmDownButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="4dp"
-        android:onClick="minusMM"
-        app:layout_constraintStart_toEndOf="@+id/mDownButton"
-        app:layout_constraintTop_toBottomOf="@+id/mmView"
-        app:srcCompat="@android:drawable/arrow_down_float" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:text=":"
-        android:textSize="56sp"
-        android:typeface="monospace"
-        app:layout_constraintStart_toEndOf="@+id/hhView"
-        app:layout_constraintTop_toBottomOf="@+id/hhUpButton" />
-
-    <TextView
-        android:id="@+id/hView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:textSize="56sp"
-        android:typeface="monospace"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hUpButton" />
-
-    <TextView
-        android:id="@+id/hhView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginLeft="12dp"
-        android:text="0"
-        android:textSize="56sp"
-        android:typeface="monospace"
-        app:layout_constraintStart_toEndOf="@+id/hView"
-        app:layout_constraintTop_toBottomOf="@+id/hUpButton" />
-
-    <TextView
-        android:id="@+id/mView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:text="0"
-        android:textSize="56sp"
-        android:typeface="monospace"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/mUpButton" />
-
-    <TextView
-        android:id="@+id/mmView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:textSize="56sp"
-        android:typeface="monospace"
-        app:layout_constraintStart_toEndOf="@+id/mView"
-        app:layout_constraintTop_toBottomOf="@+id/mmUpButton" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="51dp"
-        android:layout_height="53dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="152dp"
-        android:background="@android:drawable/ic_menu_save"
-        android:onClick="shlukHodiny"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/hUpButton" />
-
-    <TextView
-        android:id="@+id/hodinyString"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="20dp"
-        android:textSize="24sp"
-        app:layout_constraintStart_toEndOf="@+id/button2"
-        app:layout_constraintTop_toTopOf="@+id/button2" />
-
     <Button
         android:id="@+id/showTimePickerIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="120dp"
-        android:layout_marginLeft="120dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginLeft="52dp"
         android:text="Příchod"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mmDownButton" />
+        tools:layout_editor_absoluteY="101dp" />
 
     <TextView
         android:id="@+id/pickedTimeInView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="140dp"
-        android:layout_marginLeft="140dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginLeft="68dp"
+        android:layout_marginTop="12dp"
         android:text="6:00"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/showTimePickerIn" />
@@ -206,20 +33,19 @@
         android:id="@+id/showTimePickerOut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginLeft="28dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
         android:text="Odchod"
         app:layout_constraintStart_toEndOf="@+id/showTimePickerIn"
-        app:layout_constraintTop_toBottomOf="@+id/mmDownButton" />
+        tools:layout_editor_absoluteY="101dp" />
 
     <TextView
         android:id="@+id/pickedTimeOutView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="96dp"
-        android:layout_marginLeft="96dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="92dp"
+        android:layout_marginLeft="92dp"
+        android:layout_marginTop="12dp"
         android:text="15:15"
         app:layout_constraintStart_toEndOf="@+id/pickedTimeInView"
         app:layout_constraintTop_toBottomOf="@+id/showTimePickerOut" />
@@ -228,12 +54,11 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="25dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:text="Celkem: "
         app:layout_constraintStart_toEndOf="@+id/showTimePickerOut"
-        app:layout_constraintTop_toBottomOf="@+id/mmDownButton" />
+        tools:layout_editor_absoluteY="104dp" />
 
     <TextView
         android:id="@+id/calculatedTimeView"
@@ -249,9 +74,7 @@
         android:id="@+id/text_view_table"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="272dp"
+        android:layout_marginTop="216dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

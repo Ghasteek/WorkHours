@@ -128,8 +128,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
-
     /**
      * Temporary helper method to display information in the onscreen TextView about the state of
      * the pets database.
@@ -190,8 +188,6 @@ public class MainActivity extends AppCompatActivity
             cursor.close();
         }
     }
-
-
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -313,169 +309,6 @@ public class MainActivity extends AppCompatActivity
         if (newUri == null) {
             Toast.makeText(this, getText(R.string.editor_insert_shift_failed), Toast.LENGTH_SHORT).show();
         } else {Toast.makeText(this, getText(R.string.editor_insert_shift_successful), Toast.LENGTH_SHORT).show();}
-    }
-
-    public void plusH(View view) {
-        TextView tv2 = (TextView) findViewById(R.id.hhView);
-        String hhStr = (String) tv2.getText();
-        TextView tv = (TextView) findViewById(R.id.hView);
-        String hStr = (String) tv.getText();
-        int hh = Integer.parseInt(hhStr);
-        int h = Integer.parseInt(hStr);
-        int max = 0;
-        if ((h < 2) && (hh < 4)){
-            max = 2;
-        } else {max = 1;};
-        int smer = 1;                                                                                   // 1 je plus, 0 je minus
-        int incremented = cycle(max, smer, hStr);
-        String vysledek = Integer.toString(incremented);
-        tv.setText(vysledek);
-    }
-
-    public void minusH(View view) {
-        TextView tv2 = (TextView) findViewById(R.id.hhView);
-        String hhStr = (String) tv2.getText();
-        TextView tv = (TextView) findViewById(R.id.hView);
-        String hStr = (String) tv.getText();
-        int hh = Integer.parseInt(hhStr);
-        int h = Integer.parseInt(hStr);
-        int max = 0;
-        if ((h < 2) && (hh < 5)){
-            max = 2;
-        } else {max = 1;};
-        int smer = 0;                                                                                   // 1 je plus, 0 je minus
-        int incremented = cycle(max, smer, hStr);
-        String vysledek = Integer.toString(incremented);
-        tv.setText(vysledek);
-    }
-
-    public void plusHH(View view) {
-        TextView tv2 = (TextView) findViewById(R.id.hhView);
-        String hhStr = (String) tv2.getText();
-        TextView tv = (TextView) findViewById(R.id.hView);
-        String hStr = (String) tv.getText();
-        int hh = Integer.parseInt(hhStr);
-        int h = Integer.parseInt(hStr);
-        int max = 9;
-        if (h == 2 && hh == 3 ){
-            tv2.setText("0");
-            tv.setText("0");
-        } else {
-            int smer = 1;                                                                               // 1 je plus, 0 je minus
-            int incremented = cycle(max, smer, hhStr);
-            String vysledek = Integer.toString(incremented);
-            tv2.setText(vysledek);
-        }
-    }
-
-    public void minusHH(View view) {
-        TextView tv2 = (TextView) findViewById(R.id.hhView);
-        String hhStr = (String) tv2.getText();
-        TextView tv = (TextView) findViewById(R.id.hView);
-        String hStr = (String) tv.getText();
-        int hh = Integer.parseInt(hhStr);
-        int h = Integer.parseInt(hStr);
-        int max ;
-        if (h == 2){
-            max = 3;
-        } else {max = 9;};
-        int smer = 0;                                                                                   // 1 je plus, 0 je minus
-        int incremented = cycle(max, smer, hhStr);
-        String vysledek = Integer.toString(incremented);
-        tv2.setText(vysledek);
-    }
-
-    public void plusM(View view) {
-        TextView tv2 = (TextView) findViewById(R.id.mmView);
-        String mmStr = (String) tv2.getText();
-        TextView tv = (TextView) findViewById(R.id.mView);
-        String mStr = (String) tv.getText();
-        int mm = Integer.parseInt(mmStr);
-        int m = Integer.parseInt(mStr);
-        int max = 5;
-        int smer = 1;                                                                                   // 1 je plus, 0 je minus
-        int incremented = cycle(max, smer, mStr);
-        String vysledek = Integer.toString(incremented);
-        tv.setText(vysledek);
-    }
-
-    public void minusM(View view) {
-        TextView tv = (TextView) findViewById(R.id.mView);
-        String mStr = (String) tv.getText();
-        int m = Integer.parseInt(mStr);
-        int max = 5;
-        int smer = 0;                                                                                   // 1 je plus, 0 je minus
-        int incremented = cycle(max, smer, mStr);
-        String vysledek = Integer.toString(incremented);
-        tv.setText(vysledek);
-    }
-
-    public void plusMM(View view) {
-        TextView tv2 = (TextView) findViewById(R.id.mmView);
-        String mmStr = (String) tv2.getText();
-        TextView tv = (TextView) findViewById(R.id.mView);
-        String mStr = (String) tv.getText();
-        int mm = Integer.parseInt(mmStr);
-        int m = Integer.parseInt(mStr);
-        int max = 9;
-        if (m == 5 && mm == 9 ){
-            tv2.setText("0");
-            tv.setText("0");
-        } else {
-            int smer = 1;                                                                               // 1 je plus, 0 je minus
-            int incremented = cycle(max, smer, mmStr);
-            String vysledek = Integer.toString(incremented);
-            tv2.setText(vysledek);
-        }
-    }
-
-    public void minusMM(View view) {
-        int max = 9;
-        int smer = 0;                                                                                   // 1 je plus, 0 je minus
-        TextView tv = (TextView) findViewById(R.id.mmView);
-        String currentStr = (String) tv.getText();
-        int incremented = cycle(max, smer, currentStr);
-        String vysledek = Integer.toString(incremented);
-        tv.setText(vysledek);
-    }
-
-    public int cycle(int max, int smer, String currentStr) {
-        int current = Integer.parseInt(currentStr);
-        int incremented = 0;
-        if (smer==1) {
-            if (current < max) {
-                return (current + 1);
-            }
-            else {
-                return (0);
-            }
-        } else {
-            if (current > 0) {
-                return (current - 1);
-            }
-            else {
-                return (max);
-            }
-        }
-    }
-
-    public void shlukHodiny(View view) {
-        int h, hh, m, mm = 0;
-        TextView tv1 = (TextView) findViewById(R.id.hView);
-        String hStr = (String) tv1.getText();
-        TextView tv2 = (TextView) findViewById(R.id.hhView);
-        String hhStr = (String) tv2.getText();
-        TextView tv3 = (TextView) findViewById(R.id.mView);
-        String mStr = (String) tv3.getText();
-        TextView tv4 = (TextView) findViewById(R.id.mmView);
-        String mmStr = (String) tv4.getText();
-        h = Integer.parseInt(hStr);
-        hh = Integer.parseInt(hhStr);
-        m = Integer.parseInt(mStr);
-        mm = Integer.parseInt(mmStr);
-        TextView tv5 = (TextView) findViewById(R.id.hodinyString);
-        tv5.setText(hStr + hhStr + ":" + mStr + mmStr);
-
     }
 
 
