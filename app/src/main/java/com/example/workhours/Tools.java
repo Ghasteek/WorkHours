@@ -1,5 +1,10 @@
 package com.example.workhours;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class Tools {
 
     public static int dateStrToInt (String dateInput){                                              // TODO dodelat hlidani vlozeneho datumu
@@ -52,5 +57,20 @@ public class Tools {
             newTime = hours + ":" + minutesStr;
         }
         return (newTime);
+    }
+
+    public static String getDayOfWeekStr (int dateInput){
+        String [] daysArray = {"Po ", "Út ", "Stř", "Čt ", "Pá ", "So ", "Ne "};
+        Calendar helpCal = Calendar.getInstance();
+        SimpleDateFormat originalFormat = new SimpleDateFormat("yyyyMMdd");
+        Date itemDate = helpCal.getTime();
+        try {
+            itemDate = originalFormat.parse(String.valueOf(dateInput));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        helpCal.setTime(itemDate);
+        int dayOfWeek = helpCal.get(Calendar.DAY_OF_WEEK) - 2;
+        return (daysArray[dayOfWeek]);
     }
 }

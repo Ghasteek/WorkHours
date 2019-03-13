@@ -99,19 +99,21 @@ public class ShiftsProvider extends ContentProvider {
             throw new IllegalArgumentException( "Arrival time invalid.");
         }
         int departure = values.getAsInteger(ShiftEntry.COLUMN_DEPARTURE);
-        if ((departure > 1439) || (departure == 0)){
+        if (departure > 1439){
             throw new IllegalArgumentException( "Departure time invalid.");
         }
-        if (arrival > departure){
+
+        int holiday = values.getAsInteger(ShiftEntry.COLUMN_HOLIDAY);
+        if (!ShiftEntry.isValidHoliday(holiday)){
+            throw new IllegalArgumentException( "Holiday selection invalid.");
+        }
+
+        if (arrival > departure && holiday != 4){
             throw new IllegalArgumentException( "Arrival time must be before departure.");
         }
         int breakLenght = values.getAsInteger(ShiftEntry.COLUMN_BREAK_LENGHT);
         if ((breakLenght > 1439) || (breakLenght == 0)){
             throw new IllegalArgumentException( "Break lenght invalid.");
-        }
-        int holiday = values.getAsInteger(ShiftEntry.COLUMN_HOLIDAY);
-        if (!ShiftEntry.isValidHoliday(holiday)){
-            throw new IllegalArgumentException( "Holiday selection invalid.");
         }
 
         //data insertion into the database

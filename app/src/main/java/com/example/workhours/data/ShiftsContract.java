@@ -40,10 +40,11 @@ public final class ShiftsContract {
         public final static int HOLIDAY_COMPENSATION = 1;                                               // nahradni volno
         public final static int HOLIDAY_PUBLIC = 2;                                                     // statni svatek
         public final static int HOLIDAY_VACATION = 3;                                                   // dovolena
+        public final static int HOLIDAY_INCOMPLETE = 4;                                                 // nekompletní záznam
         public final static String[] arrayHolidayOptions = {"Regular Shift", "free overtime", "Public Holiday", "Vacation"};
 
         public static boolean isValidHoliday(int holiday) {
-            if (holiday == HOLIDAY_SHIFT || holiday == HOLIDAY_COMPENSATION || holiday == HOLIDAY_PUBLIC || holiday == HOLIDAY_VACATION ) {
+            if (holiday == HOLIDAY_SHIFT || holiday == HOLIDAY_COMPENSATION || holiday == HOLIDAY_PUBLIC || holiday == HOLIDAY_VACATION || holiday == HOLIDAY_INCOMPLETE ) {
                 return true;
             }
             return false;

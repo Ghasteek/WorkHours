@@ -47,8 +47,6 @@ public class MainActivity extends AppCompatActivity
     TextView pickedTimeIn;
     TextView pickedTimeOut;
     SharedPreferences pref;
-    private ShiftsDbHelper mDbHelper;
-    private static final int SHIFT_LOADER = 0;
     ShiftCursorAdapter mCursorAdapter;
 
 
@@ -108,18 +106,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        Button changeColor = (Button) findViewById(R.id.setColorButton);
-        changeColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ProgressBar bar = (ProgressBar) findViewById(R.id.progressBar);
-                bar.setProgress(50);
-                Drawable progressDrawable = bar.getProgressDrawable().mutate();
-                progressDrawable.setColorFilter(Color.parseColor("#008577"), android.graphics.PorterDuff.Mode.SRC_IN);
-                bar.setProgressDrawable(progressDrawable);
-            }
-        });
-
 
         pref = getApplicationContext().getSharedPreferences("Settings", 0);             // definovani SharedPreference a dvou editu
         pickedTimeIn = (TextView) findViewById(R.id.pickedTimeInView);
@@ -144,10 +130,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    /**
-     * Temporary helper method to display information in the onscreen TextView about the state of
-     * the pets database.
-     */
     private void displayDatabaseInfo() {
         String[] projection = {
                 ShiftEntry.COLUMN_DATE,

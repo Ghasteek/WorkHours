@@ -47,39 +47,52 @@ public class ShiftCursorAdapter extends CursorAdapter {
         int holidayType = cursor.getInt(cursor.getColumnIndexOrThrow(ShiftsContract.ShiftEntry.COLUMN_HOLIDAY));
         int overtime = cursor.getInt(cursor.getColumnIndexOrThrow(ShiftsContract.ShiftEntry.COLUMN_OVERTIME));
 
-        shiftLengthView.setText(Tools.timeIntToStr(shiftLength));
         dateView.setText(Tools.dateIntToStr(date));
-        holidayTypeView.setText(String.valueOf(holidayType));
+        dayView.setText(Tools.getDayOfWeekStr(date));
 
-        if (overtime > 0) {
-            overtimeView.setText("+" + Tools.timeIntToStr(overtime));
-        } else {
-            overtimeView.setText(Tools.timeIntToStr(overtime));
-            }
-        shiftBar.setProgress(shiftLength);
+        switch (holidayType) {
+            case ShiftsContract.ShiftEntry.HOLIDAY_SHIFT:
+                shiftLengthView.setText(Tools.timeIntToStr(shiftLength));
+                holidayTypeView.setText(String.valueOf(holidayType));
 
-        if (shiftLength >= 480) {
-            if (shiftLength > 480) {
-                overtimeBar.setVisibility(View.VISIBLE);
-                overtimeBar.setProgress(shiftLength - 480);
-            }
-            Drawable progressDrawable = shiftBar.getProgressDrawable().mutate();
-            progressDrawable.setColorFilter(Color.parseColor("#008577"), android.graphics.PorterDuff.Mode.SRC_IN);
-            shiftBar.setProgressDrawable(progressDrawable);
+                if (overtime > 0) {
+                    overtimeView.setText("+" + Tools.timeIntToStr(overtime));
+                } else {
+                    overtimeView.setText(Tools.timeIntToStr(overtime));
+                }
+                shiftBar.setProgress(shiftLength);
+
+                if (shiftLength >= 480) {
+                    if (shiftLength > 480) {
+                        overtimeBar.setVisibility(View.VISIBLE);
+                        overtimeBar.setProgress(shiftLength - 480);
+                    }
+                    Drawable progressDrawable = shiftBar.getProgressDrawable().mutate();
+                    progressDrawable.setColorFilter(Color.parseColor("#008577"), android.graphics.PorterDuff.Mode.SRC_IN);
+                    shiftBar.setProgressDrawable(progressDrawable);
+                }
+                return;
+            case ShiftsContract.ShiftEntry.HOLIDAY_COMPENSATION:
+                shiftLengthView.setText(context.getString(R.string.compensation));
+                holidayTypeView.setVisibility(View.INVISIBLE);
+                shiftBar.setVisibility(View.INVISIBLE);
+                overtimeBar.setVisibility(View.INVISIBLE);
+                overtimeView.setVisibility(View.INVISIBLE);
+                return;
+            case ShiftsContract.ShiftEntry.HOLIDAY_VACATION:
+                shiftLengthView.setText(context.getString(R.string.vacation));
+                holidayTypeView.setVisibility(View.INVISIBLE);
+                shiftBar.setVisibility(View.INVISIBLE);
+                overtimeBar.setVisibility(View.INVISIBLE);
+                overtimeView.setVisibility(View.INVISIBLE);
+                return;
+            case ShiftsContract.ShiftEntry.HOLIDAY_INCOMPLETE:
+                shiftLengthView.setText(context.getString(R.string.incomplete));
+                holidayTypeView.setVisibility(View.INVISIBLE);
+                shiftBar.setVisibility(View.INVISIBLE);
+                overtimeBar.setVisibility(View.INVISIBLE);
+                overtimeView.setVisibility(View.INVISIBLE);
+                return;
         }
-
-        //TODO přesunout do TOOLS
-        String [] daysArray = {"Po ", "Út ", "Stř", "Čt ", "Pá ", "So ", "Ne "};
-        Calendar helpCal = Calendar.getInstance();
-        SimpleDateFormat originalFormat = new SimpleDateFormat("yyyyMMdd");
-        Date itemDate = helpCal.getTime();
-        try {
-            itemDate = originalFormat.parse(String.valueOf(date));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        helpCal.setTime(itemDate);
-        int dayOfWeek = helpCal.get(Calendar.DAY_OF_WEEK) - 2;
-        dayView.setText(daysArray[dayOfWeek]);
     }
 }

@@ -54,4 +54,8 @@
     <string name="keep_shift">No</string>
     <!-- SPINNER Shift types -->
     <string name="regular_shift">Regular shift</string>
+    <!-- SHIFTS TABLE popisky -->
+    <string name="compensation">Náhradní volno</string>
+    <string name="vacation">Dovolená</string>
+    <string name="incomplete">Nekompletní záznam</string>
 </resources>

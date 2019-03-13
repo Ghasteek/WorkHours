@@ -35,8 +35,8 @@ public class ShiftTable extends AppCompatActivity {
     public static int year;
     public static int month;
 
-    SimpleDateFormat sdf = new SimpleDateFormat("MMM yyyy");
-    SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd");
+    /*SimpleDateFormat sdf = new SimpleDateFormat("MMM yyyy");
+    SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd");*/
 
     @Override
     protected void onStart() {
