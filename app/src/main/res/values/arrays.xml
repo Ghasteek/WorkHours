@@ -13,5 +13,15 @@
         <item>Říjen</item>
         <item>Listopad</item>
         <item>Prosinec</item>
+    </string-array>
+
+    <string-array name="days">
+        <item>Po</item>
+        <item>Út</item>
+        <item>Stř</item>
+        <item>Čt</item>
+        <item>Pá</item>
+        <item>So</item>
+        <item>Ne</item>
     </string-array>>
 </resources>

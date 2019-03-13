@@ -6,6 +6,9 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.database.Cursor;
@@ -101,6 +105,18 @@ public class MainActivity extends AppCompatActivity
                 Globals.whichTinme = "OUT";
                 DialogFragment timePickerOut = new TimePickerFragment();
                 timePickerOut.show(getSupportFragmentManager(), "time out picker");
+            }
+        });
+
+        Button changeColor = (Button) findViewById(R.id.setColorButton);
+        changeColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProgressBar bar = (ProgressBar) findViewById(R.id.progressBar);
+                bar.setProgress(50);
+                Drawable progressDrawable = bar.getProgressDrawable().mutate();
+                progressDrawable.setColorFilter(Color.parseColor("#008577"), android.graphics.PorterDuff.Mode.SRC_IN);
+                bar.setProgressDrawable(progressDrawable);
             }
         });
 

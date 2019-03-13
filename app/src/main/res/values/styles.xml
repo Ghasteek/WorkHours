@@ -17,4 +17,14 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!-- RED Progress Bar-->
+    <style name="AppTheme.Red">
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- PURPLE Progress Bar-->
+    <style name="AppTheme.Purple">
+        <item name="colorAccent">#4E0072</item>
+    </style>
+
 </resources>

@@ -170,10 +170,15 @@ public class Shift extends AppCompatActivity {
         EditText timeIn = findViewById(R.id.arrivalEdit);
         EditText timeOut = findViewById(R.id.departureEdit);
         EditText breakTime = findViewById(R.id.breakLenghtEdit);
+
         Calendar cal = Calendar.getInstance();
+
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH) + 1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
+        String dateStr = day + "." + month + "." + year;
+
+        date.setText(dateStr);
 
         if (pref.contains("defaultInTime")){
             timeIn.setText(pref.getString("defaultInTime", ""));
