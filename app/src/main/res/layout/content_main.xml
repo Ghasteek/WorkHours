@@ -85,15 +85,63 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <ProgressBar
+        android:id="@+id/monthShiftsProgress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/thisMonthViewId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="0dp"
+        android:textSize="18sp"
+        android:text="Brezen 2019"
+        app:layout_constraintStart_toEndOf="@+id/monthShiftsProgress"
+        app:layout_constraintTop_toTopOf="@+id/monthShiftsProgress" />
+    <TextView
+        android:id="@+id/shiftsInfoViewId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="2dp"
+        android:textSize="18sp"
+        android:text="Odpracovano 12 dni z 20"
+        app:layout_constraintStart_toEndOf="@+id/monthShiftsProgress"
+        app:layout_constraintTop_toBottomOf="@+id/thisMonthViewId" />
+
+    <TextView
+        android:id="@+id/overtimeThisMonthViewId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="2dp"
+        android:textSize="18sp"
+        android:text="Tento měsíc +0,5h"
+        app:layout_constraintStart_toEndOf="@+id/monthShiftsProgress"
+        app:layout_constraintTop_toBottomOf="@+id/shiftsInfoViewId" />
+
     <TextView
         android:id="@+id/overtimeSumViewId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="31dp"
-        android:layout_marginLeft="31dp"
-        android:layout_marginTop="26dp"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="2dp"
+        android:textSize="18sp"
+        android:text="celkove prescasu: +2.5h"
+        app:layout_constraintStart_toEndOf="@+id/monthShiftsProgress"
+        app:layout_constraintTop_toBottomOf="@+id/overtimeThisMonthViewId" />
 
 </android.support.constraint.ConstraintLayout>

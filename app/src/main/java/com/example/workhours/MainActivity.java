@@ -37,19 +37,20 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
+import com.example.workhours.data.ShiftsContract;
 import com.example.workhours.data.ShiftsContract.ShiftEntry;
 import com.example.workhours.data.ShiftsDbHelper;
 import com.example.workhours.data.ShiftsProvider;
 
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener{    // pro time picker t5eba implementovat TimePickerDialog.OnTimeSetListener
 
-    TextView pickedTimeIn;
-    TextView pickedTimeOut;
-    TextView overtimeSumView;
-    SharedPreferences pref;
-    SharedPreferences temp;
-    /*ShiftCursorAdapter mCursorAdapter;*/
+    TextView pickedTimeIn,pickedTimeOut, thisMonthView,shiftsInfoView, overtimeThisMonthView, overtimeSumView;
+    ProgressBar monthShifts;
+    SharedPreferences pref, temp;
+    Calendar calendar;
 
 
     @Override
@@ -99,12 +100,18 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-        pref = getApplicationContext().getSharedPreferences("Settings", 0);             // definovani SharedPreference a dvou editu
-        pickedTimeIn = (TextView) findViewById(R.id.pickedTimeInView);
-        pickedTimeOut = (TextView) findViewById(R.id.pickedTimeOutView);
-
+        pref = getApplicationContext().getSharedPreferences("Settings", 0);             // definovani SharedPreference
         temp = getApplicationContext().getSharedPreferences("Temporary", 0);
+
+        pickedTimeIn = (TextView) findViewById(R.id.pickedTimeInView);                               // definmování textových polí na hlavní stránce
+        pickedTimeOut = (TextView) findViewById(R.id.pickedTimeOutView);
+        thisMonthView = (TextView) findViewById(R.id.thisMonthViewId);
+        shiftsInfoView = (TextView) findViewById(R.id.shiftsInfoViewId);
+        overtimeThisMonthView = (TextView) findViewById(R.id.overtimeThisMonthViewId);
         overtimeSumView =  (TextView) findViewById(R.id.overtimeSumViewId);
+        monthShifts = (ProgressBar) findViewById(R.id.monthShiftsProgress);
+
+        calendar = Calendar.getInstance();
 
         String timeInStr = pickedTimeIn.getText().toString();                                           // prirazeni shared preference do globalnich promennych kvuli time pickeru
         String timeOutStr = pickedTimeOut.getText().toString();
@@ -121,8 +128,61 @@ public class MainActivity extends AppCompatActivity
         if (pref.contains("defaultOutTime")){
             pickedTimeOut.setText(pref.getString("defaultOutTime", ""));
         }
-          displayDatabaseInfo();
+        //displayDatabaseInfo();
+        showInfo();
+    }
 
+    private void showInfo() {
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+
+        String[] projection = {
+                ShiftEntry.COLUMN_DATE,
+                ShiftEntry.COLUMN_SHIFT_LENGHT,
+                ShiftEntry.COLUMN_OVERTIME,
+                ShiftEntry.COLUMN_HOLIDAY};
+
+        String selection = ShiftEntry.COLUMN_HOLIDAY + "=? AND " + ShiftEntry.COLUMN_DATE + " LIKE ?";
+
+        int monthLength = (int) (Math.log10(month) + 1);                                                    // logarytmicka metoda zjisteni poctu cifer v cisle
+        String monthStr;
+        if (monthLength == 1) {
+            monthStr = "0" + (month + 1);
+        } else { monthStr = String.valueOf(month); }
+
+        String[] selectionArgs = new String[] { String.valueOf(ShiftEntry.HOLIDAY_SHIFT), String.valueOf(year) + monthStr + "%" };
+
+        Cursor cursor = getContentResolver().query(
+                ShiftsContract.ShiftEntry.CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
+                null);
+
+        String [] monthArray = getResources().getStringArray(R.array.months);                           // nastavení popisku tohoto měsíce a roku
+        int i = month;
+        thisMonthView.setText(monthArray[i] + " " + String.valueOf(year));
+
+        int overtimeIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_OVERTIME);
+        int overTimeSumThisMonth = 0;
+
+        try{
+            int shiftsThisMonth = cursor.getCount();                                                        //nastavení popisku odpracovaných směn //TODO spočítat kolik je v měsíci pracovních dní
+            shiftsInfoView.setText(getResources().getString(R.string.alreadyWorked) + " " + shiftsThisMonth);
+            monthShifts.setMax(20);
+            monthShifts.setProgress(shiftsThisMonth);
+
+            while (cursor.moveToNext()){
+                overTimeSumThisMonth = overTimeSumThisMonth + cursor.getInt(overtimeIndex);
+            }
+            overtimeThisMonthView.setText(getResources().getString(R.string.thisMonthOvertime) + " " + Tools.timeIntToStr(overTimeSumThisMonth) );
+        } finally {
+            cursor.close();
+        }
+
+        if (temp.contains("overtimeSum")){
+            overtimeSumView.setText( getResources().getString(R.string.sumOfOvertime) + " " + Tools.timeIntToStr(temp.getInt("overtimeSum",0)) + "h");
+        } else {overtimeSumView.setText( getResources().getString(R.string.sumOfOvertime) + " 0h");}
     }
 
     private void displayDatabaseInfo() {
@@ -217,7 +277,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart(){
         super.onStart();
-        displayDatabaseInfo();
+        showInfo();
+        //displayDatabaseInfo();
     }
                                                                                                         // po sem je definice buttonu a jeho onclickListeneru + onTimeSet abz vratil cas
     @Override
@@ -251,7 +312,8 @@ public class MainActivity extends AppCompatActivity
                 return true;
             case R.id.action_dummyData:
                 insertDummyData();
-                displayDatabaseInfo();
+                showInfo();
+                //displayDatabaseInfo();
                 return true;
             case R.id.action_add:
                 Intent addIntent = new Intent(MainActivity.this, Shift.class);
