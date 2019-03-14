@@ -46,8 +46,10 @@ public class MainActivity extends AppCompatActivity
 
     TextView pickedTimeIn;
     TextView pickedTimeOut;
+    TextView overtimeSumView;
     SharedPreferences pref;
-    ShiftCursorAdapter mCursorAdapter;
+    SharedPreferences temp;
+    /*ShiftCursorAdapter mCursorAdapter;*/
 
 
     @Override
@@ -80,19 +82,9 @@ public class MainActivity extends AppCompatActivity
         showTimePickerIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Globals.whichTinme = "IN";
+                Globals.whichTime = "IN";
                 DialogFragment timePickerIn = new TimePickerFragment();
                 timePickerIn.show(getSupportFragmentManager(), "time in picker");
-            }
-        });
-
-        TextView showTimePickerOut2 = (TextView) findViewById(R.id.pickedTimeOutView);                  // odchod picker pri kliku na label
-        showTimePickerOut2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Globals.whichTinme = "OUT";
-                DialogFragment timePickerOut = new TimePickerFragment();
-                timePickerOut.show(getSupportFragmentManager(), "time out picker");
             }
         });
 
@@ -100,7 +92,7 @@ public class MainActivity extends AppCompatActivity
         showTimePickerOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Globals.whichTinme = "OUT";
+                Globals.whichTime = "OUT";
                 DialogFragment timePickerOut = new TimePickerFragment();
                 timePickerOut.show(getSupportFragmentManager(), "time out picker");
             }
@@ -110,6 +102,9 @@ public class MainActivity extends AppCompatActivity
         pref = getApplicationContext().getSharedPreferences("Settings", 0);             // definovani SharedPreference a dvou editu
         pickedTimeIn = (TextView) findViewById(R.id.pickedTimeInView);
         pickedTimeOut = (TextView) findViewById(R.id.pickedTimeOutView);
+
+        temp = getApplicationContext().getSharedPreferences("Temporary", 0);
+        overtimeSumView =  (TextView) findViewById(R.id.overtimeSumViewId);
 
         String timeInStr = pickedTimeIn.getText().toString();                                           // prirazeni shared preference do globalnich promennych kvuli time pickeru
         String timeOutStr = pickedTimeOut.getText().toString();
@@ -185,11 +180,15 @@ public class MainActivity extends AppCompatActivity
         } finally {
             cursor.close();
         }
+
+        if (temp.contains("overtimeSum")){
+            overtimeSumView.setText(" overtime   " + Tools.timeIntToStr(temp.getInt("overtimeSum",0)));
+        } else {overtimeSumView.setText("0");}
     }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        if (Globals.whichTinme == "IN"){
+        if (Globals.whichTime == "IN"){
             TextView timeInView = (TextView) findViewById(R.id.pickedTimeInView);
             int minLength = (int) (Math.log10(minute) + 1);                                                     // logarytmicka metoda zjisteni poctu cifer v cisle
             if (minLength == 2){
@@ -311,7 +310,7 @@ public class MainActivity extends AppCompatActivity
 
 
     public static class Globals {
-        public static String whichTinme;
+        public static String whichTime;
         public static int timeInHours;
         public static int timeInMinutes;
         public static int timeOutHours;

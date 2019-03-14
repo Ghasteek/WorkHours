@@ -14,11 +14,11 @@ public class TimePickerFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        if (MainActivity.Globals.whichTinme == "IN") {
+        if (MainActivity.Globals.whichTime == "IN") {
             int hour = MainActivity.Globals.timeInHours;//c.get(Calendar.HOUR_OF_DAY);
             int minute = MainActivity.Globals.timeInMinutes;//c.get(Calendar.MINUTE);
             return new TimePickerDialog(getActivity(), (TimePickerDialog.OnTimeSetListener) getActivity(), hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
-        } else if (MainActivity.Globals.whichTinme == "OUT"){
+        } else if (MainActivity.Globals.whichTime == "OUT"){
             int hour = MainActivity.Globals.timeOutHours;
             int minute = MainActivity.Globals.timeOutMinutes;
             return new TimePickerDialog(getActivity(), (TimePickerDialog.OnTimeSetListener) getActivity(), hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));

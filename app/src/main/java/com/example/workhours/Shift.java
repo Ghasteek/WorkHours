@@ -34,6 +34,7 @@ public class Shift extends AppCompatActivity {
     private Uri clickedShiftUri;
     private boolean mShiftChanged = false;
     private Spinner holidayTypeSpinner;
+    private String overtimeLengthStr;
 
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {                      // listener to any user touch on a view for editing
         @Override
@@ -158,7 +159,7 @@ public class Shift extends AppCompatActivity {
             setDefault();
         } else {
             setTitle(getString(R.string.editShift));
-
+            date.setEnabled(false);
             fillUp(clickedShiftUri);
 
         }
@@ -217,8 +218,7 @@ public class Shift extends AppCompatActivity {
                 String departureStr = Tools.timeIntToStr(cursor.getInt(departureColumnIndex));
                 String breakLenghtStr = Tools.timeIntToStr(cursor.getInt(breakLengthColumnIndex));
                 String shiftLenghtStr = Tools.timeIntToStr(cursor.getInt(shiftLengthColumnIndex));
-                String overtimeLengthStr = Tools.timeIntToStr(cursor.getInt(overtimeLengthColumnIndex));
-                //String holidayTypeStr = String.valueOf(cursor.getInt(holidayTypeColumnIndex));
+                overtimeLengthStr = Tools.timeIntToStr(cursor.getInt(overtimeLengthColumnIndex));
 
                 date.setText(dateStr);
                 arriveTime.setText(arrivalStr);
@@ -263,6 +263,23 @@ public class Shift extends AppCompatActivity {
         int shiftLengthInt = departureTimeInt - arriveTimeInt - breakLengthInt;                         // vypocet delky smeny
 
         int overtimeLengthInt = shiftLengthInt - 480 ;
+        int overtimeLenghtOriginal = 0;
+        if (clickedShiftUri != null) {
+            overtimeLenghtOriginal = Tools.timeStrToInt(overtimeLengthStr);
+        }
+        int overtimeDifference = overtimeLengthInt - overtimeLenghtOriginal;
+        //Toast.makeText(this,"rozdíl overtime je " + overtimeDifference, Toast.LENGTH_LONG).show();
+
+        SharedPreferences temp = getApplicationContext().getSharedPreferences("Temporary", 0);             // definovani SharedPreference a editu
+        SharedPreferences.Editor editor = temp.edit();
+        int overtimeSumOld = 0;
+        if (temp.contains("overtimeSum")){
+            overtimeSumOld = temp.getInt("overtimeSum", 0);
+        }
+        //int overtimeSumOld = pref.getInt("overtimeSum", 0);
+        int overtimeSumNew = overtimeSumOld + overtimeDifference;
+        editor.putInt("overtimeSum", overtimeSumNew);
+        editor.apply();
 
         int holidayTypeInt = holidayTypeSpinner.getSelectedItemPosition();
 

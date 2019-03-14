@@ -13,10 +13,13 @@ public class Settings extends AppCompatActivity {
     EditText timeIn;
     EditText timeOut;
     EditText breakTime;
+    EditText overtimeCorrection;
     SharedPreferences pref;
+    SharedPreferences temp;
 
     public void save_settings(){
         SharedPreferences.Editor editor = pref.edit();
+        SharedPreferences.Editor editorTemp = temp.edit();
 
         String timeInStr = timeIn.getText().toString();
         String timeOutStr = timeOut.getText().toString();
@@ -25,14 +28,24 @@ public class Settings extends AppCompatActivity {
         editor.putString("defaultInTime", timeInStr);
         editor.putString("defaultOutTime", timeOutStr);
         editor.putInt("defaultPause", Tools.timeStrToInt(defaultPauseStr));
-
+//TODO předělat time pickery aby si braly default in a default out časy ze shared preferenecs a né z glogals
         String[] timeInArray = timeInStr.split(":");
         String[] timeOutArray = timeOutStr.split(":");
         MainActivity.Globals.timeInHours = Integer.parseInt(timeInArray[0]);
         MainActivity.Globals.timeInMinutes = Integer.parseInt(timeInArray[1]);
         MainActivity.Globals.timeOutHours = Integer.parseInt(timeOutArray[0]);
         MainActivity.Globals.timeOutMinutes = Integer.parseInt(timeOutArray[1]);
-        editor.apply();                                                                        // apply() nevraci true pokud vse probehne v poradku, pokud chci hlidat vysledek, pouyit commit() + hlidat navrat true
+        editor.apply();                                                                             // apply() nevraci true pokud vse probehne v poradku, pokud chci hlidat vysledek, pouyit commit() + hlidat navrat true
+
+        int overtimeOld = 0;
+        if (temp.contains("overtimeSum")){
+            overtimeOld = temp.getInt("overtimeSum", 0);
+        }
+        int correction = Integer.parseInt(overtimeCorrection.getText().toString());
+        int overtimeNew = overtimeOld + correction;
+        editorTemp.putInt("overtimeSum", overtimeNew);
+        editorTemp.apply();
+
         Toast.makeText(this, "Settings saved.", Toast.LENGTH_SHORT).show();
     }
 
@@ -68,9 +81,11 @@ public class Settings extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
         pref = getApplicationContext().getSharedPreferences("Settings", 0);             // definovani SharedPreference a editu
+        temp = getApplicationContext().getSharedPreferences("Temporary", 0);
         timeIn = (EditText) findViewById(R.id.defaultArrivalTimeEdit);
         timeOut = (EditText) findViewById(R.id.defaultDepartureTimeEdit);
         breakTime = (EditText) findViewById(R.id.defaultBreakTimeEdit);
+        overtimeCorrection = (EditText) findViewById(R.id.overtimeCorrectionEdit);
 
         if (pref.contains("defaultInTime")){
             timeIn.setText(pref.getString("defaultInTime", ""));
@@ -81,5 +96,6 @@ public class Settings extends AppCompatActivity {
         if (pref.contains("defaultPause")){
             breakTime.setText(Tools.timeIntToStr(pref.getInt("defaultPause",0)));
         }
+
     }
 }
