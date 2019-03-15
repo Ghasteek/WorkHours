@@ -34,6 +34,13 @@ public class Tools {
         return (newDate);
     }
 
+    public static int dateDateToInt (Date dateInput) {
+        Calendar helpcal = Calendar.getInstance();
+        helpcal.setTime(dateInput);
+        String dateOutput = helpcal.get(Calendar.DAY_OF_MONTH) + "." + (helpcal.get(Calendar.MONTH) + 1) + "." + helpcal.get(Calendar.YEAR);
+        return(dateStrToInt(dateOutput));
+    }
+
     public static String timeIntToStr (int timeInput){
         boolean isNegative = false;
         String newTime;
@@ -107,8 +114,5 @@ public class Tools {
             startCal.add(Calendar.DAY_OF_MONTH, 1);
         }
         return(String.valueOf(workDaysInMonth));
-        //return(startDateInt);
-        //return(endDateInt);
-        //return(String.valueOf(workDaysInMonth) + " / " + String.valueOf(lastDay));
     }
 }

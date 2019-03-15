@@ -73,6 +73,12 @@
     <!-- MAIN SCREEN popisky -->
     <string name="alreadyWorked">Odpracováno </string>
     <string name="daysFrom"> dní z </string>
-    <string name="thisMonthOvertime">Tento měsíc </string>
+    <string name="thisMonthOvertime">Tento měsíc přesčasů: </string>
     <string name="sumOfOvertime">Celkově přesčasů: </string>
+    <string name="arriveTooltip">Zadejte čas příchodu do práce</string>
+    <string name="departureTooltip">Zadejte čas odchodu z práce</string>
+    <string name="todayShiftLabel">Dnešní směna:</string>
+    <string name="todayShiftDepartureLabel">Odchod:</string>
+    <string name="todayShiftArrivalLabel">Příchod:</string>
+    <string name="notInserted">nezadáno</string>
 </resources>

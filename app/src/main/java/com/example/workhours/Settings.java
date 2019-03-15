@@ -37,14 +37,17 @@ public class Settings extends AppCompatActivity {
         MainActivity.Globals.timeOutMinutes = Integer.parseInt(timeOutArray[1]);
         editor.apply();                                                                             // apply() nevraci true pokud vse probehne v poradku, pokud chci hlidat vysledek, pouyit commit() + hlidat navrat true
 
-        int overtimeOld = 0;
-        if (temp.contains("overtimeSum")){
-            overtimeOld = temp.getInt("overtimeSum", 0);
+        String isValidCorrection = overtimeCorrection.getText().toString();
+        if (!isValidCorrection.isEmpty()) {
+            int overtimeOld = 0;
+            if (temp.contains("overtimeSum")) {
+                overtimeOld = temp.getInt("overtimeSum", 0);
+            }
+            int correction = Integer.parseInt(overtimeCorrection.getText().toString());
+            int overtimeNew = overtimeOld + correction;
+            editorTemp.putInt("overtimeSum", overtimeNew);
+            editorTemp.apply();
         }
-        int correction = Integer.parseInt(overtimeCorrection.getText().toString());
-        int overtimeNew = overtimeOld + correction;
-        editorTemp.putInt("overtimeSum", overtimeNew);
-        editorTemp.apply();
 
         Toast.makeText(this, "Settings saved.", Toast.LENGTH_SHORT).show();
     }

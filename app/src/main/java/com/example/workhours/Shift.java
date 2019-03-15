@@ -276,7 +276,6 @@ public class Shift extends AppCompatActivity {
         if (temp.contains("overtimeSum")){
             overtimeSumOld = temp.getInt("overtimeSum", 0);
         }
-        //int overtimeSumOld = pref.getInt("overtimeSum", 0);
         int overtimeSumNew = overtimeSumOld + overtimeDifference;
         editor.putInt("overtimeSum", overtimeSumNew);
         editor.apply();

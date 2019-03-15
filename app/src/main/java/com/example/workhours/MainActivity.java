@@ -30,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -48,12 +49,13 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener{    // pro time picker t5eba implementovat TimePickerDialog.OnTimeSetListener
+        implements NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener{    // pro time picker třeba implementovat TimePickerDialog.OnTimeSetListener
 
-    TextView pickedTimeIn,pickedTimeOut, thisMonthView,shiftsInfoView, overtimeThisMonthView, overtimeSumView;
+    TextView todayArrivalInfo,todayDepartureInfo, thisMonthView,shiftsInfoView, overtimeThisMonthView, overtimeSumView;
     ProgressBar monthShifts;
     SharedPreferences pref, temp;
     Calendar calendar;
+    ImageButton showTimePickerIn, showTimePickerOut;
 
 
     @Override
@@ -64,14 +66,15 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+                                                                                                        // vypnuti floating action buttonu
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -82,7 +85,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
                                                                                                         // prichod picker
-        Button showTimePickerIn = (Button) findViewById(R.id.showTimePickerIn);
+        showTimePickerIn = (ImageButton) findViewById(R.id.arriveButtonId);
         showTimePickerIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +95,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        Button showTimePickerOut = (Button) findViewById(R.id.showTimePickerOut);                             // odchod picker
+        showTimePickerOut = (ImageButton) findViewById(R.id.departureButtonId);               // odchod picker
         showTimePickerOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,8 +109,9 @@ public class MainActivity extends AppCompatActivity
         pref = getApplicationContext().getSharedPreferences("Settings", 0);             // definovani SharedPreference
         temp = getApplicationContext().getSharedPreferences("Temporary", 0);
 
-        pickedTimeIn = (TextView) findViewById(R.id.pickedTimeInView);                               // definmování textových polí na hlavní stránce
-        pickedTimeOut = (TextView) findViewById(R.id.pickedTimeOutView);
+        todayArrivalInfo = (TextView) findViewById(R.id.todayArrivalInfoId);                               // definmování textových polí na hlavní stránce
+        todayDepartureInfo = (TextView) findViewById(R.id.todayDepartureInfoId);
+
         thisMonthView = (TextView) findViewById(R.id.thisMonthViewId);
         shiftsInfoView = (TextView) findViewById(R.id.shiftsInfoViewId);
         overtimeThisMonthView = (TextView) findViewById(R.id.overtimeThisMonthViewId);
@@ -116,22 +120,47 @@ public class MainActivity extends AppCompatActivity
 
         calendar = Calendar.getInstance();
 
-        String timeInStr = pickedTimeIn.getText().toString();                                           // prirazeni shared preference do globalnich promennych kvuli time pickeru
-        String timeOutStr = pickedTimeOut.getText().toString();
-        String[] timeInArray = timeInStr.split(":");
-        String[] timeOutArray = timeOutStr.split(":");
+        String[] timeInArray = pref.getString("defaultInTime", "").split(":");
+        String[] timeOutArray = pref.getString("defaultOutTime", "").split(":");
         MainActivity.Globals.timeInHours = Integer.parseInt(timeInArray[0]);
         MainActivity.Globals.timeInMinutes = Integer.parseInt(timeInArray[1]);
         MainActivity.Globals.timeOutHours = Integer.parseInt(timeOutArray[0]);
         MainActivity.Globals.timeOutMinutes = Integer.parseInt(timeOutArray[1]);
 
-        if (pref.contains("defaultInTime")){
-            pickedTimeIn.setText(pref.getString("defaultInTime", ""));
+        //TODO dodělat kontrolu, že poslední zadaná směna byla ze včerejška, pokud ne, přidat incomplete směny za chybějící dny, upozornit že je třeba doplnit údaje
+        // vybrat z DB poslední záznam a porovnat jeho datum s datumem v temp ulozenym pri poslednim zásahu do DB
+        if (temp.contains("arrivalTime")){
+            if ((temp.getInt("arrivalDate", 0)) == (Tools.dateDateToInt(calendar.getTime()))) {
+                todayArrivalInfo.setText(getResources().getString(R.string.todayShiftArrivalLabel) + " " + Tools.timeIntToStr(temp.getInt("arrivalTime", 0)));
+                showTimePickerIn.setEnabled(false);
+            } else {
+                Toast.makeText(this,"neni vyplnena smena ze vcera ", Toast.LENGTH_LONG).show();
+                SharedPreferences.Editor editorTemp = temp.edit();
+                editorTemp.remove("arrivalTime");
+                editorTemp.remove("arrivalDate");
+                editorTemp.apply();
+                todayArrivalInfo.setText(getResources().getString(R.string.todayShiftArrivalLabel) + " " + getResources().getText(R.string.notInserted));
+                }
+
+        } else {
+            todayArrivalInfo.setText(getResources().getString(R.string.todayShiftArrivalLabel) + " " + getResources().getText(R.string.notInserted));
+            }
+
+        if (temp.contains("departureTime")){
+            if ((temp.getInt("departureDate", 0)) == (Tools.dateDateToInt(calendar.getTime()))) {
+                todayDepartureInfo.setText(getResources().getString(R.string.todayShiftDepartureLabel) + " " + Tools.timeIntToStr(temp.getInt("departureTime", 0)));
+                showTimePickerOut.setEnabled(false);
+            } else {
+                SharedPreferences.Editor editorTemp = temp.edit();
+                editorTemp.remove("departureTime");
+                editorTemp.remove("departureDate");
+                editorTemp.apply();
+                todayDepartureInfo.setText(getResources().getString(R.string.todayShiftDepartureLabel) + " " + getResources().getString(R.string.notInserted));
+            }
+
+        } else {
+            todayDepartureInfo.setText(getResources().getString(R.string.todayShiftDepartureLabel) + " " + getResources().getString(R.string.notInserted));
         }
-        if (pref.contains("defaultOutTime")){
-            pickedTimeOut.setText(pref.getString("defaultOutTime", ""));
-        }
-        //displayDatabaseInfo();
         showInfo();
     }
 
@@ -171,14 +200,15 @@ public class MainActivity extends AppCompatActivity
 
         try{
             int shiftsThisMonth = cursor.getCount();                                                        //nastavení popisku odpracovaných směn
-            shiftsInfoView.setText(getResources().getString(R.string.alreadyWorked) + " " + shiftsThisMonth + " " + getResources().getString(R.string.daysFrom) + " " + Tools.getWorkDaysInMont(month, year));
-            monthShifts.setMax(20);
+            String workDaysInMonth = Tools.getWorkDaysInMont(month, year);
+            shiftsInfoView.setText(getResources().getString(R.string.alreadyWorked) + " " + shiftsThisMonth + " " + getResources().getString(R.string.daysFrom) + " " + workDaysInMonth);
+            monthShifts.setMax(Integer.parseInt(workDaysInMonth));
             monthShifts.setProgress(shiftsThisMonth);
 
             while (cursor.moveToNext()){
                 overTimeSumThisMonth = overTimeSumThisMonth + cursor.getInt(overtimeIndex);
             }
-            overtimeThisMonthView.setText(getResources().getString(R.string.thisMonthOvertime) + " " + Tools.timeIntToStr(overTimeSumThisMonth) );
+            overtimeThisMonthView.setText(getResources().getString(R.string.thisMonthOvertime) + " " + Tools.timeIntToStr(overTimeSumThisMonth));
         } finally {
             cursor.close();
         }
@@ -188,7 +218,7 @@ public class MainActivity extends AppCompatActivity
         } else {overtimeSumView.setText( getResources().getString(R.string.sumOfOvertime) + " 0h");}
     }
 
-    private void displayDatabaseInfo() {
+    /*private void displayDatabaseInfo() {
         String[] projection = {
                 ShiftEntry.COLUMN_DATE,
                 ShiftEntry.COLUMN_ARRIVAL,
@@ -247,41 +277,70 @@ public class MainActivity extends AppCompatActivity
         if (temp.contains("overtimeSum")){
             overtimeSumView.setText(" overtime   " + Tools.timeIntToStr(temp.getInt("overtimeSum",0)));
         } else {overtimeSumView.setText("0");}
-    }
+    }*/
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        String departureTimeHelp = "";
+        String arrivalTimeHelp = "";
         if (Globals.whichTime == "IN"){
-            TextView timeInView = (TextView) findViewById(R.id.pickedTimeInView);
             int minLength = (int) (Math.log10(minute) + 1);                                                     // logarytmicka metoda zjisteni poctu cifer v cisle
             if (minLength == 2){
-                timeInView.setText(hourOfDay + ":" + minute);
-            } else {timeInView.setText(hourOfDay + ":0" + minute);}
+                arrivalTimeHelp = hourOfDay + ":" + minute;
+            } else {arrivalTimeHelp = hourOfDay + ":0" + minute;}
+            todayArrivalInfo.setText(getResources().getString(R.string.todayShiftArrivalLabel) + " " + arrivalTimeHelp);
             Globals.timeInHours = hourOfDay;
             Globals.timeInMinutes = minute;
+            SharedPreferences.Editor editorTemp = temp.edit();
+            editorTemp.putInt("arrivalTime", Tools.timeStrToInt(arrivalTimeHelp));
+            editorTemp.putInt("arrivalDate", Tools.dateDateToInt(calendar.getTime()));
+            //TODO uloz do db nekompletni zaznam s holiday type 4 - nekompletni zaznam
+            /*ContentValues shiftValues = new ContentValues();
+            shiftValues.put(ShiftEntry.COLUMN_DATE, dateInt);
+            shiftValues.put(ShiftEntry.COLUMN_ARRIVAL, arriveTimeInt);
+            shiftValues.put(ShiftEntry.COLUMN_DEPARTURE, departureTimeInt);
+            shiftValues.put(ShiftEntry.COLUMN_BREAK_LENGHT, breakLengthInt);
+            shiftValues.put(ShiftEntry.COLUMN_SHIFT_LENGHT, shiftLengthInt);
+            shiftValues.put(ShiftEntry.COLUMN_OVERTIME, overtimeLengthInt);
+            shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, holidayTypeInt);
+            Uri incompleteShiftUri = getContentResolver().insert(ShiftEntry.CONTENT_URI, shiftValues);
+            String uriStr = incompleteShiftUri.toString();*/
+            String uriStr = "uriRozdelaneSmeny.toString()";
+            editorTemp.putString("incompleteUri", uriStr);
+            editorTemp.apply();
+            showTimePickerIn.setEnabled(false);
+            Toast.makeText(this,"ukladam incomplete zaznam ", Toast.LENGTH_LONG).show();
+
         } else {
-            TextView timeOutView = (TextView) findViewById(R.id.pickedTimeOutView);
             int minLength = (int) (Math.log10(minute) + 1);
             if (minLength == 2){
-                timeOutView.setText(hourOfDay + ":" + minute);
-            } else {timeOutView.setText(hourOfDay + ":0" + minute);}
-            int pause = pref.getInt("defaultPause", 0);
-            int calculatedTime = (((hourOfDay * 60) + minute)) - (((Globals.timeInHours * 60) + Globals.timeInMinutes)) - pause;  // vypocet odpracovanych minut, (odchod - prichod) - pauza
-            int hours = calculatedTime / 60;                                                                                    // vypocet hodin
-            int minutes = (calculatedTime - (hours * 60));                                                                      // vypocet minut
-            TextView calculatedView = (TextView) findViewById(R.id.calculatedTimeView);
-            int minLength2 = (int) (Math.log10(minutes) + 1);
-            if (minLength2 == 2){
-                calculatedView.setText(hours + ":" + minutes);
-            } else {calculatedView.setText(hours + ":0" + minutes);}
+                departureTimeHelp = hourOfDay + ":" + minute;
+            } else {departureTimeHelp = hourOfDay + ":0" + minute;}
+            todayDepartureInfo.setText(getResources().getString(R.string.todayShiftDepartureLabel) + " " + departureTimeHelp);
+            Globals.timeOutHours = hourOfDay;
+            Globals.timeOutMinutes = minute;
+            SharedPreferences.Editor editorTemp = temp.edit();
+            editorTemp.putInt("departureTime", Tools.timeStrToInt(departureTimeHelp));
+            editorTemp.putInt("departureDate", Tools.dateDateToInt(calendar.getTime()));
+            //TODO dodelat  update nekompletniho záznamu, URI je v temp, stejne jako arival time a date, třeba dopočítat délky
+            editorTemp.apply();
+            showTimePickerOut.setEnabled(false);
+            Toast.makeText(this,"updatuji nekompletni zaznam ", Toast.LENGTH_LONG).show();
         }
+        /*int dateToSave = Tools.dateDateToInt(calendar.getTime());
+        int arrivalTimeToSave = Tools.timeStrToInt(arrivalTimeHelp);
+        int departureTimeToSave = Tools.timeStrToInt(departureTimeHelp);
+        int breakTimeToSave = pref.getInt("defaultPause", 0);
+        int shiftLenghtToSave = departureTimeToSave - arrivalTimeToSave - breakTimeToSave;  // vypocet odpracovanych minut, (odchod - prichod) - pauza*/
+
     }
+
+
 
     @Override
     protected void onStart(){
         super.onStart();
         showInfo();
-        //displayDatabaseInfo();
     }
                                                                                                         // po sem je definice buttonu a jeho onclickListeneru + onTimeSet abz vratil cas
     @Override
