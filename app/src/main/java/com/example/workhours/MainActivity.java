@@ -42,7 +42,10 @@ import com.example.workhours.data.ShiftsContract.ShiftEntry;
 import com.example.workhours.data.ShiftsDbHelper;
 import com.example.workhours.data.ShiftsProvider;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener{    // pro time picker t5eba implementovat TimePickerDialog.OnTimeSetListener
@@ -144,7 +147,7 @@ public class MainActivity extends AppCompatActivity
 
         String selection = ShiftEntry.COLUMN_HOLIDAY + "=? AND " + ShiftEntry.COLUMN_DATE + " LIKE ?";
 
-        int monthLength = (int) (Math.log10(month) + 1);                                                    // logarytmicka metoda zjisteni poctu cifer v cisle
+        int monthLength = (int) (Math.log10(month+1) + 1);                                                    // logarytmicka metoda zjisteni poctu cifer v cisle
         String monthStr;
         if (monthLength == 1) {
             monthStr = "0" + (month + 1);
@@ -167,8 +170,8 @@ public class MainActivity extends AppCompatActivity
         int overTimeSumThisMonth = 0;
 
         try{
-            int shiftsThisMonth = cursor.getCount();                                                        //nastavení popisku odpracovaných směn //TODO spočítat kolik je v měsíci pracovních dní
-            shiftsInfoView.setText(getResources().getString(R.string.alreadyWorked) + " " + shiftsThisMonth);
+            int shiftsThisMonth = cursor.getCount();                                                        //nastavení popisku odpracovaných směn
+            shiftsInfoView.setText(getResources().getString(R.string.alreadyWorked) + " " + shiftsThisMonth + " " + getResources().getString(R.string.daysFrom) + " " + Tools.getWorkDaysInMont(month, year));
             monthShifts.setMax(20);
             monthShifts.setProgress(shiftsThisMonth);
 

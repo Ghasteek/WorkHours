@@ -1,5 +1,7 @@
 package com.example.workhours;
 
+import android.widget.Toast;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -72,5 +74,41 @@ public class Tools {
         helpCal.setTime(itemDate);
         int dayOfWeek = helpCal.get(Calendar.DAY_OF_WEEK) - 2;
         return (daysArray[dayOfWeek]);
+    }
+
+    public static String getWorkDaysInMont (int monthInput, int yearInput) {
+        Calendar calendar = Calendar.getInstance();
+        int lastDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        int newMonth = monthInput + 1;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        String startDateInt = "01-" + newMonth + "-" + yearInput;
+        String endDateInt = lastDay + "-" + newMonth + "-" + yearInput;
+        Date startDate = null , endDate = null;
+        try {
+            startDate = sdf.parse(startDateInt);
+            endDate = sdf.parse(endDateInt);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar startCal = Calendar.getInstance();
+        startCal.setTime(startDate);
+
+        Calendar endCal = Calendar.getInstance();
+        endCal.setTime(endDate);
+
+        int workDaysInMonth = 0;
+
+        while (startCal.getTimeInMillis() <= endCal.getTimeInMillis()) {
+            if (startCal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY &&
+                    startCal.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) {
+                workDaysInMonth++;
+            }
+
+            startCal.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        return(String.valueOf(workDaysInMonth));
+        //return(startDateInt);
+        //return(endDateInt);
+        //return(String.valueOf(workDaysInMonth) + " / " + String.valueOf(lastDay));
     }
 }
