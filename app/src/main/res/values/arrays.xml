@@ -15,13 +15,21 @@
         <item>Prosinec</item>
     </string-array>
 
-    <string-array name="days">
+    <string-array name="holidayType">
+        <item>Směna</item>
+        <item>Náhradní volno</item>
+        <item>Státní svátek</item>
+        <item>Dovolená</item>
+        <item>Nekompletní záznam</item>
+    </string-array>
+
+    <string-array name="daysOfWeek">.
+        <item>Ne</item>
         <item>Po</item>
         <item>Út</item>
         <item>Stř</item>
         <item>Čt</item>
         <item>Pá</item>
         <item>So</item>
-        <item>Ne</item>
     </string-array>>
 </resources>

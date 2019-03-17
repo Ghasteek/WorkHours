@@ -13,13 +13,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.workhours.data.ShiftsContract;
-import com.example.workhours.Tools;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
 
 public class ShiftCursorAdapter extends CursorAdapter {
 
@@ -42,7 +35,7 @@ public class ShiftCursorAdapter extends CursorAdapter {
         ProgressBar shiftBar = (ProgressBar) view.findViewById(R.id.shiftProgressBar);
         ProgressBar overtimeBar =  (ProgressBar) view.findViewById(R.id.overtimeProgressBar);
 
-        int shiftLength = cursor.getInt(cursor.getColumnIndexOrThrow(ShiftsContract.ShiftEntry.COLUMN_SHIFT_LENGHT));
+        int shiftLength = cursor.getInt(cursor.getColumnIndexOrThrow(ShiftsContract.ShiftEntry.COLUMN_SHIFT_LENGTH));
         int date = cursor.getInt(cursor.getColumnIndexOrThrow(ShiftsContract.ShiftEntry.COLUMN_DATE));
         int holidayType = cursor.getInt(cursor.getColumnIndexOrThrow(ShiftsContract.ShiftEntry.COLUMN_HOLIDAY));
         int overtime = cursor.getInt(cursor.getColumnIndexOrThrow(ShiftsContract.ShiftEntry.COLUMN_OVERTIME));

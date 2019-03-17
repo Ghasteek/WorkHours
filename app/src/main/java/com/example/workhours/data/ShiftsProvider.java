@@ -111,7 +111,7 @@ public class ShiftsProvider extends ContentProvider {
         if (arrival > departure && holiday != 4){
             throw new IllegalArgumentException( "Arrival time must be before departure.");
         }
-        int breakLenght = values.getAsInteger(ShiftEntry.COLUMN_BREAK_LENGHT);
+        int breakLenght = values.getAsInteger(ShiftEntry.COLUMN_BREAK_LENGTH);
         if ((breakLenght > 1439) || (breakLenght == 0)){
             throw new IllegalArgumentException( "Break lenght invalid.");
         }
@@ -161,7 +161,7 @@ public class ShiftsProvider extends ContentProvider {
         if (arrival > departure){
             throw new IllegalArgumentException( "Arrival time must be before departure.");
         }
-        int breakLenght = values.getAsInteger(ShiftEntry.COLUMN_BREAK_LENGHT);
+        int breakLenght = values.getAsInteger(ShiftEntry.COLUMN_BREAK_LENGTH);
         if ((breakLenght > 1439) || (breakLenght == 0)){
             throw new IllegalArgumentException( "Break lenght invalid.");
         }

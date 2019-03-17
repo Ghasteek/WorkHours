@@ -1,15 +1,24 @@
 package com.example.workhours;
 
-import android.widget.Toast;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+import com.example.workhours.data.ShiftsContract;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Tools {
 
-    public static int dateStrToInt (String dateInput){                                              // TODO dodelat hlidani vlozeneho datumu
+public class Tools extends AppCompatActivity {
+
+    @Override
+    protected void onCreate (Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+        public static int dateStrToInt (String dateInput){                                              // TODO dodelat hlidani vlozeneho datumu
         String[] dateArray = dateInput.split("\\.");
         int dayLength = dateArray[0].length();
         int monthLength = dateArray[1].length();
@@ -68,8 +77,8 @@ public class Tools {
         return (newTime);
     }
 
-    public static String getDayOfWeekStr (int dateInput){
-        String [] daysArray = {"Po ", "Út ", "Stř", "Čt ", "Pá ", "So ", "Ne "};
+    public static String getDayOfWeekStr(int dateInput){
+        String [] daysOfWeek = {"Ne", "Po", "Út", "Stř", "Čt", "Pá", "So"};
         Calendar helpCal = Calendar.getInstance();
         SimpleDateFormat originalFormat = new SimpleDateFormat("yyyyMMdd");
         Date itemDate = helpCal.getTime();
@@ -79,11 +88,11 @@ public class Tools {
             e.printStackTrace();
         }
         helpCal.setTime(itemDate);
-        int dayOfWeek = helpCal.get(Calendar.DAY_OF_WEEK) - 2;
-        return (daysArray[dayOfWeek]);
+        int dayOfWeek = helpCal.get(Calendar.DAY_OF_WEEK) - 1;
+        return (String.valueOf(daysOfWeek[dayOfWeek]));
     }
 
-    public static String getWorkDaysInMont (int monthInput, int yearInput) {
+    public static String getWorkDaysInMonth (int monthInput, int yearInput) {
         Calendar calendar = Calendar.getInstance();
         int lastDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         int newMonth = monthInput + 1;

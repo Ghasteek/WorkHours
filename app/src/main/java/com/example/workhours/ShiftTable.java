@@ -35,8 +35,6 @@ public class ShiftTable extends AppCompatActivity {
     public static int year;
     public static int month;
 
-    /*SimpleDateFormat sdf = new SimpleDateFormat("MMM yyyy");
-    SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd");*/
 
     @Override
     protected void onStart() {
@@ -105,7 +103,7 @@ public class ShiftTable extends AppCompatActivity {
         String[] projection = {
                 ShiftsContract.ShiftEntry._ID,
                 ShiftsContract.ShiftEntry.COLUMN_DATE,
-                ShiftsContract.ShiftEntry.COLUMN_SHIFT_LENGHT,
+                ShiftsContract.ShiftEntry.COLUMN_SHIFT_LENGTH,
                 ShiftsContract.ShiftEntry.COLUMN_OVERTIME,
                 ShiftsContract.ShiftEntry.COLUMN_HOLIDAY};
 

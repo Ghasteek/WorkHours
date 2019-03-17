@@ -66,7 +66,9 @@
     <string name="regular_shift">Regular shift</string>
 
     <!-- SHIFTS TABLE popisky -->
+    <string name="regularShift">Směna</string>
     <string name="compensation">Náhradní volno</string>
+    <string name="publicHoliday">Státní svátek</string>
     <string name="vacation">Dovolená</string>
     <string name="incomplete">Nekompletní záznam</string>
 
@@ -81,4 +83,5 @@
     <string name="todayShiftDepartureLabel">Odchod:</string>
     <string name="todayShiftArrivalLabel">Příchod:</string>
     <string name="notInserted">nezadáno</string>
+    <string name="arrivalNeeded">První musíte zadat čas příchodu</string>>
 </resources>

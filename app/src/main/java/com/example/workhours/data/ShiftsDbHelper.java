@@ -23,8 +23,8 @@ public class ShiftsDbHelper extends SQLiteOpenHelper {
                         + ShiftEntry.COLUMN_DATE + " INTEGER, "
                         + ShiftEntry.COLUMN_ARRIVAL + " INTEGER, "
                         + ShiftEntry.COLUMN_DEPARTURE + " INTEGER, "
-                        + ShiftEntry.COLUMN_BREAK_LENGHT + " INTEGER, "
-                        + ShiftEntry.COLUMN_SHIFT_LENGHT + " INTEGER, "
+                        + ShiftEntry.COLUMN_BREAK_LENGTH + " INTEGER, "
+                        + ShiftEntry.COLUMN_SHIFT_LENGTH + " INTEGER, "
                         + ShiftEntry.COLUMN_OVERTIME + " INTEGER, "
                         + ShiftEntry.COLUMN_HOLIDAY + " INTEGER);";
 

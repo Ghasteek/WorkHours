@@ -139,11 +139,11 @@ public class Shift extends AppCompatActivity {
         overtimeLegth = findViewById(R.id.overtimeLengthView);
         holidayTypeSpinner = findViewById(R.id.holidaySpinner);
 
+        String [] holidayArray = getResources().getStringArray(R.array.holidayType);
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
-                (this, android.R.layout.simple_spinner_dropdown_item, ShiftEntry.arrayHolidayOptions);
+                (this, android.R.layout.simple_spinner_dropdown_item, holidayArray);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         holidayTypeSpinner.setAdapter(spinnerArrayAdapter);
-        // TODO spinner??
 
         date.setOnTouchListener(mTouchListener);
         arriveTime.setOnTouchListener(mTouchListener);
@@ -208,8 +208,8 @@ public class Shift extends AppCompatActivity {
                 int dateColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_DATE);
                 int arrivalColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_ARRIVAL);
                 int departureColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_DEPARTURE);
-                int breakLengthColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_BREAK_LENGHT);
-                int shiftLengthColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_SHIFT_LENGHT);
+                int breakLengthColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_BREAK_LENGTH);
+                int shiftLengthColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_SHIFT_LENGTH);
                 int overtimeLengthColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_OVERTIME);
                 int holidayTypeColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_HOLIDAY);
 
@@ -226,7 +226,10 @@ public class Shift extends AppCompatActivity {
                 breakLenght.setText(breakLenghtStr);
                 shiftLenght.setText(shiftLenghtStr);
                 overtimeLegth.setText(overtimeLengthStr);
-                holidayTypeSpinner.setSelection(cursor.getInt(holidayTypeColumnIndex));
+                int holidayTypeInt = cursor.getInt(holidayTypeColumnIndex);
+                if ( holidayTypeInt == 4 ) {
+                    holidayTypeSpinner.setSelection(0);
+                } else{holidayTypeSpinner.setSelection(cursor.getInt(holidayTypeColumnIndex));}
             }
         cursor.close();
     }
@@ -271,14 +274,14 @@ public class Shift extends AppCompatActivity {
         //Toast.makeText(this,"rozdíl overtime je " + overtimeDifference, Toast.LENGTH_LONG).show();
 
         SharedPreferences temp = getApplicationContext().getSharedPreferences("Temporary", 0);             // definovani SharedPreference a editu
-        SharedPreferences.Editor editor = temp.edit();
+        SharedPreferences.Editor editorTemp = temp.edit();
         int overtimeSumOld = 0;
         if (temp.contains("overtimeSum")){
             overtimeSumOld = temp.getInt("overtimeSum", 0);
         }
         int overtimeSumNew = overtimeSumOld + overtimeDifference;
-        editor.putInt("overtimeSum", overtimeSumNew);
-        editor.apply();
+        editorTemp.putInt("overtimeSum", overtimeSumNew);
+        editorTemp.apply();
 
         int holidayTypeInt = holidayTypeSpinner.getSelectedItemPosition();
 
@@ -286,8 +289,8 @@ public class Shift extends AppCompatActivity {
         shiftValues.put(ShiftEntry.COLUMN_DATE, dateInt);
         shiftValues.put(ShiftEntry.COLUMN_ARRIVAL, arriveTimeInt);
         shiftValues.put(ShiftEntry.COLUMN_DEPARTURE, departureTimeInt);
-        shiftValues.put(ShiftEntry.COLUMN_BREAK_LENGHT, breakLengthInt);
-        shiftValues.put(ShiftEntry.COLUMN_SHIFT_LENGHT, shiftLengthInt);
+        shiftValues.put(ShiftEntry.COLUMN_BREAK_LENGTH, breakLengthInt);
+        shiftValues.put(ShiftEntry.COLUMN_SHIFT_LENGTH, shiftLengthInt);
         shiftValues.put(ShiftEntry.COLUMN_OVERTIME, overtimeLengthInt);
         shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, holidayTypeInt);
 
@@ -301,6 +304,14 @@ public class Shift extends AppCompatActivity {
             if (rowsAffected == 0) {
                 Toast.makeText(this, getText(R.string.editor_update_shift_failed), Toast.LENGTH_SHORT).show();
             } else {Toast.makeText(this, getText(R.string.editor_update_shift_successful), Toast.LENGTH_SHORT).show();}
+        }
+
+        if (MainActivity.Globals.isEdited == true) {
+            SharedPreferences.Editor editor = temp.edit();
+            editor.putInt("arrivalTime", arriveTimeInt);
+            editor.putInt("departureTime", departureTimeInt);
+            editor.apply();
+            MainActivity.Globals.isEdited = false;
         }
     }
 
@@ -351,9 +362,34 @@ public class Shift extends AppCompatActivity {
     }
 
     private void deleteShift(){
-        // todo
+        SharedPreferences temp = getApplicationContext().getSharedPreferences("Temporary", 0);             // definovani SharedPreference a editu
+
+        int overtimeLengthOfShift = Tools.timeStrToInt(overtimeLengthStr);
+        int overtimeLengthOldSum = temp.getInt("overtimeSum", 0);
+        int overtimeNewSum = 0;
+        if (overtimeLengthOfShift > 0){
+            overtimeNewSum = overtimeLengthOldSum + overtimeLengthOfShift;
+        } else {
+            overtimeNewSum = overtimeLengthOldSum + Math.abs(overtimeLengthOfShift);
+            }
+
+        SharedPreferences.Editor editorTemp = temp.edit();
+        editorTemp.putInt("overtimeSum", overtimeNewSum);
         int rowsDeleted = getContentResolver().delete(clickedShiftUri, null, null);
-        Toast.makeText(this, "Smazano " + rowsDeleted + " zaznamu.", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Smazano " + rowsDeleted + " zaznamu.", Toast.LENGTH_SHORT).show();
+
+        int dateTest = Tools.dateStrToInt(date.getText().toString());
+        int dateSaved = temp.getInt("arrivalDate", 0);
+        Toast.makeText(this, "Smazano "+ dateTest + " --" + dateSaved, Toast.LENGTH_SHORT).show();
+        if ((MainActivity.Globals.isEdited == true) || (dateTest == dateSaved)) {
+            editorTemp.remove("arrivalTime");
+            editorTemp.remove("departureTime");
+            editorTemp.remove("incompleteUri");
+            editorTemp.remove("departureDate");
+            editorTemp.remove("arrivalDate");
+            MainActivity.Globals.isEdited = false;
+        }
+        editorTemp.apply();
         finish();
     }
 }
