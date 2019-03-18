@@ -50,6 +50,7 @@ import com.example.workhours.data.ShiftsProvider;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -147,14 +148,54 @@ public class MainActivity extends AppCompatActivity
         MainActivity.Globals.timeOutHours = Integer.parseInt(timeOutArray[0]);
         MainActivity.Globals.timeOutMinutes = Integer.parseInt(timeOutArray[1]);
 
+        checkYesterday();
         showInfo();
+
 
         if (temp.contains("arrivalTime")) {
             editTodayButton.setVisibility(View.VISIBLE);
-        } else {editTodayButton.setVisibility(View.INVISIBLE);
+        } else {
+            editTodayButton.setVisibility(View.INVISIBLE);
             showTimePickerIn.setEnabled(true);
             showTimePickerOut.setEnabled(true);
         }
+    }
+
+    private void checkYesterday() {
+        Date today = calendar.getTime();
+        int todayInt = Tools.dateDateToInt(today);
+        //TODO zjistit kolik je dnu od posledniho zaznamu
+
+        String[] projection = {ShiftEntry.COLUMN_DATE,};
+
+        String sortOrder = ShiftEntry.COLUMN_DATE + " DESC LIMIT 1";
+
+        Cursor cursor = getContentResolver().query(
+                ShiftEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                sortOrder);
+
+        int dateColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_DATE);
+        TextView displayView = (TextView) findViewById(R.id.text_view_table);
+        int lastDbDate = 0, dateTemp, differenceDays;
+        try {
+            displayView.setText(ShiftEntry.COLUMN_DATE + " \n ");                                                  // vypsani jmen sloupcu
+
+            while (cursor.moveToNext()){                                                                // vypsani obsahu cursoru
+                lastDbDate = cursor.getInt(dateColumnIndex);
+                dateTemp = temp.getInt("arrivalDate", 0);
+                differenceDays = todayInt - lastDbDate - 1;
+                displayView.append("\n posledni zaznam v db z " + lastDbDate + "\n datum z temp.: " + dateTemp);
+                displayView.append("\n Pracovnich dnu od posledniho zaznamu v db: " + differenceDays);
+            }
+        } finally {
+            cursor.close();
+        }
+
+        String workDaysArray  = Tools.getWorkDaysInPeriod(lastDbDate, todayInt);
+        displayView.append("\n " + workDaysArray);
     }
 
     private void showInfo() {

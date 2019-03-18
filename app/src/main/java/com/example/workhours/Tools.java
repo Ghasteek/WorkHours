@@ -7,6 +7,7 @@ import com.example.workhours.data.ShiftsContract;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -18,7 +19,7 @@ public class Tools extends AppCompatActivity {
         super.onCreate(savedInstanceState);
     }
 
-        public static int dateStrToInt (String dateInput){                                              // TODO dodelat hlidani vlozeneho datumu
+    public static int dateStrToInt (String dateInput){
         String[] dateArray = dateInput.split("\\.");
         int dayLength = dateArray[0].length();
         int monthLength = dateArray[1].length();
@@ -123,5 +124,41 @@ public class Tools extends AppCompatActivity {
             startCal.add(Calendar.DAY_OF_MONTH, 1);
         }
         return(String.valueOf(workDaysInMonth));
+    }
+
+    public static String getWorkDaysInPeriod (int startDateInt, int endDateInt) {
+        Calendar calendar = Calendar.getInstance();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+
+        Date startDate = null , endDate = null;
+        try {
+            startDate = sdf.parse(String.valueOf(startDateInt+1));
+            endDate = sdf.parse(String.valueOf(endDateInt-1));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar startCal = Calendar.getInstance();
+        startCal.setTime(startDate);
+
+        Calendar endCal = Calendar.getInstance();
+        endCal.setTime(endDate);
+
+        String workDaysInPeriod = "0-";
+        int pocet = 0;
+
+        while (startCal.getTimeInMillis() <= endCal.getTimeInMillis()) {
+            if (startCal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY &&
+                    startCal.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) {
+                        int actualDate = Tools.dateDateToInt(startCal.getTime());
+                        workDaysInPeriod = workDaysInPeriod + "-" + Tools.dateIntToStr(actualDate);
+                        //pocet++;
+            }
+            startCal.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        String out = pocet + " / " + startDateInt + " / " + endDateInt;
+        //return(out);
+        //return(String.valueOf(pocet));
+        return(workDaysInPeriod);
     }
 }
