@@ -86,6 +86,13 @@ public class ShiftCursorAdapter extends CursorAdapter {
                 overtimeBar.setVisibility(View.INVISIBLE);
                 overtimeView.setVisibility(View.INVISIBLE);
                 return;
+            case ShiftsContract.ShiftEntry.HOLIDAY_PUBLIC:
+                shiftLengthView.setText(context.getString(R.string.publicHoliday));
+                holidayTypeView.setVisibility(View.INVISIBLE);
+                shiftBar.setVisibility(View.INVISIBLE);
+                overtimeBar.setVisibility(View.INVISIBLE);
+                overtimeView.setVisibility(View.INVISIBLE);
+                return;
         }
     }
 }

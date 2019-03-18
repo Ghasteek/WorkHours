@@ -141,8 +141,8 @@ public class MainActivity extends AppCompatActivity
 
         calendar = Calendar.getInstance();
 
-        String[] timeInArray = pref.getString("defaultInTime", "").split(":");
-        String[] timeOutArray = pref.getString("defaultOutTime", "").split(":");
+        String[] timeInArray = pref.getString("defaultInTime", "6:00").split(":");
+        String[] timeOutArray = pref.getString("defaultOutTime", "14:30").split(":");
         MainActivity.Globals.timeInHours = Integer.parseInt(timeInArray[0]);
         MainActivity.Globals.timeInMinutes = Integer.parseInt(timeInArray[1]);
         MainActivity.Globals.timeOutHours = Integer.parseInt(timeOutArray[0]);
@@ -193,12 +193,13 @@ public class MainActivity extends AppCompatActivity
         } finally {
             cursor.close();
         }
-
-        String workDaysArray  = Tools.getWorkDaysInPeriod(lastDbDate, todayInt);
-        displayView.append("\n " + workDaysArray);
+        if (lastDbDate != 0) {
+            String workDaysArray = Tools.getWorkDaysInPeriod(lastDbDate, todayInt);
+            displayView.append("\n " + workDaysArray);
+        }
     }
 
-    private void showInfo() {
+    private void showInfo() { //TODO zkontrolovat počítání overtimeSUM
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
 
@@ -208,7 +209,13 @@ public class MainActivity extends AppCompatActivity
                 ShiftEntry.COLUMN_OVERTIME,
                 ShiftEntry.COLUMN_HOLIDAY};
 
+
         String selection = ShiftEntry.COLUMN_HOLIDAY + "=? AND " + ShiftEntry.COLUMN_DATE + " LIKE ?";
+
+        String[] projectionHolidays = {
+                ShiftEntry.COLUMN_HOLIDAY};
+
+        String selectionHolidays = ShiftEntry.COLUMN_HOLIDAY + " BETWEEN ? AND ? AND " + ShiftEntry.COLUMN_DATE + " LIKE ?";
 
         int monthLength = (int) (Math.log10(month+1) + 1);                                                    // logarytmicka metoda zjisteni poctu cifer v cisle
         String monthStr;
@@ -216,7 +223,9 @@ public class MainActivity extends AppCompatActivity
             monthStr = "0" + (month + 1);
         } else { monthStr = String.valueOf(month); }
 
-        String[] selectionArgs = new String[] { String.valueOf(ShiftEntry.HOLIDAY_SHIFT), String.valueOf(year) + monthStr + "%" };
+        String[] selectionArgs = new String[] { String.valueOf(ShiftEntry.HOLIDAY_SHIFT),   String.valueOf(year) + monthStr + "%" };
+
+        String[] selectionArgsHolidays = new String[] { String.valueOf(ShiftEntry.HOLIDAY_SHIFT), String.valueOf(ShiftEntry.HOLIDAY_VACATION), String.valueOf(year) + monthStr + "%" };
 
         Cursor cursor = getContentResolver().query(
                 ShiftsContract.ShiftEntry.CONTENT_URI,
@@ -224,6 +233,14 @@ public class MainActivity extends AppCompatActivity
                 selection,
                 selectionArgs,
                 null);
+
+        Cursor cursor2 = getContentResolver().query(
+                        ShiftsContract.ShiftEntry.CONTENT_URI,
+                        projectionHolidays,
+                        selectionHolidays,
+                        selectionArgsHolidays,
+                        null);
+
 
         String [] monthArray = getResources().getStringArray(R.array.months);                           // nastavení popisku tohoto měsíce a roku
         int i = month;
@@ -233,9 +250,10 @@ public class MainActivity extends AppCompatActivity
         int overTimeSumThisMonth = 0;
 
         try{
-            int shiftsThisMonth = cursor.getCount();                                                        //nastavení popisku odpracovaných směn
+            int shiftsThisMonth = cursor.getCount();                                                    //nastavení popisku odpracovaných směn
+            int shiftsAndHolidaysThisMonth = cursor2.getCount();
             String workDaysInMonth = Tools.getWorkDaysInMonth(month, year);
-            shiftsInfoView.setText(getResources().getString(R.string.alreadyWorked) + " " + shiftsThisMonth + " " + getResources().getString(R.string.daysFrom) + " " + workDaysInMonth);
+            shiftsInfoView.setText(getResources().getString(R.string.alreadyWorked) + " " + shiftsAndHolidaysThisMonth + " " + getResources().getString(R.string.daysFrom) + " " + workDaysInMonth);
             monthShifts.setMax(Integer.parseInt(workDaysInMonth));
             monthShifts.setProgress(shiftsThisMonth);
 
@@ -245,14 +263,13 @@ public class MainActivity extends AppCompatActivity
             overtimeThisMonthView.setText(getResources().getString(R.string.thisMonthOvertime) + " " + Tools.timeIntToStr(overTimeSumThisMonth));
         } finally {
             cursor.close();
+            cursor2.close();
         }
 
         if (temp.contains("overtimeSum")){
             overtimeSumView.setText( getResources().getString(R.string.sumOfOvertime) + " " + Tools.timeIntToStr(temp.getInt("overtimeSum",0)) + "h");
         } else {overtimeSumView.setText( getResources().getString(R.string.sumOfOvertime) + " 0h");}
 
-        //TODO dodělat kontrolu, že poslední zadaná směna byla ze včerejška, pokud ne, přidat incomplete směny za chybějící dny, upozornit že je třeba doplnit údaje
-        // vybrat z DB poslední záznam a porovnat jeho datum s datumem v temp ulozenym pri poslednim zásahu do DB
         if (temp.contains("arrivalTime")){
             if ((temp.getInt("arrivalDate", 0)) == (Tools.dateDateToInt(calendar.getTime()))) {
                 todayArrivalInfo.setText(getResources().getString(R.string.todayShiftArrivalLabel) + " " + Tools.timeIntToStr(temp.getInt("arrivalTime", 0)));

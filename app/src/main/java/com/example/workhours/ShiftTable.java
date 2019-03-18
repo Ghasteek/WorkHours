@@ -116,13 +116,13 @@ public class ShiftTable extends AppCompatActivity {
         } else { monthStr = String.valueOf(month); }
 
         String[] selectionArgs = new String[] { String.valueOf(year)  + monthStr + "%"};
-
+        String sortOrder =  ShiftsContract.ShiftEntry.COLUMN_DATE + " ASC";
         Cursor cursor = getContentResolver().query(
                 ShiftsContract.ShiftEntry.CONTENT_URI,
                 projection,
                 selection,
                 selectionArgs,
-                null);
+                sortOrder);
 
         ListView lvItems = (ListView) findViewById(R.id.ListViewItems);
         ShiftCursorAdapter shiftsAdapter = new ShiftCursorAdapter(this, cursor);

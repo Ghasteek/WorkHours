@@ -273,17 +273,18 @@ public class Shift extends AppCompatActivity {
         int overtimeDifference = overtimeLengthInt - overtimeLenghtOriginal;
         //Toast.makeText(this,"rozdíl overtime je " + overtimeDifference, Toast.LENGTH_LONG).show();
 
+        int holidayTypeInt = holidayTypeSpinner.getSelectedItemPosition();
         SharedPreferences temp = getApplicationContext().getSharedPreferences("Temporary", 0);             // definovani SharedPreference a editu
         SharedPreferences.Editor editorTemp = temp.edit();
-        int overtimeSumOld = 0;
-        if (temp.contains("overtimeSum")){
-            overtimeSumOld = temp.getInt("overtimeSum", 0);
-        }
-        int overtimeSumNew = overtimeSumOld + overtimeDifference;
-        editorTemp.putInt("overtimeSum", overtimeSumNew);
-        editorTemp.apply();
-
-        int holidayTypeInt = holidayTypeSpinner.getSelectedItemPosition();
+        if (holidayTypeInt == 0) {
+            int overtimeSumOld = 0;
+            if (temp.contains("overtimeSum")) {
+                overtimeSumOld = temp.getInt("overtimeSum", 0);
+            }
+            int overtimeSumNew = overtimeSumOld + overtimeDifference;
+            editorTemp.putInt("overtimeSum", overtimeSumNew);
+            editorTemp.apply();
+            }
 
         ContentValues shiftValues = new ContentValues();
         shiftValues.put(ShiftEntry.COLUMN_DATE, dateInt);
