@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity
     private void checkYesterday() {
         Date today = calendar.getTime();
         int todayInt = Tools.dateDateToInt(today);
-        //TODO zjistit kolik je dnu od posledniho zaznamu
+        //TODO přidání incomplete záznamů od včerejška po poslední záznam v db
 
         String[] projection = {ShiftEntry.COLUMN_DATE,};
 

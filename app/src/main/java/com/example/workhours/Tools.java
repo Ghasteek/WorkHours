@@ -35,7 +35,13 @@ public class Tools extends AppCompatActivity {
 
     public static int timeStrToInt (String timeInput){
         String[] timeArray = timeInput.split(":");
-        return ((Integer.parseInt(timeArray[0]) * 60) + Integer.parseInt(timeArray[1]));
+        int timeOutput = 0;
+        if (timeInput.startsWith("-")){
+            timeOutput = (Integer.parseInt(timeArray[0]) * 60) - Integer.parseInt(timeArray[1]);
+        } else {
+            timeOutput = (Integer.parseInt(timeArray[0]) * 60) + Integer.parseInt(timeArray[1]);
+            }
+        return (timeOutput);
     }
 
     public static String dateIntToStr (int dateInput) {

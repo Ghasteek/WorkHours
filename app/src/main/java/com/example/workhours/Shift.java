@@ -363,25 +363,28 @@ public class Shift extends AppCompatActivity {
     }
 
     private void deleteShift(){
-        SharedPreferences temp = getApplicationContext().getSharedPreferences("Temporary", 0);             // definovani SharedPreference a editu
-
-        int overtimeLengthOfShift = Tools.timeStrToInt(overtimeLengthStr);
-        int overtimeLengthOldSum = temp.getInt("overtimeSum", 0);
-        int overtimeNewSum = 0;
-        if (overtimeLengthOfShift > 0){
-            overtimeNewSum = overtimeLengthOldSum + overtimeLengthOfShift;
-        } else {
-            overtimeNewSum = overtimeLengthOldSum + Math.abs(overtimeLengthOfShift);
-            }
-
+        SharedPreferences temp = getApplicationContext().getSharedPreferences("Temporary", 0);             // definovani SharedPreference
         SharedPreferences.Editor editorTemp = temp.edit();
-        editorTemp.putInt("overtimeSum", overtimeNewSum);
+
+        int holidayTypeInt = holidayTypeSpinner.getSelectedItemPosition();
+
+        if (holidayTypeInt == 0) {
+            int overtimeLengthOldSum = temp.getInt("overtimeSum", 0);
+            int overtimeHelp = Tools.timeStrToInt(overtimeLengthStr);
+            int overtimeNewSum = overtimeLengthOldSum - overtimeHelp;
+            String asd = overtimeLegth.getText().toString();
+            int asdasd = Tools.timeStrToInt(asd);
+            Toast.makeText(this, "ubrano " + asd + " / " + asdasd, Toast.LENGTH_LONG).show();
+
+            editorTemp.putInt("overtimeSum", overtimeNewSum);
+        }
+
         int rowsDeleted = getContentResolver().delete(clickedShiftUri, null, null);
         //Toast.makeText(this, "Smazano " + rowsDeleted + " zaznamu.", Toast.LENGTH_SHORT).show();
 
         int dateTest = Tools.dateStrToInt(date.getText().toString());
         int dateSaved = temp.getInt("arrivalDate", 0);
-        Toast.makeText(this, "Smazano "+ dateTest + " --" + dateSaved, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Smazano "+ dateTest + " --" + dateSaved, Toast.LENGTH_SHORT).show();
         if ((MainActivity.Globals.isEdited == true) || (dateTest == dateSaved)) {
             editorTemp.remove("arrivalTime");
             editorTemp.remove("departureTime");
