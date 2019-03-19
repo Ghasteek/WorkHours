@@ -48,6 +48,7 @@ import com.example.workhours.data.ShiftsContract.ShiftEntry;
 import com.example.workhours.data.ShiftsDbHelper;
 import com.example.workhours.data.ShiftsProvider;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -164,12 +165,9 @@ public class MainActivity extends AppCompatActivity
     private void checkYesterday() {
         Date today = calendar.getTime();
         int todayInt = Tools.dateDateToInt(today);
-        //TODO přidání incomplete záznamů od včerejška po poslední záznam v db
 
         String[] projection = {ShiftEntry.COLUMN_DATE,};
-
         String sortOrder = ShiftEntry.COLUMN_DATE + " DESC LIMIT 1";
-
         Cursor cursor = getContentResolver().query(
                 ShiftEntry.CONTENT_URI,
                 projection,
@@ -178,28 +176,26 @@ public class MainActivity extends AppCompatActivity
                 sortOrder);
 
         int dateColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_DATE);
-        TextView displayView = (TextView) findViewById(R.id.text_view_table);
-        int lastDbDate = 0, dateTemp, differenceDays;
+        //TextView displayView = (TextView) findViewById(R.id.text_view_table);
+        int lastDbDate = 0;
         try {
-            displayView.setText(ShiftEntry.COLUMN_DATE + " \n ");                                                  // vypsani jmen sloupcu
-
             while (cursor.moveToNext()){                                                                // vypsani obsahu cursoru
                 lastDbDate = cursor.getInt(dateColumnIndex);
-                dateTemp = temp.getInt("arrivalDate", 0);
-                differenceDays = todayInt - lastDbDate - 1;
-                displayView.append("\n posledni zaznam v db z " + lastDbDate + "\n datum z temp.: " + dateTemp);
-                displayView.append("\n Pracovnich dnu od posledniho zaznamu v db: " + differenceDays);
             }
         } finally {
             cursor.close();
         }
-        if (lastDbDate != 0) {
-            String workDaysArray = Tools.getWorkDaysInPeriod(lastDbDate, todayInt);
-            displayView.append("\n " + workDaysArray);
-        }
+        if (lastDbDate < (Tools.dateDateToInt(today) - 1)) {
+            String workDaysArrayStr = Tools.getWorkDaysInPeriod(lastDbDate, todayInt);
+            String [] workDaysArray = workDaysArrayStr.split("-");
+            for (int i = 0; i < workDaysArray.length; i++) {
+                insertIncomplete(workDaysArray[i]);
+                //displayView.append("\n " + workDaysArray[i]);
+            }
+        } //else {displayView.append("\n zaznamy kompletni");}
     }
 
-    private void showInfo() { //TODO zkontrolovat počítání overtimeSUM
+    private void showInfo() {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
 
@@ -275,7 +271,7 @@ public class MainActivity extends AppCompatActivity
                 todayArrivalInfo.setText(getResources().getString(R.string.todayShiftArrivalLabel) + " " + Tools.timeIntToStr(temp.getInt("arrivalTime", 0)));
                 showTimePickerIn.setEnabled(false);
             } else {
-                Toast.makeText(this,"neni vyplnena smena ze vcera ", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this,"neni vyplnena smena ze vcera ", Toast.LENGTH_LONG).show();
                 SharedPreferences.Editor editorTemp = temp.edit();
                 editorTemp.remove("arrivalTime");
                 editorTemp.remove("arrivalDate");
@@ -311,66 +307,6 @@ public class MainActivity extends AppCompatActivity
             }
     }
 
-    /*private void displayDatabaseInfo() {
-        String[] projection = {
-                ShiftEntry.COLUMN_DATE,
-                ShiftEntry.COLUMN_ARRIVAL,
-                ShiftEntry.COLUMN_DEPARTURE,
-                ShiftEntry.COLUMN_BREAK_LENGHT,
-                ShiftEntry.COLUMN_SHIFT_LENGHT,
-                ShiftEntry.COLUMN_OVERTIME,
-                ShiftEntry.COLUMN_HOLIDAY};
-
-        String selection = ShiftEntry.COLUMN_HOLIDAY + "=?";
-
-        String[] selectionArgs = new String[] { String.valueOf(ShiftEntry.HOLIDAY_SHIFT) };
-
-        Cursor cursor = getContentResolver().query(
-                ShiftEntry.CONTENT_URI,
-                projection,
-                selection,
-                selectionArgs,
-                null);
-
-        TextView displayView = (TextView) findViewById(R.id.text_view_table);
-
-        int dateColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_DATE);
-        int arrivalColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_ARRIVAL);
-        int departureColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_DEPARTURE);
-        int breakColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_BREAK_LENGHT);
-        int shiftColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_SHIFT_LENGHT);
-        int overtimeColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_OVERTIME);
-        int holidayColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_HOLIDAY);
-
-        try {
-            displayView.setText("Number of rows in shifts database table: " + cursor.getCount() + "\n\n");
-            displayView.append(ShiftEntry.COLUMN_DATE + " - " +
-                    ShiftEntry.COLUMN_ARRIVAL + " - " +
-                    ShiftEntry.COLUMN_DEPARTURE + " - " +
-                    ShiftEntry.COLUMN_BREAK_LENGHT + " - " +
-                    ShiftEntry.COLUMN_SHIFT_LENGHT + " - " +
-                    ShiftEntry.COLUMN_OVERTIME + " - " +
-                    ShiftEntry.COLUMN_HOLIDAY + "/n");                                                  // vypsani jmen sloupcu
-
-            while (cursor.moveToNext()){                                                                // vypsani obsahu cursoru
-                int date = cursor.getInt(dateColumnIndex);
-                int arrival = cursor.getInt(arrivalColumnIndex);
-                int departure = cursor.getInt(departureColumnIndex);
-                int breakLenght = cursor.getInt(breakColumnIndex);
-                int shift = cursor.getInt(shiftColumnIndex);
-                int overtime = cursor.getInt(overtimeColumnIndex);
-                int holiday = cursor.getInt(holidayColumnIndex);
-
-                displayView.append(("\n" + date + " - " + arrival + " - " + departure + " - " + breakLenght + " - " + shift + " - " + overtime + " - " + holiday));
-            }
-        } finally {
-            cursor.close();
-        }
-
-        if (temp.contains("overtimeSum")){
-            overtimeSumView.setText(" overtime   " + Tools.timeIntToStr(temp.getInt("overtimeSum",0)));
-        } else {overtimeSumView.setText("0");}
-    }*/
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -403,7 +339,7 @@ public class MainActivity extends AppCompatActivity
             editorTemp.putString("incompleteUri", uriStr);
             editorTemp.apply();
             showTimePickerIn.setEnabled(false);
-            Toast.makeText(this,"ukladam incomplete zaznam " + uriStr, Toast.LENGTH_LONG).show();
+            //Toast.makeText(this,"ukladam incomplete zaznam " + uriStr, Toast.LENGTH_LONG).show();
 
         } else {
             int minLength = (int) (Math.log10(minute) + 1);
@@ -434,7 +370,9 @@ public class MainActivity extends AppCompatActivity
                 int rowsAffected = getContentResolver().update(updatingUri, shiftValues, null, null);
                 if (rowsAffected == 0) {
                     Toast.makeText(this, getText(R.string.editor_update_shift_failed), Toast.LENGTH_SHORT).show();
-                } else {Toast.makeText(this, getText(R.string.editor_update_shift_successful), Toast.LENGTH_SHORT).show();}
+                } else {
+                    //Toast.makeText(this, getText(R.string.editor_update_shift_successful), Toast.LENGTH_SHORT).show();
+                    }
 
                 int oldOvertime = temp.getInt("overtimeSum", 0);
                 int newOvertime = oldOvertime + overtimeLengthInt;
@@ -443,10 +381,12 @@ public class MainActivity extends AppCompatActivity
                 editorTemp.putInt("departureDate", Tools.dateDateToInt(calendar.getTime()));
                 editorTemp.apply();
                 showTimePickerOut.setEnabled(false);
-                Toast.makeText(this,"updatuji nekompletni zaznam ", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this,"updatuji nekompletni zaznam ", Toast.LENGTH_LONG).show();
                 editTodayButton.setVisibility(View.VISIBLE);
                 showInfo();
-            }  else {Toast.makeText(this,"chyba ", Toast.LENGTH_LONG).show();}
+            }  else {
+                //Toast.makeText(this,"chyba ", Toast.LENGTH_LONG).show();
+                }
         }
     }
 
@@ -528,6 +468,21 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void insertIncomplete (String dateInput){
+        ContentValues shiftValues = new ContentValues();
+        shiftValues.put(ShiftEntry.COLUMN_DATE, Tools.dateStrToInt(dateInput));
+        shiftValues.put(ShiftEntry.COLUMN_ARRIVAL, Tools.timeStrToInt(pref.getString("defaultInTime", "0")));
+        shiftValues.put(ShiftEntry.COLUMN_DEPARTURE, 0);
+        shiftValues.put(ShiftEntry.COLUMN_BREAK_LENGTH, pref.getInt("defaultPause", 30));
+        shiftValues.put(ShiftEntry.COLUMN_SHIFT_LENGTH, 0);
+        shiftValues.put(ShiftEntry.COLUMN_OVERTIME, 0);
+        shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, ShiftEntry.HOLIDAY_INCOMPLETE);
+        Uri newUri = getContentResolver().insert(ShiftEntry.CONTENT_URI, shiftValues);
+        if (newUri == null) {
+            Toast.makeText(this, getText(R.string.editor_insert_shift_failed), Toast.LENGTH_SHORT).show();
+        } //else {Toast.makeText(this, getText(R.string.editor_insert_shift_successful), Toast.LENGTH_SHORT).show();}
     }
 
     public void insertDummyData (){

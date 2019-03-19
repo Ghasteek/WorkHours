@@ -20,6 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.database.Cursor;
 import android.content.DialogInterface;
+
+import com.example.workhours.data.ShiftsContract;
 import com.example.workhours.data.ShiftsContract.ShiftEntry;
 import java.util.Calendar;
 
@@ -236,6 +238,24 @@ public class Shift extends AppCompatActivity {
 
     public void saveShift (){
         String dateHELP = date.getText().toString();
+
+        String[] projection = {
+                ShiftEntry.COLUMN_DATE};
+
+        String selection = ShiftEntry.COLUMN_DATE + "=?";
+        String selectionArgs[] = {""+Tools.dateStrToInt(dateHELP)};
+        Cursor cursor = getContentResolver().query(
+                ShiftsContract.ShiftEntry.CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
+                null);
+        int cursorCount = cursor.getCount();
+        cursor.close();
+        if ((cursorCount != 0) && (clickedShiftUri == null)){
+            Toast.makeText(this, getText(R.string.used_date_warning), Toast.LENGTH_LONG).show();
+            return;
+        }
         if (dateHELP.length() == 0){
             Toast.makeText(this, getText(R.string.empty_date_warning), Toast.LENGTH_LONG).show();
             return;

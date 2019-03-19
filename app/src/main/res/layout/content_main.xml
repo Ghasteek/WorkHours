@@ -8,17 +8,16 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/app_bar_main">
 
+    <!--
     <TextView
         android:id="@+id/text_view_table"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginLeft="28dp"
-        android:layout_marginTop="444dp"
+        android:layout_marginTop="360dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
+    -->
 
     <ProgressBar
         android:id="@+id/monthShiftsProgress"
@@ -160,5 +159,14 @@
         app:layout_constraintStart_toStartOf="@+id/todayDepartureInfoId"
         app:layout_constraintTop_toBottomOf="@+id/todayDepartureInfoId"
         app:srcCompat="@android:drawable/ic_menu_edit" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="30dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTodayButtonId" />
 
 </android.support.constraint.ConstraintLayout>

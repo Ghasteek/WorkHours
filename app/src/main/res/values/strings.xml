@@ -39,6 +39,7 @@
     <string name="empty_departure_warning">Departure time cannot be empty</string>
     <string name="empty_break_warning">Break length cannot be empty</string>
     <string name="empty_holiday_warning">Holiday typ cannot be empty</string>
+    <string name="used_date_warning">There is already shift assigned to this date.</string>
 
     <!-- popisky menu -->
     <string name="action_settings">Settings</string>

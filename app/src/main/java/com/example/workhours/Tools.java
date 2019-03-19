@@ -132,7 +132,7 @@ public class Tools extends AppCompatActivity {
         return(String.valueOf(workDaysInMonth));
     }
 
-    public static String getWorkDaysInPeriod (int startDateInt, int endDateInt) {
+    public static String getWorkDaysInPeriod (int startDateInt, int endDateInt) {                   // vrací string s daty jednotlivych pracovnich dni oddelene pomlckami
         Calendar calendar = Calendar.getInstance();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -150,21 +150,15 @@ public class Tools extends AppCompatActivity {
         Calendar endCal = Calendar.getInstance();
         endCal.setTime(endDate);
 
-        String workDaysInPeriod = "0-";
-        int pocet = 0;
-
+        String workDaysInPeriod = "";
         while (startCal.getTimeInMillis() <= endCal.getTimeInMillis()) {
             if (startCal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY &&
                     startCal.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) {
                         int actualDate = Tools.dateDateToInt(startCal.getTime());
-                        workDaysInPeriod = workDaysInPeriod + "-" + Tools.dateIntToStr(actualDate);
-                        //pocet++;
+                        workDaysInPeriod = workDaysInPeriod + Tools.dateIntToStr(actualDate) + "-";
             }
             startCal.add(Calendar.DAY_OF_MONTH, 1);
         }
-        String out = pocet + " / " + startDateInt + " / " + endDateInt;
-        //return(out);
-        //return(String.valueOf(pocet));
         return(workDaysInPeriod);
     }
 }
