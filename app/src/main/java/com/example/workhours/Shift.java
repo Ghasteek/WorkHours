@@ -296,15 +296,24 @@ public class Shift extends AppCompatActivity {
         int holidayTypeInt = holidayTypeSpinner.getSelectedItemPosition();
         SharedPreferences temp = getApplicationContext().getSharedPreferences("Temporary", 0);             // definovani SharedPreference a editu
         SharedPreferences.Editor editorTemp = temp.edit();
-        if (holidayTypeInt == 0) {
+        if (holidayTypeInt == ShiftEntry.HOLIDAY_SHIFT) {
             int overtimeSumOld = 0;
             if (temp.contains("overtimeSum")) {
                 overtimeSumOld = temp.getInt("overtimeSum", 0);
             }
             int overtimeSumNew = overtimeSumOld + overtimeDifference;
             editorTemp.putInt("overtimeSum", overtimeSumNew);
-            editorTemp.apply();
-            }
+            }else {
+                departureTimeInt = arriveTimeInt + 480 + breakLengthInt;
+                }
+
+        if (holidayTypeInt == ShiftEntry.HOLIDAY_COMPENSATION){
+            int oldOvertime = temp.getInt("overtimeSum", 0);
+            int newOvertime = oldOvertime - 480;
+            editorTemp.putInt("overtimeSum", newOvertime);
+            overtimeLengthInt = -480;
+        }
+        editorTemp.apply();
 
         ContentValues shiftValues = new ContentValues();
         shiftValues.put(ShiftEntry.COLUMN_DATE, dateInt);

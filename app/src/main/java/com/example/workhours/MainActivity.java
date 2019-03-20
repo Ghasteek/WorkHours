@@ -58,11 +58,12 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener{    // pro time picker třeba implementovat TimePickerDialog.OnTimeSetListener
 
-    TextView todayArrivalInfo,todayDepartureInfo, thisMonthView,shiftsInfoView, overtimeThisMonthView, overtimeSumView;
+    TextView todayArrivalInfo,todayDepartureInfo, thisMonthView,shiftsInfoView, overtimeThisMonthView, overtimeSumView, todayBreak;
     ProgressBar monthShifts;
     SharedPreferences pref, temp;
     Calendar calendar;
     ImageButton showTimePickerIn, showTimePickerOut, editTodayButton;
+    EditText todayBreakInput;
 
 
     @Override
@@ -139,11 +140,14 @@ public class MainActivity extends AppCompatActivity
         overtimeSumView =  (TextView) findViewById(R.id.overtimeSumViewId);
         monthShifts = (ProgressBar) findViewById(R.id.monthShiftsProgress);
         editTodayButton = (ImageButton) findViewById(R.id.editTodayButtonId);
+        todayBreakInput = (EditText) findViewById(R.id.todayBreakInputId);
+        todayBreak = (TextView) findViewById(R.id.todayBreakId);
 
         calendar = Calendar.getInstance();
 
         String[] timeInArray = pref.getString("defaultInTime", "6:00").split(":");
         String[] timeOutArray = pref.getString("defaultOutTime", "14:30").split(":");
+        int prefBreak = pref.getInt("defaultPause", 30);
         MainActivity.Globals.timeInHours = Integer.parseInt(timeInArray[0]);
         MainActivity.Globals.timeInMinutes = Integer.parseInt(timeInArray[1]);
         MainActivity.Globals.timeOutHours = Integer.parseInt(timeOutArray[0]);
@@ -153,13 +157,13 @@ public class MainActivity extends AppCompatActivity
         showInfo();
 
 
-        if (temp.contains("arrivalTime")) {
+        /*if (temp.contains("arrivalTime")) {
             editTodayButton.setVisibility(View.VISIBLE);
         } else {
             editTodayButton.setVisibility(View.INVISIBLE);
             showTimePickerIn.setEnabled(true);
             showTimePickerOut.setEnabled(true);
-        }
+        }*/
     }
 
     private void checkYesterday() {
@@ -179,7 +183,7 @@ public class MainActivity extends AppCompatActivity
         //TextView displayView = (TextView) findViewById(R.id.text_view_table);
         int lastDbDate = 0;
         try {
-            while (cursor.moveToNext()){                                                                // vypsani obsahu cursoru
+            while (cursor.moveToNext()){
                 lastDbDate = cursor.getInt(dateColumnIndex);
             }
         } finally {
@@ -206,7 +210,7 @@ public class MainActivity extends AppCompatActivity
                 ShiftEntry.COLUMN_HOLIDAY};
 
 
-        String selection = ShiftEntry.COLUMN_HOLIDAY + "=? AND " + ShiftEntry.COLUMN_DATE + " LIKE ?";
+        String selection = ShiftEntry.COLUMN_HOLIDAY + " BETWEEN ? AND ? AND " + ShiftEntry.COLUMN_DATE + " LIKE ?";
 
         String[] projectionHolidays = {
                 ShiftEntry.COLUMN_HOLIDAY};
@@ -219,7 +223,7 @@ public class MainActivity extends AppCompatActivity
             monthStr = "0" + (month + 1);
         } else { monthStr = String.valueOf(month); }
 
-        String[] selectionArgs = new String[] { String.valueOf(ShiftEntry.HOLIDAY_SHIFT),   String.valueOf(year) + monthStr + "%" };
+        String[] selectionArgs = new String[] { String.valueOf(ShiftEntry.HOLIDAY_SHIFT), String.valueOf(ShiftEntry.HOLIDAY_COMPENSATION), String.valueOf(year) + monthStr + "%" };
 
         String[] selectionArgsHolidays = new String[] { String.valueOf(ShiftEntry.HOLIDAY_SHIFT), String.valueOf(ShiftEntry.HOLIDAY_VACATION), String.valueOf(year) + monthStr + "%" };
 
@@ -270,6 +274,7 @@ public class MainActivity extends AppCompatActivity
             if ((temp.getInt("arrivalDate", 0)) == (Tools.dateDateToInt(calendar.getTime()))) {
                 todayArrivalInfo.setText(getResources().getString(R.string.todayShiftArrivalLabel) + " " + Tools.timeIntToStr(temp.getInt("arrivalTime", 0)));
                 showTimePickerIn.setEnabled(false);
+                editTodayButton.setVisibility(View.INVISIBLE);
             } else {
                 //Toast.makeText(this,"neni vyplnena smena ze vcera ", Toast.LENGTH_LONG).show();
                 SharedPreferences.Editor editorTemp = temp.edit();
@@ -279,7 +284,14 @@ public class MainActivity extends AppCompatActivity
                 editorTemp.apply();
                 todayArrivalInfo.setText(getResources().getString(R.string.todayShiftArrivalLabel) + " " + getResources().getText(R.string.notInserted));
             }
+            todayBreakInput.setVisibility(View.VISIBLE);
+            todayBreak.setVisibility(View.VISIBLE);
         } else {
+            editTodayButton.setVisibility(View.INVISIBLE);
+            todayBreakInput.setVisibility(View.INVISIBLE);
+            todayBreak.setVisibility(View.INVISIBLE);
+            showTimePickerIn.setEnabled(true);
+            showTimePickerOut.setEnabled(true);
             todayArrivalInfo.setText(getResources().getString(R.string.todayShiftArrivalLabel) + " " + getResources().getText(R.string.notInserted));
         }
 
@@ -295,16 +307,21 @@ public class MainActivity extends AppCompatActivity
                 editorTemp.apply();
                 todayDepartureInfo.setText(getResources().getString(R.string.todayShiftDepartureLabel) + " " + getResources().getString(R.string.notInserted));
             }
-
-        } else {
-            todayDepartureInfo.setText(getResources().getString(R.string.todayShiftDepartureLabel) + " " + getResources().getString(R.string.notInserted));
-        }
-        if (temp.contains("arrivalTime")) {
             editTodayButton.setVisibility(View.VISIBLE);
-        } else {editTodayButton.setVisibility(View.INVISIBLE);
-            showTimePickerIn.setEnabled(true);
-            showTimePickerOut.setEnabled(true);
+            todayBreakInput.setVisibility(View.INVISIBLE);
+            todayBreak.setVisibility(View.INVISIBLE);
+            } else {
+            todayDepartureInfo.setText(getResources().getString(R.string.todayShiftDepartureLabel) + " " + getResources().getString(R.string.notInserted));
+            if (temp.contains("arrivalTime")) {
+                editTodayButton.setVisibility(View.INVISIBLE);
+                todayBreakInput.setVisibility(View.VISIBLE);
+                todayBreak.setVisibility(View.VISIBLE);
+                }
             }
+
+        if (pref.contains("defaultPause")) {
+            todayBreakInput.setText(Tools.timeIntToStr(pref.getInt("defaultPause", 30)));
+        }
     }
 
 
@@ -339,8 +356,9 @@ public class MainActivity extends AppCompatActivity
             editorTemp.putString("incompleteUri", uriStr);
             editorTemp.apply();
             showTimePickerIn.setEnabled(false);
+            todayBreakInput.setVisibility(View.VISIBLE);
+            todayBreak.setVisibility(View.VISIBLE);
             //Toast.makeText(this,"ukladam incomplete zaznam " + uriStr, Toast.LENGTH_LONG).show();
-
         } else {
             int minLength = (int) (Math.log10(minute) + 1);
             if (minLength == 2){
@@ -352,7 +370,7 @@ public class MainActivity extends AppCompatActivity
             SharedPreferences.Editor editorTemp = temp.edit();
             int arrivalTimeInt = temp.getInt("arrivalTime", 0);
             int departureTimeInt = Tools.timeStrToInt(departureTimeHelp);
-            int breakLengthInt = pref.getInt("defaultPause", 30);
+            int breakLengthInt = Tools.timeStrToInt(todayBreakInput.getText().toString());
             int shiftLengthInt = departureTimeInt - arrivalTimeInt - breakLengthInt;                         // vypocet delky smeny
             int overtimeLengthInt = shiftLengthInt - 480 ;
 
@@ -387,6 +405,8 @@ public class MainActivity extends AppCompatActivity
             }  else {
                 //Toast.makeText(this,"chyba ", Toast.LENGTH_LONG).show();
                 }
+            todayBreakInput.setVisibility(View.INVISIBLE);
+            todayBreak.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -395,6 +415,7 @@ public class MainActivity extends AppCompatActivity
     protected void onStart(){
         super.onStart();
         showInfo();
+        checkYesterday();
     }
                                                                                                         // po sem je definice buttonu a jeho onclickListeneru + onTimeSet abz vratil cas
     @Override

@@ -154,11 +154,36 @@
         android:id="@+id/editTodayButtonId"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginTop="10dp"
-        android:visibility="gone"
+        android:layout_marginTop="15dp"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="@+id/todayDepartureInfoId"
         app:layout_constraintTop_toBottomOf="@+id/todayDepartureInfoId"
         app:srcCompat="@android:drawable/ic_menu_edit" />
+
+    <TextView
+        android:id="@+id/todayBreakId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="6dp"
+        android:textSize="18sp"
+        android:hint="@string/breakLength"
+        app:layout_constraintStart_toEndOf="@+id/editTodayButtonId"
+        app:layout_constraintTop_toTopOf="@+id/editTodayButtonId" />
+
+    <EditText
+        android:id="@+id/todayBreakInputId"
+        android:layout_width="50dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="0dp"
+        android:textSize="18sp"
+        android:inputType="time"
+        android:hint="0:30"
+        app:layout_constraintStart_toEndOf="@+id/todayBreakId"
+        app:layout_constraintTop_toTopOf="@+id/editTodayButtonId" />
 
     <View
         android:id="@+id/divider2"
