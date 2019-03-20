@@ -1,6 +1,7 @@
 package com.example.workhours;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -66,11 +67,12 @@ public class ShiftCursorAdapter extends CursorAdapter {
                 }
                 return;
             case ShiftsContract.ShiftEntry.HOLIDAY_COMPENSATION:
-                shiftLengthView.setText(context.getString(R.string.compensation));
-                holidayTypeView.setVisibility(View.INVISIBLE);
-                shiftBar.setVisibility(View.INVISIBLE);
-                overtimeBar.setVisibility(View.INVISIBLE);
-                overtimeView.setVisibility(View.INVISIBLE);
+                shiftLengthView.setText(context.getString(R.string.compensation).trim());
+                holidayTypeView.setVisibility(View.GONE);
+                shiftBar.setVisibility(View.GONE);
+                overtimeBar.setVisibility(View.GONE);
+                overtimeView.setVisibility(View.VISIBLE);
+                overtimeView.setText(Tools.timeIntToStr(overtime));
                 return;
             case ShiftsContract.ShiftEntry.HOLIDAY_VACATION:
                 shiftLengthView.setText(context.getString(R.string.vacation));

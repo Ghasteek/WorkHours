@@ -83,6 +83,31 @@
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <EditText
+        android:id="@+id/defaultShiftLengthEdit"
+        android:layout_width="68dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginRight="35dp"
+        android:ems="10"
+        android:inputType="time"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/defaultBreakTimeEdit" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/settingsDefaultShiftLength"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/overtimeCorrectionEdit"
+        app:layout_constraintTop_toBottomOf="@+id/textView6"/>
+
+    <EditText
         android:id="@+id/overtimeCorrectionEdit"
         android:layout_width="68dp"
         android:layout_height="52dp"
@@ -93,7 +118,7 @@
         android:inputType="numberSigned"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/defaultBreakTimeEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/defaultShiftLengthEdit" />
 
     <TextView
         android:id="@+id/textView2"
@@ -105,6 +130,6 @@
         android:layout_marginRight="10dp"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/overtimeCorrectionEdit"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"/>
+        app:layout_constraintTop_toBottomOf="@+id/textView4"/>
 
 </android.support.constraint.ConstraintLayout>

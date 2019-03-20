@@ -155,15 +155,6 @@ public class MainActivity extends AppCompatActivity
 
         checkYesterday();
         showInfo();
-
-
-        /*if (temp.contains("arrivalTime")) {
-            editTodayButton.setVisibility(View.VISIBLE);
-        } else {
-            editTodayButton.setVisibility(View.INVISIBLE);
-            showTimePickerIn.setEnabled(true);
-            showTimePickerOut.setEnabled(true);
-        }*/
     }
 
     private void checkYesterday() {
@@ -372,7 +363,7 @@ public class MainActivity extends AppCompatActivity
             int departureTimeInt = Tools.timeStrToInt(departureTimeHelp);
             int breakLengthInt = Tools.timeStrToInt(todayBreakInput.getText().toString());
             int shiftLengthInt = departureTimeInt - arrivalTimeInt - breakLengthInt;                         // vypocet delky smeny
-            int overtimeLengthInt = shiftLengthInt - 480 ;
+            int overtimeLengthInt = shiftLengthInt - (Tools.timeStrToInt(pref.getString("defaultShift", ""))) ;
 
             ContentValues shiftValues = new ContentValues();
             shiftValues.put(ShiftEntry.COLUMN_DATE, temp.getInt("arrivalDate", 0));
@@ -471,13 +462,31 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+       /* switch (item.getItemId()){                                                                     // akce po kliknutí na Settings z menu/main
+            case R.id.action_settings:
+                Intent settings = new Intent(MainActivity.this, Settings.class);
+                startActivity(settings);
+                return true;
+            case R.id.action_add:
+                Intent addIntent = new Intent(MainActivity.this, Shift.class);
+                startActivity(addIntent);
+                return true;
+            case R.id.action_shiftsTable:
+                Intent ShiftTable = new Intent(MainActivity.this, ShiftTable.class);
+                startActivity(ShiftTable);
+                return true;
+        }*/
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
+        if (id == R.id.action_settings) {
+            Intent settings = new Intent(MainActivity.this, Settings.class);
+            startActivity(settings);
+        } else if (id == R.id.action_add) {
+            Intent addIntent = new Intent(MainActivity.this, Shift.class);
+            startActivity(addIntent);
+        } else if (id == R.id.action_shiftsTable) {
+            Intent ShiftTable = new Intent(MainActivity.this, ShiftTable.class);
+            startActivity(ShiftTable);
+        } else if (id == R.id.action_dummyData) {
             Intent i = new Intent(MainActivity.this, Settings.class);                   // volani aktivity
             startActivity(i);
         } else if (id == R.id.nav_share) {

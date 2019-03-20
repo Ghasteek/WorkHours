@@ -10,12 +10,8 @@ import android.widget.Toast;
 
 public class Settings extends AppCompatActivity {
 
-    EditText timeIn;
-    EditText timeOut;
-    EditText breakTime;
-    EditText overtimeCorrection;
-    SharedPreferences pref;
-    SharedPreferences temp;
+    EditText timeIn, timeOut, breakTime, overtimeCorrection, defaultShiftLength;
+    SharedPreferences temp, pref;
 
     public void save_settings(){
         SharedPreferences.Editor editor = pref.edit();
@@ -24,10 +20,12 @@ public class Settings extends AppCompatActivity {
         String timeInStr = timeIn.getText().toString();
         String timeOutStr = timeOut.getText().toString();
         String defaultPauseStr = breakTime.getText().toString();
+        String defaultShiftStr = defaultShiftLength.getText().toString();
 
         editor.putString("defaultInTime", timeInStr);
         editor.putString("defaultOutTime", timeOutStr);
         editor.putInt("defaultPause", Tools.timeStrToInt(defaultPauseStr));
+        editor.putString("defaultShift", defaultShiftStr);
 //TODO předělat time pickery aby si braly default in a default out časy ze shared preferenecs a né z glogals
         String[] timeInArray = timeInStr.split(":");
         String[] timeOutArray = timeOutStr.split(":");
@@ -89,6 +87,7 @@ public class Settings extends AppCompatActivity {
         timeOut = (EditText) findViewById(R.id.defaultDepartureTimeEdit);
         breakTime = (EditText) findViewById(R.id.defaultBreakTimeEdit);
         overtimeCorrection = (EditText) findViewById(R.id.overtimeCorrectionEdit);
+        defaultShiftLength = (EditText) findViewById(R.id.defaultShiftLengthEdit);
 
         if (pref.contains("defaultInTime")){
             timeIn.setText(pref.getString("defaultInTime", ""));
@@ -99,6 +98,8 @@ public class Settings extends AppCompatActivity {
         if (pref.contains("defaultPause")){
             breakTime.setText(Tools.timeIntToStr(pref.getInt("defaultPause",0)));
         }
-
+        if (pref.contains("defaultShift")){
+            defaultShiftLength.setText(pref.getString("defaultShift",""));
+        }
     }
 }

@@ -6,21 +6,17 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:id="@+id/nav_addShift"
+            android:icon="@android:drawable/ic_menu_add"
+            android:title="@string/action_add" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:id="@+id/nav_shiftTable"
+            android:icon="@android:drawable/ic_menu_my_calendar"
+            android:title="@string/action_shiftsTable" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools"
+            android:title="@string/action_settings"
             app:showAsAction="never" />
     </group>
 
