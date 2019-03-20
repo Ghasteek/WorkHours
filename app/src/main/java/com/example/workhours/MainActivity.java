@@ -58,7 +58,7 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener{    // pro time picker třeba implementovat TimePickerDialog.OnTimeSetListener
 
-    TextView todayArrivalInfo,todayDepartureInfo, thisMonthView,shiftsInfoView, overtimeThisMonthView, overtimeSumView, todayBreak;
+    TextView todayArrivalInfo,todayDepartureInfo, thisMonthView,shiftsInfoView, overtimeThisMonthView, overtimeSumView, todayBreak, textView;
     ProgressBar monthShifts;
     SharedPreferences pref, temp;
     Calendar calendar;
@@ -142,16 +142,17 @@ public class MainActivity extends AppCompatActivity
         editTodayButton = (ImageButton) findViewById(R.id.editTodayButtonId);
         todayBreakInput = (EditText) findViewById(R.id.todayBreakInputId);
         todayBreak = (TextView) findViewById(R.id.todayBreakId);
+        //textView = (TextView) findViewById(R.id.textViewId);
 
         calendar = Calendar.getInstance();
 
         String[] timeInArray = pref.getString("defaultInTime", "6:00").split(":");
         String[] timeOutArray = pref.getString("defaultOutTime", "14:30").split(":");
         int prefBreak = pref.getInt("defaultPause", 30);
-        MainActivity.Globals.timeInHours = Integer.parseInt(timeInArray[0]);
-        MainActivity.Globals.timeInMinutes = Integer.parseInt(timeInArray[1]);
-        MainActivity.Globals.timeOutHours = Integer.parseInt(timeOutArray[0]);
-        MainActivity.Globals.timeOutMinutes = Integer.parseInt(timeOutArray[1]);
+        Globals.timeInHours = Integer.parseInt(timeInArray[0]);
+        Globals.timeInMinutes = Integer.parseInt(timeInArray[1]);
+        Globals.timeOutHours = Integer.parseInt(timeOutArray[0]);
+        Globals.timeOutMinutes = Integer.parseInt(timeOutArray[1]);
 
         checkYesterday();
         showInfo();
@@ -405,8 +406,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart(){
         super.onStart();
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
         showInfo();
         checkYesterday();
+
     }
                                                                                                         // po sem je definice buttonu a jeho onclickListeneru + onTimeSet abz vratil cas
     @Override
@@ -462,43 +466,44 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-       /* switch (item.getItemId()){                                                                     // akce po kliknutí na Settings z menu/main
-            case R.id.action_settings:
+       switch (item.getItemId()){                                                                     // akce po kliknutí na Settings z menu/main
+            case R.id.nav_settings:
                 Intent settings = new Intent(MainActivity.this, Settings.class);
                 startActivity(settings);
                 return true;
-            case R.id.action_add:
+            case R.id.nav_addShift:
                 Intent addIntent = new Intent(MainActivity.this, Shift.class);
                 startActivity(addIntent);
                 return true;
-            case R.id.action_shiftsTable:
+            case R.id.nav_shiftTable:
                 Intent ShiftTable = new Intent(MainActivity.this, ShiftTable.class);
                 startActivity(ShiftTable);
                 return true;
-        }*/
+        }
 
-        if (id == R.id.action_settings) {
-            Intent settings = new Intent(MainActivity.this, Settings.class);
-            startActivity(settings);
-        } else if (id == R.id.action_add) {
+        /*if (id == R.id.nav_settings) {
+            Intent settings = new Intent(this, Settings.class);
+            this.startActivity(settings);
+        } else if (id == R.id.nav_addShift) {
             Intent addIntent = new Intent(MainActivity.this, Shift.class);
             startActivity(addIntent);
-        } else if (id == R.id.action_shiftsTable) {
+        } else if (id == R.id.nav_shiftTable) {
             Intent ShiftTable = new Intent(MainActivity.this, ShiftTable.class);
             startActivity(ShiftTable);
-        } else if (id == R.id.action_dummyData) {
+        } else if (id == 3) {
             Intent i = new Intent(MainActivity.this, Settings.class);                   // volani aktivity
             startActivity(i);
-        } else if (id == R.id.nav_share) {
+        }/* else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
-        }
+        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
     public void insertIncomplete (String dateInput){
         ContentValues shiftValues = new ContentValues();
