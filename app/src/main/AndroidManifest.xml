@@ -10,13 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".Preview"
+            android:label="@string/previewLabel"/>
+        <activity
             android:name=".ShiftTable"
             android:label="@string/shiftsTableLabel" />
         <activity
             android:name=".Settings"
-            android:label="@string/settingsLabel"/>
-        <activity
-            android:name=".Shift"/>
+            android:label="@string/settingsLabel" />
+        <activity android:name=".Shift" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

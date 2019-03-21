@@ -491,25 +491,11 @@ public class MainActivity extends AppCompatActivity
                 Intent ShiftTable = new Intent(MainActivity.this, ShiftTable.class);
                 startActivity(ShiftTable);
                 return true;
-        }
-
-        /*if (id == R.id.nav_settings) {
-            Intent settings = new Intent(this, Settings.class);
-            this.startActivity(settings);
-        } else if (id == R.id.nav_addShift) {
-            Intent addIntent = new Intent(MainActivity.this, Shift.class);
-            startActivity(addIntent);
-        } else if (id == R.id.nav_shiftTable) {
-            Intent ShiftTable = new Intent(MainActivity.this, ShiftTable.class);
-            startActivity(ShiftTable);
-        } else if (id == 3) {
-            Intent i = new Intent(MainActivity.this, Settings.class);                   // volani aktivity
-            startActivity(i);
-        }/* else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }*/
+            case R.id.nav_preview:
+                Intent Preview = new Intent(MainActivity.this, Preview.class);
+                startActivity(Preview);
+                return true;
+       }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

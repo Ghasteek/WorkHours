@@ -6,6 +6,10 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_preview"
+            android:icon="@android:drawable/ic_menu_zoom"
+            android:title="@string/action_preview" />
+        <item
             android:id="@+id/nav_addShift"
             android:icon="@android:drawable/ic_menu_add"
             android:title="@string/action_add" />
