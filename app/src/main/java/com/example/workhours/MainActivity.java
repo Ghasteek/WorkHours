@@ -172,23 +172,35 @@ public class MainActivity extends AppCompatActivity
                 sortOrder);
 
         int dateColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_DATE);
-        //TextView displayView = (TextView) findViewById(R.id.text_view_table);
-        int lastDbDate = 0;
-        try {
-            while (cursor.moveToNext()){
-                lastDbDate = cursor.getInt(dateColumnIndex);
+        if (cursor.getCount() != 0) {
+            //TextView displayView = (TextView) findViewById(R.id.text_view_table);
+            int lastDbDate = 0;
+            try {
+                while (cursor.moveToNext()) {
+                    lastDbDate = cursor.getInt(dateColumnIndex);
+                    }
+                } finally {
+                    cursor.close();
+                }
+            if (lastDbDate < (Tools.dateDateToInt(today) - 1)) {
+                String workDaysArrayStr = Tools.getWorkDaysInPeriod(lastDbDate, todayInt);
+                String[] workDaysArray = workDaysArrayStr.split("-");
+                for (int i = 0; i < workDaysArray.length; i++) {
+                    insertIncomplete(workDaysArray[i]);
+                    //displayView.append("\n " + workDaysArray[i]);
+                }
+            } //else {displayView.append("\n zaznamy kompletni");}
+//TODO zkontrolovat doplnění defaultních dní dovolené pro temp při překlopení roku
+            String dateHelp = String.valueOf(lastDbDate);
+            int lastDbDateYear = Integer.parseInt(dateHelp.substring(0,4));
+            int todayYear = calendar.get(Calendar.YEAR);
+            //Toast.makeText(this, lastDbDateYear + " / " + todayYear, Toast.LENGTH_LONG).show();
+            if (lastDbDateYear < todayYear) {
+                SharedPreferences.Editor editorTemp = temp.edit();
+                editorTemp.putInt("holidaySum", pref.getInt("holiday_days", 0));
+                editorTemp.apply();
+                }
             }
-        } finally {
-            cursor.close();
-        }
-        if (lastDbDate < (Tools.dateDateToInt(today) - 1)) {
-            String workDaysArrayStr = Tools.getWorkDaysInPeriod(lastDbDate, todayInt);
-            String [] workDaysArray = workDaysArrayStr.split("-");
-            for (int i = 0; i < workDaysArray.length; i++) {
-                insertIncomplete(workDaysArray[i]);
-                //displayView.append("\n " + workDaysArray[i]);
-            }
-        } //else {displayView.append("\n zaznamy kompletni");}
     }
 
     private void showInfo() {
@@ -364,7 +376,7 @@ public class MainActivity extends AppCompatActivity
             int departureTimeInt = Tools.timeStrToInt(departureTimeHelp);
             int breakLengthInt = Tools.timeStrToInt(todayBreakInput.getText().toString());
             int shiftLengthInt = departureTimeInt - arrivalTimeInt - breakLengthInt;                         // vypocet delky smeny
-            int overtimeLengthInt = shiftLengthInt - (Tools.timeStrToInt(pref.getString("defaultShift", ""))) ;
+            int overtimeLengthInt = shiftLengthInt - (Tools.timeStrToInt(pref.getString("defaultShift", "8:00"))) ;
 
             ContentValues shiftValues = new ContentValues();
             shiftValues.put(ShiftEntry.COLUMN_DATE, temp.getInt("arrivalDate", 0));
@@ -508,7 +520,7 @@ public class MainActivity extends AppCompatActivity
     public void insertIncomplete (String dateInput){
         ContentValues shiftValues = new ContentValues();
         shiftValues.put(ShiftEntry.COLUMN_DATE, Tools.dateStrToInt(dateInput));
-        shiftValues.put(ShiftEntry.COLUMN_ARRIVAL, Tools.timeStrToInt(pref.getString("defaultInTime", "0")));
+        shiftValues.put(ShiftEntry.COLUMN_ARRIVAL, Tools.timeStrToInt(pref.getString("defaultInTime", "6:00")));
         shiftValues.put(ShiftEntry.COLUMN_DEPARTURE, 0);
         shiftValues.put(ShiftEntry.COLUMN_BREAK_LENGTH, pref.getInt("defaultPause", 30));
         shiftValues.put(ShiftEntry.COLUMN_SHIFT_LENGTH, 0);

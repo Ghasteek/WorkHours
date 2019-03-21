@@ -49,7 +49,7 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:text="@string/settingsDefaultDepartureTime"
@@ -74,7 +74,7 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:text="@string/settingsDefaultBreakLength"
@@ -100,15 +100,74 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/settingsDefaultShiftLength"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
-        android:textSize="20sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/overtimeCorrectionEdit"
         app:layout_constraintTop_toBottomOf="@+id/textView6"/>
 
     <EditText
+        android:id="@+id/holidayDaysEdit"
+        android:layout_width="68dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginRight="35dp"
+        android:ems="10"
+        android:inputType="time"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/defaultShiftLengthEdit" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/settingsDefaultVacation"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/overtimeCorrectionEdit"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"/>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="30dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <EditText
         android:id="@+id/overtimeCorrectionEdit"
+        android:layout_width="68dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginRight="35dp"
+        android:ems="10"
+        android:inputType="numberSigned"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/settingsOvertimeCorrection"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/overtimeCorrectionEdit"
+        app:layout_constraintTop_toBottomOf="@+id/divider"/>
+
+    <EditText
+        android:id="@+id/holidayCorrectionEdit"
         android:layout_width="68dp"
         android:layout_height="52dp"
         android:layout_marginTop="10dp"
@@ -118,18 +177,18 @@
         android:inputType="numberSigned"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/defaultShiftLengthEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/overtimeCorrectionEdit" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/settingsOvertimeCorrection"
+        android:text="@string/settingsHolidayCorrection"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintEnd_toStartOf="@+id/overtimeCorrectionEdit"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"/>
+        app:layout_constraintTop_toBottomOf="@+id/textView2"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -18,7 +18,9 @@
     <string name="settingsDefaultDepartureTime">Default departure time : </string>
     <string name="settingsDefaultBreakLength">Default break length : </string>
     <string name="settingsDefaultShiftLength">Default shift length : </string>
-    <string name="settingsOvertimeCorrection">Manual overtime correction (m) : </string>
+    <string name="settingsDefaultVacation">Holiday days per year:</string>
+    <string name="settingsOvertimeCorrection">Manual overtime correction (M) : </string>
+    <string name="settingsHolidayCorrection">Manual holiday correction (D) : </string>
 
     <!-- SHIFT stranka -->
     <string name="date">Date : </string>

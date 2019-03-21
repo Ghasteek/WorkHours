@@ -46,6 +46,7 @@ public class Shift extends AppCompatActivity {
         }
     };
     private SharedPreferences temp, pref;
+    private int holidayTypeInt;
     //private SharedPreferences temp = getApplicationContext().getSharedPreferences("Temporary", 0);
     //private SharedPreferences pref = getApplicationContext().getSharedPreferences("Settings", 0);
 
@@ -234,7 +235,7 @@ public class Shift extends AppCompatActivity {
                 breakLenght.setText(breakLenghtStr);
                 shiftLenght.setText(shiftLenghtStr);
                 overtimeLegth.setText(overtimeLengthStr);
-                int holidayTypeInt = cursor.getInt(holidayTypeColumnIndex);
+                holidayTypeInt = cursor.getInt(holidayTypeColumnIndex);
                 if ( holidayTypeInt == 4 ) {
                     holidayTypeSpinner.setSelection(0);
                 } else{holidayTypeSpinner.setSelection(cursor.getInt(holidayTypeColumnIndex));}
@@ -291,7 +292,7 @@ public class Shift extends AppCompatActivity {
 
         int shiftLengthInt = departureTimeInt - arriveTimeInt - breakLengthInt;                         // vypocet delky smeny
 
-        int overtimeLengthInt = shiftLengthInt - (Tools.timeStrToInt(pref.getString("defaultShift", ""))) ;
+        int overtimeLengthInt = shiftLengthInt - (Tools.timeStrToInt(pref.getString("defaultShift", "8:00"))) ;
         int overtimeLenghtOriginal = 0;
         if (clickedShiftUri != null) {
             overtimeLenghtOriginal = Tools.timeStrToInt(overtimeLengthStr);
@@ -299,10 +300,10 @@ public class Shift extends AppCompatActivity {
         int overtimeDifference = overtimeLengthInt - overtimeLenghtOriginal;
         //Toast.makeText(this,"rozdíl overtime je " + overtimeDifference, Toast.LENGTH_LONG).show();
 
-        int holidayTypeInt = holidayTypeSpinner.getSelectedItemPosition();
+        int holidayTypeSelectedInt = holidayTypeSpinner.getSelectedItemPosition();
 
         SharedPreferences.Editor editorTemp = temp.edit();
-        if (holidayTypeInt == ShiftEntry.HOLIDAY_SHIFT) {
+        if (holidayTypeSelectedInt == ShiftEntry.HOLIDAY_SHIFT) {
             int overtimeSumOld = 0;
             if (temp.contains("overtimeSum")) {
                 overtimeSumOld = temp.getInt("overtimeSum", 0);
@@ -313,12 +314,24 @@ public class Shift extends AppCompatActivity {
                 departureTimeInt = arriveTimeInt + (Tools.timeStrToInt(pref.getString("defaultShift", ""))) + breakLengthInt;
                 }
 
-        if (holidayTypeInt == ShiftEntry.HOLIDAY_COMPENSATION){
+        if (holidayTypeSelectedInt == ShiftEntry.HOLIDAY_COMPENSATION){
             int oldOvertime = temp.getInt("overtimeSum", 0);
             int newOvertime = oldOvertime - (Tools.timeStrToInt(pref.getString("defaultShift", "")));
             editorTemp.putInt("overtimeSum", newOvertime);
             overtimeLengthInt = - (Tools.timeStrToInt(pref.getString("defaultShift", "")));
         }
+
+        if ((holidayTypeSelectedInt == ShiftEntry.HOLIDAY_VACATION) && (holidayTypeInt != ShiftEntry.HOLIDAY_VACATION)) {
+            int oldHolidaySum = temp.getInt("holidaySum", 0);
+            int newHolidaySum = oldHolidaySum - 1;
+            editorTemp.putInt("holidaySum", newHolidaySum);
+        }
+        if ((holidayTypeSelectedInt != ShiftEntry.HOLIDAY_VACATION) && (holidayTypeInt == ShiftEntry.HOLIDAY_VACATION)) {
+            int oldHolidaySum = temp.getInt("holidaySum", 0);
+            int newHolidaySum = oldHolidaySum + 1;
+            editorTemp.putInt("holidaySum", newHolidaySum);
+        }
+
         editorTemp.apply();
 
         ContentValues shiftValues = new ContentValues();
@@ -328,7 +341,7 @@ public class Shift extends AppCompatActivity {
         shiftValues.put(ShiftEntry.COLUMN_BREAK_LENGTH, breakLengthInt);
         shiftValues.put(ShiftEntry.COLUMN_SHIFT_LENGTH, shiftLengthInt);
         shiftValues.put(ShiftEntry.COLUMN_OVERTIME, overtimeLengthInt);
-        shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, holidayTypeInt);
+        shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, holidayTypeSelectedInt);
 
         if (clickedShiftUri == null) {
             Uri newUri = getContentResolver().insert(ShiftEntry.CONTENT_URI, shiftValues);
@@ -400,9 +413,9 @@ public class Shift extends AppCompatActivity {
     private void deleteShift(){
         SharedPreferences.Editor editorTemp = temp.edit();
 
-        int holidayTypeInt = holidayTypeSpinner.getSelectedItemPosition();
+        int holidayTypeSelectedInt = holidayTypeSpinner.getSelectedItemPosition();
 
-        if (holidayTypeInt == ShiftEntry.HOLIDAY_SHIFT) {
+        if (holidayTypeSelectedInt == ShiftEntry.HOLIDAY_SHIFT) {
             int overtimeLengthOldSum = temp.getInt("overtimeSum", 0);
             int overtimeHelp = Tools.timeStrToInt(overtimeLengthStr);
             int overtimeNewSum = overtimeLengthOldSum - overtimeHelp;
@@ -412,10 +425,20 @@ public class Shift extends AppCompatActivity {
 
             editorTemp.putInt("overtimeSum", overtimeNewSum);
         }
-        if (holidayTypeInt == ShiftEntry.HOLIDAY_COMPENSATION) {
+        if (holidayTypeSelectedInt == ShiftEntry.HOLIDAY_COMPENSATION) {
             int overtimeOld = temp.getInt("overtimeSum", 0);
             int overtimeNew = overtimeOld + (Tools.timeStrToInt(pref.getString("defaultShift", "0")));
             editorTemp.putInt("overtimeSum", overtimeNew);
+        }
+        if ((holidayTypeSelectedInt == ShiftEntry.HOLIDAY_VACATION) && (holidayTypeInt != ShiftEntry.HOLIDAY_VACATION)) {
+            int oldHolidaySum = temp.getInt("holidaySum", 0);
+            int newHolidaySum = oldHolidaySum - 1;
+            editorTemp.putInt("holidaySum", newHolidaySum);
+        }
+        if ((holidayTypeSelectedInt != ShiftEntry.HOLIDAY_VACATION) && (holidayTypeInt == ShiftEntry.HOLIDAY_VACATION)) {
+            int oldHolidaySum = temp.getInt("holidaySum", 0);
+            int newHolidaySum = oldHolidaySum + 1;
+            editorTemp.putInt("holidaySum", newHolidaySum);
         }
 
         int rowsDeleted = getContentResolver().delete(clickedShiftUri, null, null);

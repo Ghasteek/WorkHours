@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 public class Settings extends AppCompatActivity {
 
-    EditText timeIn, timeOut, breakTime, overtimeCorrection, defaultShiftLength;
+    EditText timeIn, timeOut, breakTime, overtimeCorrection, defaultShiftLength, holidayDaysEdit, holidayCorrection;
     SharedPreferences temp, pref;
 
     public void save_settings(){
@@ -21,11 +21,13 @@ public class Settings extends AppCompatActivity {
         String timeOutStr = timeOut.getText().toString();
         String defaultPauseStr = breakTime.getText().toString();
         String defaultShiftStr = defaultShiftLength.getText().toString();
+        int holidayDays = Integer.parseInt(holidayDaysEdit.getText().toString());
 
         editor.putString("defaultInTime", timeInStr);
         editor.putString("defaultOutTime", timeOutStr);
         editor.putInt("defaultPause", Tools.timeStrToInt(defaultPauseStr));
         editor.putString("defaultShift", defaultShiftStr);
+        editor.putInt("holiday_days", holidayDays);
 //TODO předělat time pickery aby si braly default in a default out časy ze shared preferenecs a né z glogals
         String[] timeInArray = timeInStr.split(":");
         String[] timeOutArray = timeOutStr.split(":");
@@ -44,6 +46,23 @@ public class Settings extends AppCompatActivity {
             int correction = Integer.parseInt(overtimeCorrection.getText().toString());
             int overtimeNew = overtimeOld + correction;
             editorTemp.putInt("overtimeSum", overtimeNew);
+            editorTemp.apply();
+        }
+
+        String isValidHolidayCorrection = holidayCorrection.getText().toString();
+        if (!isValidHolidayCorrection.isEmpty()){
+            int holidayOld = temp.getInt("holidaySum", 0);
+            if (temp.contains("holidaySum")) {
+                holidayOld = temp.getInt("holidaySum", 0);
+            }
+            int correctionHoliday = Integer.parseInt(holidayCorrection.getText().toString());
+            int holidayNew = holidayOld + correctionHoliday;
+            editorTemp.putInt("holidaySum", holidayNew);
+            editorTemp.apply();
+        }
+
+        if (!temp.contains("holidaySum")) {     //TODO při změně defaultního počtu dovolené, změnit i dovolenou v temp
+            editorTemp.putInt("holidaySum", holidayDays);
             editorTemp.apply();
         }
 
@@ -88,6 +107,8 @@ public class Settings extends AppCompatActivity {
         breakTime = (EditText) findViewById(R.id.defaultBreakTimeEdit);
         overtimeCorrection = (EditText) findViewById(R.id.overtimeCorrectionEdit);
         defaultShiftLength = (EditText) findViewById(R.id.defaultShiftLengthEdit);
+        holidayDaysEdit = (EditText) findViewById(R.id.holidayDaysEdit);
+        holidayCorrection = (EditText) findViewById(R.id.holidayCorrectionEdit);
 
         if (pref.contains("defaultInTime")){
             timeIn.setText(pref.getString("defaultInTime", ""));
@@ -100,6 +121,9 @@ public class Settings extends AppCompatActivity {
         }
         if (pref.contains("defaultShift")){
             defaultShiftLength.setText(pref.getString("defaultShift",""));
+        }
+        if (pref.contains("holiday_days")){
+            holidayDaysEdit.setText("" + pref.getInt("holiday_days",0));
         }
     }
 }
