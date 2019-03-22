@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.getMenu().getItem(0).setChecked(false);
         navigationView.setNavigationItemSelectedListener(this);
 
         editTodayButton = (ImageButton) findViewById(R.id.editTodayButtonId);
@@ -162,7 +163,7 @@ public class MainActivity extends AppCompatActivity
         Date today = calendar.getTime();
         int todayInt = Tools.dateDateToInt(today);
 
-        String[] projection = {ShiftEntry.COLUMN_DATE,};
+        String[] projection = {ShiftEntry.COLUMN_DATE,};                                            //get last row from DB according date
         String sortOrder = ShiftEntry.COLUMN_DATE + " DESC LIMIT 1";
         Cursor cursor = getContentResolver().query(
                 ShiftEntry.CONTENT_URI,
@@ -175,14 +176,14 @@ public class MainActivity extends AppCompatActivity
         if (cursor.getCount() != 0) {
             //TextView displayView = (TextView) findViewById(R.id.text_view_table);
             int lastDbDate = 0;
-            try {
+            try {                                                                                   //get date of last row in DB according to date
                 while (cursor.moveToNext()) {
                     lastDbDate = cursor.getInt(dateColumnIndex);
                     }
                 } finally {
                     cursor.close();
                 }
-            if (lastDbDate < (Tools.dateDateToInt(today) - 1)) {
+            if (lastDbDate < (Tools.dateDateToInt(today) - 1)) {                                    // if there is row in db, that has lower date than today, insert incomplete rows into DB only for work days
                 String workDaysArrayStr = Tools.getWorkDaysInPeriod(lastDbDate, todayInt);
                 String[] workDaysArray = workDaysArrayStr.split("-");
                 for (int i = 0; i < workDaysArray.length; i++) {
@@ -195,11 +196,19 @@ public class MainActivity extends AppCompatActivity
             int lastDbDateYear = Integer.parseInt(dateHelp.substring(0,4));
             int todayYear = calendar.get(Calendar.YEAR);
             //Toast.makeText(this, lastDbDateYear + " / " + todayYear, Toast.LENGTH_LONG).show();
-            if (lastDbDateYear < todayYear) {
+            if (lastDbDateYear < todayYear) {                                                       //if last date in db is from last year, then get whole holiday pool into temporary
+                int oldHoliday = temp.getInt("holidaySum", 0);
+                int newHoliday = pref.getInt("holiday_days", 0) + oldHoliday;
                 SharedPreferences.Editor editorTemp = temp.edit();
-                editorTemp.putInt("holidaySum", pref.getInt("holiday_days", 0));
+                editorTemp.putInt("holidaySum", newHoliday);
                 editorTemp.apply();
                 }
+
+            int lastDbDateMonth = Integer.parseInt(dateHelp.substring(5,6));
+            int todayMonth = calendar.get(Calendar.MONTH) - 1;
+            if (lastDbDateMonth < todayMonth) {                                                     // if last date in DB is from last month, then put into DB row with date yyyyMM and actual overtime SUM
+//TODO dodělat přidání záznamu se sumou přesčasů pro daný měsíc
+            }
             }
     }
 
@@ -499,6 +508,7 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 

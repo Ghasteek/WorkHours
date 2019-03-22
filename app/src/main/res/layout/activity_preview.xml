@@ -8,6 +8,31 @@
 
     <!--                 prvni radek              -->
     <TextView
+        android:id="@+id/overtimeFromLastMonthId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:textSize="20sp"
+        android:text="Převod z minula:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/overtimeFromLastMonthValueId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:text="2:30h"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--                 druhy radek              -->
+    <TextView
         android:id="@+id/workHoursPlanId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,9 +40,9 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
         android:textSize="20sp"
-        android:hint="Předpis práce:"
+        android:text="Předpis práce:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/overtimeFromLastMonthId" />
 
     <TextView
         android:id="@+id/workHoursPlanValueId"
@@ -26,12 +51,12 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
-        android:hint="168:00h"
+        android:text="168:00h"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/overtimeFromLastMonthValueId" />
 
-    <!--                 druhy radek              -->
+    <!--                 treti radek              -->
 
     <TextView
         android:id="@+id/workHoursDoneId"
@@ -41,7 +66,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
         android:textSize="20sp"
-        android:hint="Odpracovaná doba:"
+        android:text="Odpracovaná doba:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/workHoursPlanId" />
 
@@ -52,12 +77,12 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
-        android:hint="102:00h"
+        android:text="102:00h"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/workHoursPlanValueId" />
 
-    <!--                 treti radek              -->
+    <!--                 ctvrty radek              -->
 
     <TextView
         android:id="@+id/workHoursMonthlyDifferenceId"
@@ -67,7 +92,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
         android:textSize="20sp"
-        android:hint="Měsíční rozdíl:"
+        android:text="Měsíční rozdíl:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/workHoursDoneId" />
 
@@ -78,12 +103,12 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
-        android:hint="-50:30h"
+        android:text="-50:30h"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/workHoursDoneValueId" />
 
-    <!--                 ctvrty radek              -->
+    <!--                 paty radek              -->
 
     <TextView
         android:id="@+id/workHoursToNextMonthId"
@@ -93,7 +118,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
         android:textSize="20sp"
-        android:hint="Převod pro další měsíc:"
+        android:text="Převod pro další měsíc:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/workHoursMonthlyDifferenceId" />
 
@@ -104,12 +129,12 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
-        android:hint="2:30h"
+        android:text="2:30h"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/workHoursMonthlyDifferenceValueId" />
 
-    <!--                 paty radek              -->
+    <!--                 sesty radek              -->
 
     <TextView
         android:id="@+id/usedHolidayId"
@@ -119,7 +144,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
         android:textSize="20sp"
-        android:hint="Použitá dovolená:"
+        android:text="Použitá dovolená:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/workHoursToNextMonthId" />
 
@@ -130,12 +155,12 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
-        android:hint="2"
+        android:text="2"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/workHoursToNextMonthValueId" />
 
-    <!--                 sesty radek              -->
+    <!--                 sedmy radek              -->
 
     <TextView
         android:id="@+id/remainingHolidayId"
@@ -145,7 +170,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
         android:textSize="20sp"
-        android:hint="Zbývající dovolená:"
+        android:text="Zbývající dovolená:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/usedHolidayId" />
 
@@ -156,9 +181,35 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
-        android:hint="18"
+        android:text="18"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/usedHolidayValueId" />
+
+    <!--                 osmy radek              -->
+
+    <TextView
+        android:id="@+id/publicHolidaysId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:textSize="20sp"
+        android:text="Státní svátky:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/remainingHolidayId" />
+
+    <TextView
+        android:id="@+id/publicHolidaysValueId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:text="1"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/remainingHolidayValueId" />
 
 </android.support.constraint.ConstraintLayout>

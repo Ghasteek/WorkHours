@@ -1,6 +1,6 @@
 package com.example.workhours;
 
-import android.content.DialogInterface;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -13,6 +13,7 @@ public class Preview extends AppCompatActivity {
         setContentView(R.layout.activity_preview);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -23,4 +24,5 @@ public class Preview extends AppCompatActivity {
         }
         return true;
     }
+
 }
