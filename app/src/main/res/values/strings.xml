@@ -24,12 +24,12 @@
 
     <!-- SHIFT stranka -->
     <string name="date">Date : </string>
-    <string name="arrivalTime">Arrival : </string>
-    <string name="departureTime">Departure : </string>
-    <string name="breakLength">Break length : </string>
-    <string name="shiftLength">Shift length : </string>
-    <string name="overtimeLength">Overtime : </string>
-    <string name="holidayType">Holiday type : </string>
+    <string name="arrivalTime">Arrival :\u0020</string>
+    <string name="departureTime">Departure :\u0020</string>
+    <string name="breakLength">Break length :\u0020</string>
+    <string name="shiftLength">Shift length :\u0020</string>
+    <string name="overtimeLength">Overtime :\u0020</string>
+    <string name="holidayType">Holiday type :\u0020</string>
 
     <!-- TOASTS -->
     <string name="defaults_loaded">Loaded default times from settings.</string>
@@ -79,15 +79,26 @@
     <string name="incomplete">Nekompletní záznam</string>
 
     <!-- MAIN SCREEN popisky -->
-    <string name="alreadyWorked">Odpracováno </string>
-    <string name="daysFrom"> dní z </string>
-    <string name="thisMonthOvertime">Tento měsíc přesčasů: </string>
-    <string name="sumOfOvertime">Celkově přesčasů: </string>
+    <string name="alreadyWorked">Odpracováno\u0020</string>
+    <string name="daysFrom">\u0020dní z\u0020</string>
+    <string name="thisMonthOvertime">Tento měsíc přesčasů:\u0020</string>
+    <string name="sumOfOvertime">Převod pro další měsíc:\u0020</string>
+    <string name="hour">\u0020h</string>
+    <string name="zeroHour">\u00200h</string>
     <string name="arriveTooltip">Zadejte čas příchodu do práce</string>
     <string name="departureTooltip">Zadejte čas odchodu z práce</string>
     <string name="todayShiftLabel">Dnešní směna:</string>
-    <string name="todayShiftDepartureLabel">Odchod:</string>
-    <string name="todayShiftArrivalLabel">Příchod:</string>
+    <string name="todayShiftDepartureLabel">Odchod:\u0020</string>
+    <string name="todayShiftArrivalLabel">Příchod:\u0020</string>
     <string name="notInserted">nezadáno</string>
-    <string name="arrivalNeeded">První musíte zadat čas příchodu</string>>
+    <string name="arrivalNeeded">První musíte zadat čas příchodu</string>
+
+    <!-- preview popisky -->
+    <string name="workHoursPlan">Předpis práce:</string>
+    <string name="workHoursDone">Odpracovaná doba:</string>
+    <string name="workHoursMonthlyDifference">Měsíční rozdíl:</string>
+    <string name="workHoursToNextMonth">Převod pro další měsíc:</string>
+    <string name="usedHoliday">Použitá dovolená:</string>
+    <string name="remainingHoliday">Zbývající dovolená:</string>
+    <string name="publicHolidays">Státní svátky:</string>
 </resources>

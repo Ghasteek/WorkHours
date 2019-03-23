@@ -228,6 +228,8 @@ public class Shift extends AppCompatActivity {
                 String breakLenghtStr = Tools.timeIntToStr(cursor.getInt(breakLengthColumnIndex));
                 String shiftLenghtStr = Tools.timeIntToStr(cursor.getInt(shiftLengthColumnIndex));
                 overtimeLengthStr = Tools.timeIntToStr(cursor.getInt(overtimeLengthColumnIndex));
+                holidayTypeInt = cursor.getInt(holidayTypeColumnIndex);
+
 
                 date.setText(dateStr);
                 arriveTime.setText(arrivalStr);
@@ -235,8 +237,9 @@ public class Shift extends AppCompatActivity {
                 breakLenght.setText(breakLenghtStr);
                 shiftLenght.setText(shiftLenghtStr);
                 overtimeLegth.setText(overtimeLengthStr);
-                holidayTypeInt = cursor.getInt(holidayTypeColumnIndex);
-                if ( holidayTypeInt == 4 ) {
+
+
+                if ( holidayTypeInt == ShiftEntry.HOLIDAY_INCOMPLETE ) {
                     holidayTypeSpinner.setSelection(0);
                 } else{holidayTypeSpinner.setSelection(cursor.getInt(holidayTypeColumnIndex));}
             }
@@ -290,7 +293,10 @@ public class Shift extends AppCompatActivity {
         }
         int breakLengthInt = Tools.timeStrToInt(breakHelp);                                             // prevod delky pauzy na integer v minutach
 
-        int shiftLengthInt = departureTimeInt - arriveTimeInt - breakLengthInt;                         // vypocet delky smeny
+        int shiftLengthInt = 0;                                                                         // vypocet delky smeny
+        if (departureTimeInt != 0) {
+            shiftLengthInt = departureTimeInt - arriveTimeInt - breakLengthInt;
+        } else { shiftLengthInt = (Tools.timeStrToInt(pref.getString("defaultShift", "8:00"))); } // pomocny odecet pro fungovani nasledujicich vzorcu
 
         int overtimeLengthInt = shiftLengthInt - (Tools.timeStrToInt(pref.getString("defaultShift", "8:00"))) ;
         int overtimeLenghtOriginal = 0;
@@ -311,25 +317,46 @@ public class Shift extends AppCompatActivity {
             int overtimeSumNew = overtimeSumOld + overtimeDifference;
             editorTemp.putInt("overtimeSum", overtimeSumNew);
             }else {
-                departureTimeInt = arriveTimeInt + (Tools.timeStrToInt(pref.getString("defaultShift", ""))) + breakLengthInt;
+                departureTimeInt = arriveTimeInt + (Tools.timeStrToInt(pref.getString("defaultShift", "8:00"))) + breakLengthInt;
                 }
 
-        if (holidayTypeSelectedInt == ShiftEntry.HOLIDAY_COMPENSATION){
+        if (holidayTypeSelectedInt == ShiftEntry.HOLIDAY_COMPENSATION && holidayTypeInt != ShiftEntry.HOLIDAY_COMPENSATION){
             int oldOvertime = temp.getInt("overtimeSum", 0);
-            int newOvertime = oldOvertime - (Tools.timeStrToInt(pref.getString("defaultShift", "")));
+            int newOvertime = oldOvertime - (Tools.timeStrToInt(pref.getString("defaultShift", "8:00"))) - overtimeLengthInt;
             editorTemp.putInt("overtimeSum", newOvertime);
-            overtimeLengthInt = - (Tools.timeStrToInt(pref.getString("defaultShift", "")));
+            overtimeLengthInt = 0 - (Tools.timeStrToInt(pref.getString("defaultShift", "8:00")));
+            shiftLengthInt = Tools.timeStrToInt(pref.getString("defaultShift", "8:00"));
+        } else if (holidayTypeSelectedInt != ShiftEntry.HOLIDAY_COMPENSATION && holidayTypeInt == ShiftEntry.HOLIDAY_COMPENSATION) {
+            int oldOvertime = temp.getInt("overtimeSum", 0);
+            int newOvertime = oldOvertime + (Tools.timeStrToInt(pref.getString("defaultShift", "8:00"))) + overtimeLengthInt;
+            editorTemp.putInt("overtimeSum", newOvertime);
         }
 
-        if ((holidayTypeSelectedInt == ShiftEntry.HOLIDAY_VACATION) && (holidayTypeInt != ShiftEntry.HOLIDAY_VACATION)) {
+        if ((holidayTypeSelectedInt == ShiftEntry.HOLIDAY_VACATION) && (holidayTypeInt != ShiftEntry.HOLIDAY_VACATION)) { // je zvolena dovolena, ale nebyla
             int oldHolidaySum = temp.getInt("holidaySum", 0);
             int newHolidaySum = oldHolidaySum - 1;
             editorTemp.putInt("holidaySum", newHolidaySum);
+
+
+            int oldOvertime = temp.getInt("overtimeSum", 0);
+            int newOvertime = oldOvertime - overtimeLengthInt;
+            editorTemp.putInt("overtimeSum", newOvertime);
+
+
+
+            shiftLengthInt = Tools.timeStrToInt(pref.getString("defaultShift", "8:00"));
+            departureTimeInt = arriveTimeInt + shiftLengthInt + breakLengthInt;
+            overtimeLengthInt = 0;
+
         }
-        if ((holidayTypeSelectedInt != ShiftEntry.HOLIDAY_VACATION) && (holidayTypeInt == ShiftEntry.HOLIDAY_VACATION)) {
+        if ((holidayTypeSelectedInt != ShiftEntry.HOLIDAY_VACATION) && (holidayTypeInt == ShiftEntry.HOLIDAY_VACATION)) { // neni zvolena dovolena, ale byla
             int oldHolidaySum = temp.getInt("holidaySum", 0);
             int newHolidaySum = oldHolidaySum + 1;
             editorTemp.putInt("holidaySum", newHolidaySum);
+
+            int oldOvertime = temp.getInt("overtimeSum", 0);
+            int newOvertime = oldOvertime + overtimeLengthInt;
+            editorTemp.putInt("overtimeSum", newOvertime);
         }
 
         editorTemp.apply();
@@ -430,12 +457,8 @@ public class Shift extends AppCompatActivity {
             int overtimeNew = overtimeOld + (Tools.timeStrToInt(pref.getString("defaultShift", "0")));
             editorTemp.putInt("overtimeSum", overtimeNew);
         }
-        if ((holidayTypeSelectedInt == ShiftEntry.HOLIDAY_VACATION) && (holidayTypeInt != ShiftEntry.HOLIDAY_VACATION)) {
-            int oldHolidaySum = temp.getInt("holidaySum", 0);
-            int newHolidaySum = oldHolidaySum - 1;
-            editorTemp.putInt("holidaySum", newHolidaySum);
-        }
-        if ((holidayTypeSelectedInt != ShiftEntry.HOLIDAY_VACATION) && (holidayTypeInt == ShiftEntry.HOLIDAY_VACATION)) {
+
+        if (holidayTypeInt == ShiftEntry.HOLIDAY_VACATION) {
             int oldHolidaySum = temp.getInt("holidaySum", 0);
             int newHolidaySum = oldHolidaySum + 1;
             editorTemp.putInt("holidaySum", newHolidaySum);

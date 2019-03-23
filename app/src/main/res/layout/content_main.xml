@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="15dp"
         android:textSize="18sp"
         android:hint="First row"
         app:layout_constraintStart_toEndOf="@+id/monthShiftsProgress"
@@ -58,7 +58,7 @@
         app:layout_constraintStart_toEndOf="@+id/monthShiftsProgress"
         app:layout_constraintTop_toBottomOf="@+id/thisMonthViewId" />
 
-    <TextView
+    <!--<TextView
         android:id="@+id/overtimeThisMonthViewId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
         android:layout_marginTop="2dp"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/monthShiftsProgress"
-        app:layout_constraintTop_toBottomOf="@+id/shiftsInfoViewId" />
+        app:layout_constraintTop_toBottomOf="@+id/shiftsInfoViewId" />-->
 
     <TextView
         android:id="@+id/overtimeSumViewId"
@@ -79,7 +79,7 @@
         android:textSize="18sp"
         android:hint="LastRow"
         app:layout_constraintStart_toEndOf="@+id/monthShiftsProgress"
-        app:layout_constraintTop_toBottomOf="@+id/overtimeThisMonthViewId" />
+        app:layout_constraintTop_toBottomOf="@+id/shiftsInfoViewId" />
 
     <View
         android:id="@+id/divider"

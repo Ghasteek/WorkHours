@@ -58,7 +58,7 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener{    // pro time picker třeba implementovat TimePickerDialog.OnTimeSetListener
 
-    TextView todayArrivalInfo,todayDepartureInfo, thisMonthView,shiftsInfoView, overtimeThisMonthView, overtimeSumView, todayBreak, textView;
+    TextView todayArrivalInfo,todayDepartureInfo, thisMonthView,shiftsInfoView, overtimeSumView, todayBreak, textView;
     ProgressBar monthShifts;
     SharedPreferences pref, temp;
     Calendar calendar;
@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity
 
         thisMonthView = (TextView) findViewById(R.id.thisMonthViewId);
         shiftsInfoView = (TextView) findViewById(R.id.shiftsInfoViewId);
-        overtimeThisMonthView = (TextView) findViewById(R.id.overtimeThisMonthViewId);
         overtimeSumView =  (TextView) findViewById(R.id.overtimeSumViewId);
         monthShifts = (ProgressBar) findViewById(R.id.monthShiftsProgress);
         editTodayButton = (ImageButton) findViewById(R.id.editTodayButtonId);
@@ -179,10 +178,10 @@ public class MainActivity extends AppCompatActivity
             try {                                                                                   //get date of last row in DB according to date
                 while (cursor.moveToNext()) {
                     lastDbDate = cursor.getInt(dateColumnIndex);
-                    }
-                } finally {
-                    cursor.close();
                 }
+            } finally {
+                cursor.close();
+            }
             if (lastDbDate < (Tools.dateDateToInt(today) - 1)) {                                    // if there is row in db, that has lower date than today, insert incomplete rows into DB only for work days
                 String workDaysArrayStr = Tools.getWorkDaysInPeriod(lastDbDate, todayInt);
                 String[] workDaysArray = workDaysArrayStr.split("-");
@@ -193,7 +192,7 @@ public class MainActivity extends AppCompatActivity
             } //else {displayView.append("\n zaznamy kompletni");}
 //TODO zkontrolovat doplnění defaultních dní dovolené pro temp při překlopení roku
             String dateHelp = String.valueOf(lastDbDate);
-            int lastDbDateYear = Integer.parseInt(dateHelp.substring(0,4));
+            int lastDbDateYear = Integer.parseInt(dateHelp.substring(0, 4));
             int todayYear = calendar.get(Calendar.YEAR);
             //Toast.makeText(this, lastDbDateYear + " / " + todayYear, Toast.LENGTH_LONG).show();
             if (lastDbDateYear < todayYear) {                                                       //if last date in db is from last year, then get whole holiday pool into temporary
@@ -202,14 +201,8 @@ public class MainActivity extends AppCompatActivity
                 SharedPreferences.Editor editorTemp = temp.edit();
                 editorTemp.putInt("holidaySum", newHoliday);
                 editorTemp.apply();
-                }
-
-            int lastDbDateMonth = Integer.parseInt(dateHelp.substring(5,6));
-            int todayMonth = calendar.get(Calendar.MONTH) - 1;
-            if (lastDbDateMonth < todayMonth) {                                                     // if last date in DB is from last month, then put into DB row with date yyyyMM and actual overtime SUM
-//TODO dodělat přidání záznamu se sumou přesčasů pro daný měsíc
             }
-            }
+        }
     }
 
     private void showInfo() {
@@ -238,7 +231,7 @@ public class MainActivity extends AppCompatActivity
 
         String[] selectionArgs = new String[] { String.valueOf(ShiftEntry.HOLIDAY_SHIFT), String.valueOf(ShiftEntry.HOLIDAY_COMPENSATION), String.valueOf(year) + monthStr + "%" };
 
-        String[] selectionArgsHolidays = new String[] { String.valueOf(ShiftEntry.HOLIDAY_SHIFT), String.valueOf(ShiftEntry.HOLIDAY_VACATION), String.valueOf(year) + monthStr + "%" };
+        String[] selectionArgsHolidays = new String[] { String.valueOf(ShiftEntry.HOLIDAY_PUBLIC), String.valueOf(ShiftEntry.HOLIDAY_VACATION), String.valueOf(year) + monthStr + "%" };
 
         Cursor cursor = getContentResolver().query(
                 ShiftsContract.ShiftEntry.CONTENT_URI,
@@ -264,24 +257,20 @@ public class MainActivity extends AppCompatActivity
 
         try{
             int shiftsThisMonth = cursor.getCount();                                                    //nastavení popisku odpracovaných směn
-            int shiftsAndHolidaysThisMonth = cursor2.getCount();
+            int holidaysThisMonth = cursor2.getCount();
             String workDaysInMonth = Tools.getWorkDaysInMonth(month, year);
-            shiftsInfoView.setText(getResources().getString(R.string.alreadyWorked) + " " + shiftsAndHolidaysThisMonth + " " + getResources().getString(R.string.daysFrom) + " " + workDaysInMonth);
-            monthShifts.setMax(Integer.parseInt(workDaysInMonth));
+            int workDaysInMonthCorrected = Integer.parseInt(workDaysInMonth) - holidaysThisMonth;
+            shiftsInfoView.setText(getResources().getString(R.string.alreadyWorked) + shiftsThisMonth + getResources().getString(R.string.daysFrom) + workDaysInMonthCorrected);
+            monthShifts.setMax(workDaysInMonthCorrected);
             monthShifts.setProgress(shiftsThisMonth);
-
-            while (cursor.moveToNext()){
-                overTimeSumThisMonth = overTimeSumThisMonth + cursor.getInt(overtimeIndex);
-            }
-            overtimeThisMonthView.setText(getResources().getString(R.string.thisMonthOvertime) + " " + Tools.timeIntToStr(overTimeSumThisMonth));
         } finally {
             cursor.close();
             cursor2.close();
         }
 
         if (temp.contains("overtimeSum")){
-            overtimeSumView.setText( getResources().getString(R.string.sumOfOvertime) + " " + Tools.timeIntToStr(temp.getInt("overtimeSum",0)) + "h");
-        } else {overtimeSumView.setText( getResources().getString(R.string.sumOfOvertime) + " 0h");}
+            overtimeSumView.setText( getResources().getString(R.string.sumOfOvertime) + Tools.timeIntToStr(temp.getInt("overtimeSum",0)) + getResources().getString(R.string.hour));
+        } else {overtimeSumView.setText( getResources().getString(R.string.sumOfOvertime) + getResources().getString(R.string.zeroHour));}
 
         if (temp.contains("arrivalTime")){
             if ((temp.getInt("arrivalDate", 0)) == (Tools.dateDateToInt(calendar.getTime()))) {
@@ -363,7 +352,7 @@ public class MainActivity extends AppCompatActivity
             shiftValues.put(ShiftEntry.COLUMN_OVERTIME, 0);
             shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, ShiftEntry.HOLIDAY_INCOMPLETE);
 
-            Uri incompleteShiftUri = getContentResolver().insert(ShiftEntry.CONTENT_URI, shiftValues);
+            Uri incompleteShiftUri = getContentResolver().insert(ShiftEntry.CONTENT_URI, shiftValues);      // insertin of incomplete row into DB after adding arrival time
             String uriStr = incompleteShiftUri.toString();
 
             editorTemp.putString("incompleteUri", uriStr);
@@ -384,7 +373,7 @@ public class MainActivity extends AppCompatActivity
             int arrivalTimeInt = temp.getInt("arrivalTime", 0);
             int departureTimeInt = Tools.timeStrToInt(departureTimeHelp);
             int breakLengthInt = Tools.timeStrToInt(todayBreakInput.getText().toString());
-            int shiftLengthInt = departureTimeInt - arrivalTimeInt - breakLengthInt;                         // vypocet delky smeny
+            int shiftLengthInt = departureTimeInt - arrivalTimeInt - breakLengthInt;                                                  // vypocet delky smeny
             int overtimeLengthInt = shiftLengthInt - (Tools.timeStrToInt(pref.getString("defaultShift", "8:00"))) ;
 
             ContentValues shiftValues = new ContentValues();
@@ -398,7 +387,7 @@ public class MainActivity extends AppCompatActivity
 
             if (temp.contains("incompleteUri")) {
                  Uri updatingUri = Uri.parse(temp.getString("incompleteUri", " "));
-                int rowsAffected = getContentResolver().update(updatingUri, shiftValues, null, null);
+                int rowsAffected = getContentResolver().update(updatingUri, shiftValues, null, null);           // update of incomplete row to regular row
                 if (rowsAffected == 0) {
                     Toast.makeText(this, getText(R.string.editor_update_shift_failed), Toast.LENGTH_SHORT).show();
                 } else {
