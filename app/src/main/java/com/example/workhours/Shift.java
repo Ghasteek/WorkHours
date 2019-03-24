@@ -32,11 +32,12 @@ public class Shift extends AppCompatActivity {
     private EditText departureTime;
     private EditText breakLenght;
     private TextView shiftLenght;
-    private TextView overtimeLegth;
+    private TextView overtimeLength;
     private Uri clickedShiftUri;
     private boolean mShiftChanged = false;
     private Spinner holidayTypeSpinner;
     private String overtimeLengthStr;
+
 
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {                      // listener to any user touch on a view for editing
         @Override
@@ -145,7 +146,7 @@ public class Shift extends AppCompatActivity {
         departureTime = findViewById(R.id.departureEdit);
         breakLenght = findViewById(R.id.breakLenghtEdit);
         shiftLenght = findViewById(R.id.shiftLenghtView);
-        overtimeLegth = findViewById(R.id.overtimeLengthView);
+        overtimeLength = findViewById(R.id.overtimeLengthView);
         holidayTypeSpinner = findViewById(R.id.holidaySpinner);
 
         String [] holidayArray = getResources().getStringArray(R.array.holidayType);
@@ -236,7 +237,7 @@ public class Shift extends AppCompatActivity {
                 departureTime.setText(departureStr);
                 breakLenght.setText(breakLenghtStr);
                 shiftLenght.setText(shiftLenghtStr);
-                overtimeLegth.setText(overtimeLengthStr);
+                overtimeLength.setText(overtimeLengthStr);
 
 
                 if ( holidayTypeInt == ShiftEntry.HOLIDAY_INCOMPLETE ) {
@@ -299,11 +300,11 @@ public class Shift extends AppCompatActivity {
         } else { shiftLengthInt = (Tools.timeStrToInt(pref.getString("defaultShift", "8:00"))); } // pomocny odecet pro fungovani nasledujicich vzorcu
 
         int overtimeLengthInt = shiftLengthInt - (Tools.timeStrToInt(pref.getString("defaultShift", "8:00"))) ;
-        int overtimeLenghtOriginal = 0;
+        int overtimeLengthOriginal = 0;
         if (clickedShiftUri != null) {
-            overtimeLenghtOriginal = Tools.timeStrToInt(overtimeLengthStr);
+            overtimeLengthOriginal = Tools.timeStrToInt(overtimeLengthStr);
         }
-        int overtimeDifference = overtimeLengthInt - overtimeLenghtOriginal;
+        int overtimeDifference = overtimeLengthInt - overtimeLengthOriginal;
         //Toast.makeText(this,"rozdíl overtime je " + overtimeDifference, Toast.LENGTH_LONG).show();
 
         int holidayTypeSelectedInt = holidayTypeSpinner.getSelectedItemPosition();
@@ -446,7 +447,7 @@ public class Shift extends AppCompatActivity {
             int overtimeLengthOldSum = temp.getInt("overtimeSum", 0);
             int overtimeHelp = Tools.timeStrToInt(overtimeLengthStr);
             int overtimeNewSum = overtimeLengthOldSum - overtimeHelp;
-            //String asd = overtimeLegth.getText().toString();
+            //String asd = overtimeLength.getText().toString();
             //nt asdasd = Tools.timeStrToInt(asd);
             //Toast.makeText(this, "ubrano " + asd + " / " + asdasd, Toast.LENGTH_LONG).show();
 

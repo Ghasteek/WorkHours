@@ -29,7 +29,7 @@ public class ShiftCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         TextView dayView = (TextView) view.findViewById(R.id.dayView);
-        TextView shiftLengthView = (TextView) view.findViewById(R.id.shiftLenght);
+        TextView shiftLengthView = (TextView) view.findViewById(R.id.shiftLength);
         TextView dateView = (TextView) view.findViewById(R.id.dateView);
         TextView holidayTypeView = (TextView) view.findViewById(R.id.holidayType);
         TextView overtimeView = (TextView) view.findViewById(R.id.overtime);

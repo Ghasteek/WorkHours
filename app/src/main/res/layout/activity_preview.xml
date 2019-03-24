@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".Preview">
 
-    <!--                 prvni radek
+    <!--                 first row
     <TextView
         android:id="@+id/overtimeFromLastMonthId"
         android:layout_width="wrap_content"
@@ -15,7 +15,6 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
         android:textSize="20sp"
-        android:text="Převod z minula:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,12 +25,11 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
-        android:text="2:30h"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />  -->
 
-    <!--                 prvni radek              -->
+    <!--                 first row              -->
     <TextView
         android:id="@+id/workHoursPlanId"
         android:layout_width="wrap_content"
@@ -55,7 +53,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--                 druhy radek              -->
+    <!--                 second row              -->
 
     <TextView
         android:id="@+id/workHoursDoneId"
@@ -80,7 +78,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/workHoursPlanValueId" />
 
-    <!--                 treti radek              -->
+    <!--                 third row              -->
 
     <TextView
         android:id="@+id/workHoursMonthlyDifferenceId"
@@ -105,7 +103,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/workHoursDoneValueId" />
 
-    <!--                 ctvrty radek              -->
+    <!--                 fourth row              -->
 
     <TextView
         android:id="@+id/workHoursToNextMonthId"
@@ -130,7 +128,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/workHoursMonthlyDifferenceValueId" />
 
-    <!--                 paty radek              -->
+    <!--                 fifth row              -->
 
     <TextView
         android:id="@+id/usedHolidayId"
@@ -155,7 +153,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/workHoursToNextMonthValueId" />
 
-    <!--                 sesty radek              -->
+    <!--                 sixth row              -->
 
     <TextView
         android:id="@+id/remainingHolidayId"
@@ -180,7 +178,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/usedHolidayValueId" />
 
-    <!--                 sedmy radek              -->
+    <!--                 seventh row              -->
 
     <TextView
         android:id="@+id/publicHolidaysId"
