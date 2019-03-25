@@ -178,8 +178,10 @@
         android:layout_marginTop="0dp"
         android:textSize="18sp"
         android:inputType="time"
+        android:hint="@string/timeHint"
         app:layout_constraintStart_toEndOf="@+id/todayBreakId"
-        app:layout_constraintTop_toTopOf="@+id/editTodayButtonId" />
+        app:layout_constraintTop_toTopOf="@+id/editTodayButtonId"
+        tools:ignore="Autofill"/>
 
     <View
         android:id="@+id/divider2"

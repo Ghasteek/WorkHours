@@ -50,7 +50,7 @@ public class ShiftTable extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        final TextView showMonthYear = findViewById(R.id.textView);
+        final TextView showMonthYear = findViewById(R.id.showMonthYearId);
         final ImageButton changeSelection = findViewById(R.id.button);
         if (year == 0) {
             Calendar cal = Calendar.getInstance();

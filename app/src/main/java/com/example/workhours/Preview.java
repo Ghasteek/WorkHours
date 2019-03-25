@@ -114,6 +114,8 @@ public class Preview extends AppCompatActivity {
 
         remainingHolidayValue.setText(String.valueOf(temp.getInt("holidaySum", 0)));
 
+        cursor.close();
+        cursor2.close();
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -15,9 +15,11 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:inputType="date"
+        android:hint="@string/dateHint"
         android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="Autofill"/>
 
     <EditText
         android:id="@+id/arrivalEdit"
@@ -28,9 +30,11 @@
         android:layout_marginTop="10dp"
         android:ems="10"
         android:inputType="time"
+        android:hint="@string/timeHint"
         android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/dateEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/dateEdit"
+        tools:ignore="Autofill"/>
 
     <EditText
         android:id="@+id/departureEdit"
@@ -41,9 +45,11 @@
         android:layout_marginTop="10dp"
         android:ems="10"
         android:inputType="time"
+        android:hint="@string/timeHint"
         android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/textView6"
-        app:layout_constraintTop_toBottomOf="@+id/arrivalEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/arrivalEdit"
+        tools:ignore="Autofill"/>
 
     <EditText
         android:id="@+id/breakLenghtEdit"
@@ -54,9 +60,11 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="time"
+        android:hint="@string/timeHint"
         android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/textView7"
-        app:layout_constraintTop_toBottomOf="@+id/departureEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/departureEdit"
+        tools:ignore="Autofill"/>
 
     <TextView
         android:id="@+id/shiftLenghtView"

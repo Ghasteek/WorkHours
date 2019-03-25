@@ -16,7 +16,7 @@
         android:paddingEnd="10dp"
         android:paddingLeft="5dp"
         android:paddingStart="5dp"
-        android:textColor="#AEB6BD" />
+        android:textColor="#AEB6BD"/>
 
     <TextView
         android:id="@+id/dayView"

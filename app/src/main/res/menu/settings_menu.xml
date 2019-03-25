@@ -6,6 +6,6 @@
         android:enabled="true"
         android:icon="@android:drawable/ic_menu_save"
         android:orderInCategory="100"
-        android:title="Save"
+        android:title="@string/menuTitleSave"
         app:showAsAction="always" />
 </menu>

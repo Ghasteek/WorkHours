@@ -182,13 +182,16 @@ public class MainActivity extends AppCompatActivity
             } finally {
                 cursor.close();
             }
-            if (lastDbDate < (Tools.dateDateToInt(today) - 1)) {                                    // if there is row in db, that has lower date than today, insert incomplete rows into DB only for work days
+            if (lastDbDate < (Tools.dateDateToInt(today) - 1) ) {                                    // if there is row in db, that has lower date than today, insert incomplete rows into DB only for work days
                 String workDaysArrayStr = Tools.getWorkDaysInPeriod(lastDbDate, todayInt);
                 String[] workDaysArray = workDaysArrayStr.split("-");
-                for (int i = 0; i < workDaysArray.length; i++) {
-                    insertIncomplete(workDaysArray[i]);
-                    //displayView.append("\n " + workDaysArray[i]);
+                if (workDaysArray.length == 0) {
+                    for (int i = 0; i < workDaysArray.length; i++) {
+                        insertIncomplete(workDaysArray[i]);
+                        //displayView.append("\n " + workDaysArray[i]);
+                    }
                 }
+                //Toast.makeText(this, " " + workDaysArray[0], Toast.LENGTH_LONG).show();
             } //else {displayView.append("\n zaznamy kompletni");}
 //TODO zkontrolovat doplnění defaultních dní dovolené pro temp při překlopení roku
             String dateHelp = String.valueOf(lastDbDate);

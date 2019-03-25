@@ -4,15 +4,15 @@
     <item
         android:id="@+id/action_save"
         android:enabled="true"
+        android:title="@string/menuTitleSave"
         android:icon="@android:drawable/ic_menu_save"
         android:orderInCategory="100"
-        android:title="Save"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_delete"
         android:enabled="true"
+        android:title="@string/menuTitleDelete"
         android:icon="@android:drawable/ic_menu_delete"
         android:orderInCategory="100"
-        android:title="Delete"
         app:showAsAction="always" />
 </menu>

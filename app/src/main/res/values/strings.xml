@@ -8,6 +8,9 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="today">Set today</string>
+    <string name="timeHint">0:00</string>
+    <string name="vacationHint">20</string>
+    <string name="dateHint">24.11.2019</string>
 
     <!-- EMPTY VIEW popisek -->
     <string name="empty_view_title_text">No shifts this month</string>
@@ -50,6 +53,8 @@
     <string name="action_dummy">Insert Dummy Data</string>
     <string name="action_add">Add new shift data</string>
     <string name="action_shiftsTable">Shifts Table</string>
+    <string name="menuTitleSave">Save</string>
+    <string name="menuTitleDelete">Delete</string>
 
     <!-- Popisky stranek -->
     <string name="shiftsTableLabel">Shifts table</string>
