@@ -86,16 +86,25 @@
     <!-- MAIN SCREEN popisky -->
     <string name="alreadyWorked">Odpracováno\u0020</string>
     <string name="daysFrom">\u0020dní z\u0020</string>
-    <string name="thisMonthOvertime">Tento měsíc přesčasů:\u0020</string>
     <string name="sumOfOvertime">Převod pro další měsíc:\u0020</string>
+
+    <string name="thisMonthOvertime">Tento měsíc přesčasů:\u0020</string>
+
+    <string name="firstRow">%1$s %2$d</string>
+    <string name="secondRow">Odpracováno %1$d dní z %2$d</string>
+    <string name="thirdRow">Převod pro další měsíc: %1$s h</string>
+    <string name="todayShiftArrivalLabel">Příchod: %1$s</string>
+    <string name="todayShiftDepartureLabel">Odchod: %1$s</string>
+    <string name="todayShiftArrivalNaLabel">Příchod: nezadáno</string>
+    <string name="todayShiftDepartureNaLabel">Odchod: nezadáno</string>
+
+
     <string name="hour">\u0020h</string>
     <string name="zeroHour">\u00200h</string>
     <string name="arriveTooltip">Zadejte čas příchodu do práce</string>
     <string name="departureTooltip">Zadejte čas odchodu z práce</string>
     <string name="todayShiftLabel">Dnešní směna:</string>
-    <string name="todayShiftDepartureLabel">Odchod:\u0020</string>
-    <string name="todayShiftArrivalLabel">Příchod:\u0020</string>
-    <string name="notInserted">nezadáno</string>
+
     <string name="arrivalNeeded">První musíte zadat čas příchodu</string>
 
     <!-- preview popisky -->

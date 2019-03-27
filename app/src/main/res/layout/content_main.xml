@@ -99,7 +99,8 @@
         android:scaleType="centerInside"
         android:src="@drawable/check_in"
         app:layout_constraintTop_toBottomOf="@+id/divider"
-        app:layout_constraintEnd_toStartOf="@+id/departureButtonId" />
+        app:layout_constraintEnd_toStartOf="@+id/departureButtonId"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/departureButtonId"
@@ -111,7 +112,8 @@
         android:layout_marginRight="30dp"
         android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/todayLabelId"
@@ -155,7 +157,8 @@
         android:visibility="invisible"
         app:layout_constraintStart_toStartOf="@+id/todayDepartureInfoId"
         app:layout_constraintTop_toBottomOf="@+id/todayDepartureInfoId"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
+        app:srcCompat="@android:drawable/ic_menu_edit"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/todayBreakId"

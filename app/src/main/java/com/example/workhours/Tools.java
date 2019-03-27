@@ -2,14 +2,11 @@ package com.example.workhours;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-
-import com.example.workhours.data.ShiftsContract;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class Tools extends AppCompatActivity {
@@ -35,7 +32,7 @@ public class Tools extends AppCompatActivity {
 
     public static int timeStrToInt (String timeInput){
         String[] timeArray = timeInput.split(":");
-        int timeOutput = 0;
+        int timeOutput;
         if (timeInput.startsWith("-")){
             timeOutput = (Integer.parseInt(timeArray[0]) * 60) - Integer.parseInt(timeArray[1]);
         } else {
@@ -46,8 +43,8 @@ public class Tools extends AppCompatActivity {
 
     public static String dateIntToStr (int dateInput) {
         String dateStr = String.valueOf(dateInput);
-        String newDate = dateStr.substring(6) + "." + dateStr.substring(4, 6) + "." + dateStr.substring(0, 4);
-        return (newDate);
+        //String newDate = dateStr.substring(6) + "." + dateStr.substring(4, 6) + "." + dateStr.substring(0, 4);
+        return (dateStr.substring(6) + "." + dateStr.substring(4, 6) + "." + dateStr.substring(0, 4));
     }
 
     public static int dateDateToInt (Date dateInput) {
@@ -87,7 +84,7 @@ public class Tools extends AppCompatActivity {
     public static String getDayOfWeekStr(int dateInput){
         String [] daysOfWeek = {"Ne", "Po", "Út", "Stř", "Čt", "Pá", "So"};
         Calendar helpCal = Calendar.getInstance();
-        SimpleDateFormat originalFormat = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat originalFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         Date itemDate = helpCal.getTime();
         try {
             itemDate = originalFormat.parse(String.valueOf(dateInput));
@@ -103,7 +100,7 @@ public class Tools extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         int lastDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         int newMonth = monthInput + 1;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         String startDateInt = "01-" + newMonth + "-" + yearInput;
         String endDateInt = lastDay + "-" + newMonth + "-" + yearInput;
         Date startDate = null , endDate = null;
@@ -133,9 +130,9 @@ public class Tools extends AppCompatActivity {
     }
 
     public static String getWorkDaysInPeriod (int startDateInt, int endDateInt) {                   // vrací string s daty jednotlivych pracovnich dni oddelene pomlckami
-        Calendar calendar = Calendar.getInstance();
+        //Calendar calendar = Calendar.getInstance();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
 
         Date startDate = null , endDate = null;
         try {
@@ -150,15 +147,15 @@ public class Tools extends AppCompatActivity {
         Calendar endCal = Calendar.getInstance();
         endCal.setTime(endDate);
 
-        String workDaysInPeriod = "";
+        StringBuilder workDaysInPeriod = new StringBuilder();
         while (startCal.getTimeInMillis() <= endCal.getTimeInMillis()) {
             if (startCal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY &&
                     startCal.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) {
                         int actualDate = Tools.dateDateToInt(startCal.getTime());
-                        workDaysInPeriod = workDaysInPeriod + Tools.dateIntToStr(actualDate) + "-";
+                        workDaysInPeriod.append(Tools.dateIntToStr(actualDate)).append("-");
             }
             startCal.add(Calendar.DAY_OF_MONTH, 1);
         }
-        return(workDaysInPeriod);
+        return(workDaysInPeriod.toString());
     }
 }
