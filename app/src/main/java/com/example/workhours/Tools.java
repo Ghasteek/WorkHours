@@ -11,6 +11,7 @@ import java.util.Locale;
 
 public class Tools extends AppCompatActivity {
 
+    @SuppressWarnings("EmptyMethod")
     @Override
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

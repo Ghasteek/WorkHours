@@ -1,9 +1,11 @@
 package com.example.workhours;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -16,26 +18,30 @@ import java.util.Calendar;
  * Created by ankititjunkies on 20/03/18.
  */
 
+@SuppressWarnings("ConstantConditions")
 public class MonthYearPickerDialog extends DialogFragment {
 
-    private static final int MAX_YEAR = 2099;
+    //private static final int MAX_YEAR = 2099;
     private DatePickerDialog.OnDateSetListener listener;
 
     public void setListener(DatePickerDialog.OnDateSetListener listener) {
         this.listener = listener;
     }
 
+    @NonNull
+    @SuppressLint("InflateParams")
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         // Get the layout inflater
+
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         final Calendar cal = Calendar.getInstance();
 
         View dialog = inflater.inflate(R.layout.month_year_picker_dialog, null);
-        final NumberPicker monthPicker = (NumberPicker) dialog.findViewById(R.id.picker_month);
-        final NumberPicker yearPicker = (NumberPicker) dialog.findViewById(R.id.picker_year);
+        final NumberPicker monthPicker = dialog.findViewById(R.id.picker_month);
+        final NumberPicker yearPicker = dialog.findViewById(R.id.picker_year);
 
         int monthHelp = ShiftTable.month;
 

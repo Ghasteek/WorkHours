@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.example.workhours.data.ShiftsContract;
 
 import java.util.Calendar;
-
+@SuppressWarnings("WeakerAccess")
 public class Preview extends AppCompatActivity {
 
     TextView workHoursPlanValue, workHoursDoneValue, workHoursMonthlyDifferenceValue,
@@ -28,8 +28,10 @@ public class Preview extends AppCompatActivity {
         calendar = Calendar.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preview);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
 
         workHoursPlanValue = findViewById(R.id.workHoursPlanValueId);
         workHoursDoneValue = findViewById(R.id.workHoursDoneValueId);
@@ -82,26 +84,33 @@ public class Preview extends AppCompatActivity {
                 null);
 
 
-        int holidaysThisMonth = cursor2.getCount();
+        int holidaysThisMonth = 0, shiftLengthIndex, holidayTypeIndex, workHoursThisMonth = 0, usedHoliday = 0, usedPublicHoliday = 0;
+        if (cursor2 != null && cursor != null) {
+            holidaysThisMonth = cursor2.getCount();
+
+            shiftLengthIndex = cursor.getColumnIndex(ShiftsContract.ShiftEntry.COLUMN_SHIFT_LENGTH);
+            holidayTypeIndex = cursor2.getColumnIndex(ShiftsContract.ShiftEntry.COLUMN_HOLIDAY);
+
+            while (cursor.moveToNext()){
+                workHoursThisMonth = workHoursThisMonth + cursor.getInt(shiftLengthIndex);
+            }
+            while (cursor2.moveToNext()){
+                if (cursor2.getInt(holidayTypeIndex) == ShiftsContract.ShiftEntry.HOLIDAY_VACATION) { usedHoliday ++;}
+                if (cursor2.getInt(holidayTypeIndex) == ShiftsContract.ShiftEntry.HOLIDAY_PUBLIC) { usedPublicHoliday ++;}
+            }
+
+            cursor.close();
+            cursor2.close();
+        }
+
         String workDaysInMonth = Tools.getWorkDaysInMonth(month, year);
         int workDaysInMonthCorrected = Integer.parseInt(workDaysInMonth) - holidaysThisMonth;
-        int defaultShiftLength = 0;
-        if (pref.contains("defaultShift")) {defaultShiftLength = Tools.timeStrToInt(pref.getString("defaultShift", "8:00"));}
+        String defaultShiftLengthLoaded = "8:00";
+         if (pref.contains("defaultShift")) {defaultShiftLengthLoaded = "" + pref.getString("defaultShift", "8:00");}
+        int defaultShiftLength = Tools.timeStrToInt(defaultShiftLengthLoaded);
         int workHoursPlan = workDaysInMonthCorrected * defaultShiftLength;
         workHoursPlanValue.setText(Tools.timeIntToStr(workHoursPlan));                              // setup value of work hours plan to this month
 
-        int workHoursThisMonth = 0;
-        int usedHoliday = 0;
-        int usedPublicHoliday = 0;
-        int shiftLengthIndex = cursor.getColumnIndex(ShiftsContract.ShiftEntry.COLUMN_SHIFT_LENGTH);
-        int holidayTypeIndex = cursor2.getColumnIndex(ShiftsContract.ShiftEntry.COLUMN_HOLIDAY);
-        while (cursor.moveToNext()){
-            workHoursThisMonth = workHoursThisMonth + cursor.getInt(shiftLengthIndex);
-        }
-        while (cursor2.moveToNext()){
-            if (cursor2.getInt(holidayTypeIndex) == ShiftsContract.ShiftEntry.HOLIDAY_VACATION) { usedHoliday ++;}
-            if (cursor2.getInt(holidayTypeIndex) == ShiftsContract.ShiftEntry.HOLIDAY_PUBLIC) { usedPublicHoliday ++;}
-        }
 
         workHoursDoneValue.setText(Tools.timeIntToStr(workHoursThisMonth));
 
@@ -114,8 +123,7 @@ public class Preview extends AppCompatActivity {
 
         remainingHolidayValue.setText(String.valueOf(temp.getInt("holidaySum", 0)));
 
-        cursor.close();
-        cursor2.close();
+        publicHolidaysValue.setText(String.valueOf(usedPublicHoliday));
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -32,18 +33,21 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener{    // pro time picker třeba implementovat TimePickerDialog.OnTimeSetListener
 
-    TextView todayArrivalInfo,todayDepartureInfo, thisMonthView,shiftsInfoView, overtimeSumView, todayBreak;
-    //TextView textView;
-    ProgressBar monthShifts;
-    SharedPreferences pref, temp;
-    Calendar calendar;
-    ImageButton showTimePickerIn, showTimePickerOut, editTodayButton;
-    EditText todayBreakInput;
+    private TextView todayArrivalInfo,todayDepartureInfo, thisMonthView,shiftsInfoView, overtimeSumView, todayBreak;
+    //private TextView textView;
+    private ProgressBar monthShifts;
+    private SharedPreferences pref, temp;
+    private Calendar calendar;
+    private ImageButton showTimePickerIn, showTimePickerOut, editTodayButton;
+    private EditText todayBreakInput;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -405,7 +409,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         showInfo();
         checkYesterday();
-
     }
                                                                                                         // po sem je definice buttonu a jeho onclickListeneru + onTimeSet abz vratil cas
     @Override
@@ -421,7 +424,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        //getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -485,7 +488,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public void insertIncomplete (String dateInput){
+    private void insertIncomplete(String dateInput){
         String arrivalString = pref.getString("defaultInTime", "6:00");
         int arrivalHelp = 0;
         if (arrivalString != null) {
@@ -505,7 +508,7 @@ public class MainActivity extends AppCompatActivity
         } //else {Toast.makeText(this, getText(R.string.editor_insert_shift_successful), Toast.LENGTH_SHORT).show();}
     }
 
-    public void insertDummyData (){
+    private void insertDummyData (){
         ContentValues shiftValues = new ContentValues();
             shiftValues.put(ShiftEntry.COLUMN_DATE, 20190302);
             shiftValues.put(ShiftEntry.COLUMN_ARRIVAL, 360);
@@ -520,6 +523,7 @@ public class MainActivity extends AppCompatActivity
         } else {Toast.makeText(this, getText(R.string.editor_insert_shift_successful), Toast.LENGTH_SHORT).show();}
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static class Globals {
         public static String whichTime;
         public static int timeInHours;

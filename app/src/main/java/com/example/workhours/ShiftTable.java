@@ -6,27 +6,18 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.workhours.data.ShiftsContract;
 
+@SuppressWarnings("WeakerAccess")
 public class ShiftTable extends AppCompatActivity {
 
     /*TextView showMonthYear;
@@ -47,8 +38,10 @@ public class ShiftTable extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shift_table);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
 
         final TextView showMonthYear = findViewById(R.id.showMonthYearId);
         final ImageButton changeSelection = findViewById(R.id.button);
@@ -59,7 +52,7 @@ public class ShiftTable extends AppCompatActivity {
         }
         String [] monthArray = getResources().getStringArray(R.array.months);
         int i = month - 1;
-        showMonthYear.setText(monthArray[i] + " " + String.valueOf(year));
+        showMonthYear.setText(getString(R.string.firstRow, monthArray[i], year));
         showData(year, month);
 
         changeSelection.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +67,7 @@ public class ShiftTable extends AppCompatActivity {
                         month = month2;
                         String [] monthArray = getResources().getStringArray(R.array.months);
                         int i = month - 1;
-                        showMonthYear.setText(monthArray[i] + " " + String.valueOf(year));
+                        showMonthYear.setText(getString(R.string.firstRow, monthArray[i], year));
                         showData(year, month);
                     }
                 });
@@ -82,7 +75,7 @@ public class ShiftTable extends AppCompatActivity {
             }
         });
         //setting emptyView if no data in cursor
-        ListView lvItems = (ListView) findViewById(R.id.ListViewItems);
+        ListView lvItems = findViewById(R.id.ListViewItems);
         View emptyView = findViewById(R.id.empty_view);
         lvItems.setEmptyView(emptyView);
 
@@ -124,7 +117,7 @@ public class ShiftTable extends AppCompatActivity {
                 selectionArgs,
                 sortOrder);
 
-        ListView lvItems = (ListView) findViewById(R.id.ListViewItems);
+        ListView lvItems = findViewById(R.id.ListViewItems);
         ShiftCursorAdapter shiftsAdapter = new ShiftCursorAdapter(this, cursor);
         lvItems.setAdapter(shiftsAdapter);
     }

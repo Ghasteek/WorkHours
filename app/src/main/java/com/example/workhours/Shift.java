@@ -1,21 +1,22 @@
 package com.example.workhours;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.database.Cursor;
@@ -25,31 +26,43 @@ import com.example.workhours.data.ShiftsContract;
 import com.example.workhours.data.ShiftsContract.ShiftEntry;
 import java.util.Calendar;
 
-
+@SuppressWarnings("WeakerAccess")
 public class Shift extends AppCompatActivity {
-    private EditText date;
-    private EditText arriveTime;
-    private EditText departureTime;
-    private EditText breakLenght;
-    private TextView shiftLenght;
-    private TextView overtimeLength;
-    private Uri clickedShiftUri;
-    private boolean mShiftChanged = false;
-    private Spinner holidayTypeSpinner;
-    private String overtimeLengthStr;
+    EditText date;
+    EditText arriveTime;
+    EditText departureTime;
+    EditText breakLenght;
+    TextView shiftLenght;
+    TextView overtimeLength;
+    Uri clickedShiftUri;
+    boolean mShiftChanged = false;
+    Spinner holidayTypeSpinner;
+    String overtimeLengthStr;
+    SharedPreferences temp, pref;
+    int holidayTypeInt;
+    InputMethodManager im;
+    View clickedView;
 
 
-    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {                      // listener to any user touch on a view for editing
+    private final View.OnTouchListener mTouchListener = new View.OnTouchListener() {                      // listener to any user touch on a view for editing
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            mShiftChanged = true;
-            return false;
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    mShiftChanged = true;
+                    return false;
+                case MotionEvent.ACTION_UP:
+                    view.performClick();
+                    clickedView = view;
+                    im = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    im.showSoftInput(view, 0);
+                    return false;
+                default:
+                    break;
+            }
+            return true;
         }
     };
-    private SharedPreferences temp, pref;
-    private int holidayTypeInt;
-    //private SharedPreferences temp = getApplicationContext().getSharedPreferences("Temporary", 0);
-    //private SharedPreferences pref = getApplicationContext().getSharedPreferences("Settings", 0);
 
 
     @Override
@@ -132,14 +145,17 @@ public class Shift extends AppCompatActivity {
         return true;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate (Bundle savedInstanceState){
-        temp = getApplicationContext().getSharedPreferences("Temporary", 0);
-        pref = getApplicationContext().getSharedPreferences("Settings", 0);
+        temp = getSharedPreferences("Temporary", 0);
+        pref = getSharedPreferences("Settings", 0);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_shift);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
 
         date = findViewById(R.id.dateEdit);
         arriveTime = findViewById(R.id.arrivalEdit);
@@ -150,7 +166,7 @@ public class Shift extends AppCompatActivity {
         holidayTypeSpinner = findViewById(R.id.holidaySpinner);
 
         String [] holidayArray = getResources().getStringArray(R.array.holidayType);
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>
                 (this, android.R.layout.simple_spinner_dropdown_item, holidayArray);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         holidayTypeSpinner.setAdapter(spinnerArrayAdapter);
@@ -214,37 +230,41 @@ public class Shift extends AppCompatActivity {
                 null,
                 null);
 
-            while (cursor.moveToNext()) {
-                int dateColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_DATE);
-                int arrivalColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_ARRIVAL);
-                int departureColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_DEPARTURE);
-                int breakLengthColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_BREAK_LENGTH);
-                int shiftLengthColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_SHIFT_LENGTH);
-                int overtimeLengthColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_OVERTIME);
-                int holidayTypeColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_HOLIDAY);
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    int dateColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_DATE);
+                    int arrivalColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_ARRIVAL);
+                    int departureColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_DEPARTURE);
+                    int breakLengthColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_BREAK_LENGTH);
+                    int shiftLengthColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_SHIFT_LENGTH);
+                    int overtimeLengthColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_OVERTIME);
+                    int holidayTypeColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_HOLIDAY);
 
-                String dateStr = Tools.dateIntToStr(cursor.getInt(dateColumnIndex));
-                String arrivalStr = Tools.timeIntToStr(cursor.getInt(arrivalColumnIndex));
-                String departureStr = Tools.timeIntToStr(cursor.getInt(departureColumnIndex));
-                String breakLenghtStr = Tools.timeIntToStr(cursor.getInt(breakLengthColumnIndex));
-                String shiftLenghtStr = Tools.timeIntToStr(cursor.getInt(shiftLengthColumnIndex));
-                overtimeLengthStr = Tools.timeIntToStr(cursor.getInt(overtimeLengthColumnIndex));
-                holidayTypeInt = cursor.getInt(holidayTypeColumnIndex);
-
-
-                date.setText(dateStr);
-                arriveTime.setText(arrivalStr);
-                departureTime.setText(departureStr);
-                breakLenght.setText(breakLenghtStr);
-                shiftLenght.setText(shiftLenghtStr);
-                overtimeLength.setText(overtimeLengthStr);
+                    String dateStr = Tools.dateIntToStr(cursor.getInt(dateColumnIndex));
+                    String arrivalStr = Tools.timeIntToStr(cursor.getInt(arrivalColumnIndex));
+                    String departureStr = Tools.timeIntToStr(cursor.getInt(departureColumnIndex));
+                    String breakLenghtStr = Tools.timeIntToStr(cursor.getInt(breakLengthColumnIndex));
+                    String shiftLenghtStr = Tools.timeIntToStr(cursor.getInt(shiftLengthColumnIndex));
+                    overtimeLengthStr = Tools.timeIntToStr(cursor.getInt(overtimeLengthColumnIndex));
+                    holidayTypeInt = cursor.getInt(holidayTypeColumnIndex);
 
 
-                if ( holidayTypeInt == ShiftEntry.HOLIDAY_INCOMPLETE ) {
-                    holidayTypeSpinner.setSelection(0);
-                } else{holidayTypeSpinner.setSelection(cursor.getInt(holidayTypeColumnIndex));}
+                    date.setText(dateStr);
+                    arriveTime.setText(arrivalStr);
+                    departureTime.setText(departureStr);
+                    breakLenght.setText(breakLenghtStr);
+                    shiftLenght.setText(shiftLenghtStr);
+                    overtimeLength.setText(overtimeLengthStr);
+
+
+                    if (holidayTypeInt == ShiftEntry.HOLIDAY_INCOMPLETE) {
+                        holidayTypeSpinner.setSelection(0);
+                    } else {
+                        holidayTypeSpinner.setSelection(cursor.getInt(holidayTypeColumnIndex));
+                    }
+                }
+                cursor.close();
             }
-        cursor.close();
     }
 
     public void saveShift (){
@@ -261,8 +281,11 @@ public class Shift extends AppCompatActivity {
                 selection,
                 selectionArgs,
                 null);
-        int cursorCount = cursor.getCount();
-        cursor.close();
+        int cursorCount = 0;
+        if (cursor != null) {
+            cursorCount = cursor.getCount();
+            cursor.close();
+        }
         if ((cursorCount != 0) && (clickedShiftUri == null)){
             Toast.makeText(this, getText(R.string.used_date_warning), Toast.LENGTH_LONG).show();
             return;
@@ -294,12 +317,24 @@ public class Shift extends AppCompatActivity {
         }
         int breakLengthInt = Tools.timeStrToInt(breakHelp);                                             // prevod delky pauzy na integer v minutach
 
-        int shiftLengthInt = 0;                                                                         // vypocet delky smeny
+        int shiftLengthInt = 480;                                                                             // vypocet delky smeny
+        String defaultShiftLoaded = "8:00";
+        if (pref.contains("defaultShift")) {
+            defaultShiftLoaded = pref.getString("defaultShift", "8:00");
+        }
+
         if (departureTimeInt != 0) {
             shiftLengthInt = departureTimeInt - arriveTimeInt - breakLengthInt;
-        } else { shiftLengthInt = (Tools.timeStrToInt(pref.getString("defaultShift", "8:00"))); } // pomocny odecet pro fungovani nasledujicich vzorcu
+        } else {
+            if (defaultShiftLoaded != null) {
+                shiftLengthInt = Tools.timeStrToInt(defaultShiftLoaded);
+                }                                                                                       // pomocny odecet pro fungovani nasledujicich vzorcu
+            }
+        int overtimeLengthInt = 0;
+        if (defaultShiftLoaded != null) {
+            overtimeLengthInt = shiftLengthInt - (Tools.timeStrToInt(defaultShiftLoaded));
+        }
 
-        int overtimeLengthInt = shiftLengthInt - (Tools.timeStrToInt(pref.getString("defaultShift", "8:00"))) ;
         int overtimeLengthOriginal = 0;
         if (clickedShiftUri != null) {
             overtimeLengthOriginal = Tools.timeStrToInt(overtimeLengthStr);
@@ -308,6 +343,8 @@ public class Shift extends AppCompatActivity {
         //Toast.makeText(this,"rozdíl overtime je " + overtimeDifference, Toast.LENGTH_LONG).show();
 
         int holidayTypeSelectedInt = holidayTypeSpinner.getSelectedItemPosition();
+
+        String defaultShiftLoadedStr = "" + pref.getString("defaultShift", "8:00");
 
         SharedPreferences.Editor editorTemp = temp.edit();
         if (holidayTypeSelectedInt == ShiftEntry.HOLIDAY_SHIFT) {
@@ -318,18 +355,18 @@ public class Shift extends AppCompatActivity {
             int overtimeSumNew = overtimeSumOld + overtimeDifference;
             editorTemp.putInt("overtimeSum", overtimeSumNew);
             }else {
-                departureTimeInt = arriveTimeInt + (Tools.timeStrToInt(pref.getString("defaultShift", "8:00"))) + breakLengthInt;
+                departureTimeInt = arriveTimeInt + (Tools.timeStrToInt(defaultShiftLoadedStr)) + breakLengthInt;
                 }
 
         if (holidayTypeSelectedInt == ShiftEntry.HOLIDAY_COMPENSATION && holidayTypeInt != ShiftEntry.HOLIDAY_COMPENSATION){
             int oldOvertime = temp.getInt("overtimeSum", 0);
-            int newOvertime = oldOvertime - (Tools.timeStrToInt(pref.getString("defaultShift", "8:00"))) - overtimeLengthInt;
+            int newOvertime = oldOvertime - (Tools.timeStrToInt(defaultShiftLoadedStr)) - overtimeLengthInt;
             editorTemp.putInt("overtimeSum", newOvertime);
-            overtimeLengthInt = 0 - (Tools.timeStrToInt(pref.getString("defaultShift", "8:00")));
-            shiftLengthInt = Tools.timeStrToInt(pref.getString("defaultShift", "8:00"));
+            overtimeLengthInt = 0 - (Tools.timeStrToInt(defaultShiftLoadedStr));
+            shiftLengthInt = Tools.timeStrToInt(defaultShiftLoadedStr);
         } else if (holidayTypeSelectedInt != ShiftEntry.HOLIDAY_COMPENSATION && holidayTypeInt == ShiftEntry.HOLIDAY_COMPENSATION) {
             int oldOvertime = temp.getInt("overtimeSum", 0);
-            int newOvertime = oldOvertime + (Tools.timeStrToInt(pref.getString("defaultShift", "8:00"))) + overtimeLengthInt;
+            int newOvertime = oldOvertime + (Tools.timeStrToInt(defaultShiftLoadedStr)) + overtimeLengthInt;
             editorTemp.putInt("overtimeSum", newOvertime);
         }
 
@@ -345,7 +382,7 @@ public class Shift extends AppCompatActivity {
 
 
 
-            shiftLengthInt = Tools.timeStrToInt(pref.getString("defaultShift", "8:00"));
+            shiftLengthInt = Tools.timeStrToInt(defaultShiftLoadedStr);
             departureTimeInt = arriveTimeInt + shiftLengthInt + breakLengthInt;
             overtimeLengthInt = 0;
 
@@ -383,7 +420,7 @@ public class Shift extends AppCompatActivity {
             } else {Toast.makeText(this, getText(R.string.editor_update_shift_successful), Toast.LENGTH_SHORT).show();}
         }
 
-        if (MainActivity.Globals.isEdited == true) {
+        if (MainActivity.Globals.isEdited) {
             SharedPreferences.Editor editor = temp.edit();
             editor.putInt("arrivalTime", arriveTimeInt);
             editor.putInt("departureTime", departureTimeInt);
@@ -413,6 +450,7 @@ public class Shift extends AppCompatActivity {
         alertDialog.show();
     }
 
+    @SuppressWarnings("unused")
     private void showDeleteShiftDialog(
             DialogInterface.OnClickListener deleteButtonClickListener) {
         // Create an AlertDialog.Builder and set the message, and click listeners
@@ -455,7 +493,8 @@ public class Shift extends AppCompatActivity {
         }
         if (holidayTypeSelectedInt == ShiftEntry.HOLIDAY_COMPENSATION) {
             int overtimeOld = temp.getInt("overtimeSum", 0);
-            int overtimeNew = overtimeOld + (Tools.timeStrToInt(pref.getString("defaultShift", "0")));
+            String defaultShiftHelp = "" + pref.getString("defaultShift", "0");
+            int overtimeNew = overtimeOld + (Tools.timeStrToInt(defaultShiftHelp));
             editorTemp.putInt("overtimeSum", overtimeNew);
         }
 
@@ -465,13 +504,14 @@ public class Shift extends AppCompatActivity {
             editorTemp.putInt("holidaySum", newHolidaySum);
         }
 
-        int rowsDeleted = getContentResolver().delete(clickedShiftUri, null, null);
+        getContentResolver().delete(clickedShiftUri, null, null);
+        //int rowsDeleted = getContentResolver().delete(clickedShiftUri, null, null);
         //Toast.makeText(this, "Smazano " + rowsDeleted + " zaznamu.", Toast.LENGTH_SHORT).show();
 
         int dateTest = Tools.dateStrToInt(date.getText().toString());
         int dateSaved = temp.getInt("arrivalDate", 0);
         //Toast.makeText(this, "Smazano "+ dateTest + " --" + dateSaved, Toast.LENGTH_SHORT).show();
-        if ((MainActivity.Globals.isEdited == true) || (dateTest == dateSaved)) {
+        if ((MainActivity.Globals.isEdited) || (dateTest == dateSaved)) {
             editorTemp.remove("arrivalTime");
             editorTemp.remove("departureTime");
             editorTemp.remove("incompleteUri");

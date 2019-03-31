@@ -1,80 +1,84 @@
 <resources>
-    <string name="app_name">Work Hours</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="app_name">Píchačky</string>
+    <string name="navigation_drawer_open">Otevřít navigaci</string>
+    <string name="navigation_drawer_close">Zavřít navigaci</string>
+    <string name="nav_header_title">Píchačky</string>
+    <string name="nav_header_subtitle">Registrace směn</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
-    <string name="today">Set today</string>
+    <string name="cancel">Zrušit</string>
+    <string name="today">Dnes</string>
     <string name="timeHint">0:00</string>
     <string name="vacationHint">20</string>
     <string name="dateHint">24.11.2019</string>
+    <string name="plusNumber">+ %1$s</string>
+    <string name="justNumber">%1$d</string>
 
     <!-- EMPTY VIEW popisek -->
-    <string name="empty_view_title_text">No shifts this month</string>
-    <string name="empty_view_subtitle_text">Add shifts data</string>
+    <string name="empty_view_title_text">Žádné směny tento měsíc</string>
+    <string name="empty_view_subtitle_text">Přidejte směnu</string>
 
     <!-- SETTINGS stranka -->
-    <string name="settingsDefaultArrivalTime">Default arrival time : </string>
-    <string name="settingsDefaultDepartureTime">Default departure time : </string>
-    <string name="settingsDefaultBreakLength">Default break length : </string>
-    <string name="settingsDefaultShiftLength">Default shift length : </string>
-    <string name="settingsDefaultVacation">Holiday days per year:</string>
-    <string name="settingsOvertimeCorrection">Manual overtime correction (M) : </string>
-    <string name="settingsHolidayCorrection">Manual holiday correction (D) : </string>
+    <string name="settingsDefaultArrivalTime">Výchozí čas příchodu : </string>
+    <string name="settingsDefaultDepartureTime">Výchozí čas odchodu : </string>
+    <string name="settingsDefaultBreakLength">Výchozí délka pauzy : </string>
+    <string name="settingsDefaultShiftLength">Délka směny : </string>
+    <string name="settingsDefaultVacation">Dovolené za rok :</string>
+    <string name="settingsOvertimeCorrection">Ruční úprava přesčasu (m) : </string>
+    <string name="settingsHolidayCorrection">Ruční úprava dovolené (D) : </string>
 
     <!-- SHIFT stranka -->
-    <string name="date">Date : </string>
-    <string name="arrivalTime">Arrival :\u0020</string>
-    <string name="departureTime">Departure :\u0020</string>
-    <string name="breakLength">Break length :\u0020</string>
-    <string name="shiftLength">Shift length :\u0020</string>
-    <string name="overtimeLength">Overtime :\u0020</string>
-    <string name="holidayType">Holiday type :\u0020</string>
+    <string name="date">Datum : </string>
+    <string name="arrivalTime">Příchod :\u0020</string>
+    <string name="departureTime">Odchod :\u0020</string>
+    <string name="breakLength">Pauza :\u0020</string>
+    <string name="shiftLength">Odpracováno :\u0020</string>
+    <string name="overtimeLength">Přesčas :\u0020</string>
+    <string name="holidayType">Typ směny :\u0020</string>
 
     <!-- TOASTS -->
-    <string name="defaults_loaded">Loaded default times from settings.</string>
-    <string name="editor_insert_shift_failed">Error while saving shift</string>
-    <string name="editor_insert_shift_successful">Shift saved</string>
-    <string name="editor_update_shift_failed">Error while updating shift</string>
-    <string name="editor_update_shift_successful">Shift updated</string>
-    <string name="empty_date_warning">Date cannot be empty</string>
-    <string name="empty_arrival_warning">Arrival time cannot be empty</string>
-    <string name="empty_departure_warning">Departure time cannot be empty</string>
-    <string name="empty_break_warning">Break length cannot be empty</string>
-    <string name="empty_holiday_warning">Holiday typ cannot be empty</string>
-    <string name="used_date_warning">There is already shift assigned to this date.</string>
+    <string name="defaults_loaded">Načteny výchozí hodnoty.</string>
+    <string name="editor_insert_shift_failed">Chyba při přidávání směny</string>
+    <string name="editor_insert_shift_successful">Směna uložena</string>
+    <string name="editor_update_shift_failed">Chyba při upravování směny</string>
+    <string name="editor_update_shift_successful">Směna upravena</string>
+    <string name="empty_date_warning">Datum nemůže být nevyplněno</string>
+    <string name="empty_arrival_warning">Čas příchodu nemůže být nevyplněn</string>
+    <string name="empty_departure_warning">Čas odchodu nemůže být nevyplněn</string>
+    <string name="empty_break_warning">Délka pauzy nemůže být nevyplněna</string>
+    <string name="empty_holiday_warning">Typ směny musí být zadán</string>
+    <string name="used_date_warning">Pro toto datum již směna existuje</string>
+    <string name="settings_saved">Nastavení uloženo</string>
 
     <!-- popisky menu -->
-    <string name="action_preview">Detailed month preview</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_preview">Podrobnosti měsíce</string>
+    <string name="action_settings">Nastavení</string>
     <string name="action_dummy">Insert Dummy Data</string>
-    <string name="action_add">Add new shift data</string>
-    <string name="action_shiftsTable">Shifts Table</string>
-    <string name="menuTitleSave">Save</string>
-    <string name="menuTitleDelete">Delete</string>
+    <string name="action_add">Přidat směnu</string>
+    <string name="action_shiftsTable">Měsíční výpis</string>
+    <string name="menuTitleSave">Uložit</string>
+    <string name="menuTitleDelete">Smazat</string>
 
     <!-- Popisky stranek -->
-    <string name="shiftsTableLabel">Shifts table</string>
-    <string name="settingsLabel">Settings</string>
-    <string name="addShift">Add shift</string>
-    <string name="editShift">Edit shift</string>
-    <string name="previewLabel">Attendance preview</string>
+    <string name="shiftsTableLabel">Měsíční výpis</string>
+    <string name="settingsLabel">Nastavení</string>
+    <string name="settingsDefaultLabel">Výchozí hodnoty</string>
+    <string name="addShift">Přidat směnu</string>
+    <string name="editShift">Upravit směnu</string>
+    <string name="previewLabel">Podrobnosti měsíce</string>
 
     <!-- DISCARD DIALOG -->
-    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
-    <string name="discard">Discard</string>
-    <string name="keep_editing">Keep Editing</string>
+    <string name="unsaved_changes_dialog_msg">Zrušit změny a odejít?</string>
+    <string name="discard">Zrušit</string>
+    <string name="keep_editing">Pokračovat v úpravě</string>
 
     <!-- DELETE acceptance dialog -->
-    <string name="delete_acceptance_dialog_msg">Do you really want to delete this shift?</string>
-    <string name="delete">Delete</string>
-    <string name="keep_shift">No</string>
+    <string name="delete_acceptance_dialog_msg">Skutečně chcete smazat tuto směnu?</string>
+    <string name="delete">Smazat</string>
+    <string name="keep_shift">Zpět</string>
 
     <!-- SPINNER Shift types -->
-    <string name="regular_shift">Regular shift</string>
+    <string name="regular_shift">Směna</string>
 
     <!-- SHIFTS TABLE popisky -->
     <string name="regularShift">Směna</string>
@@ -84,12 +88,7 @@
     <string name="incomplete">Nekompletní záznam</string>
 
     <!-- MAIN SCREEN popisky -->
-    <string name="alreadyWorked">Odpracováno\u0020</string>
-    <string name="daysFrom">\u0020dní z\u0020</string>
-    <string name="sumOfOvertime">Převod pro další měsíc:\u0020</string>
-
     <string name="thisMonthOvertime">Tento měsíc přesčasů:\u0020</string>
-
     <string name="firstRow">%1$s %2$d</string>
     <string name="secondRow">Odpracováno %1$d dní z %2$d</string>
     <string name="thirdRow">Převod pro další měsíc: %1$s h</string>
@@ -97,14 +96,9 @@
     <string name="todayShiftDepartureLabel">Odchod: %1$s</string>
     <string name="todayShiftArrivalNaLabel">Příchod: nezadáno</string>
     <string name="todayShiftDepartureNaLabel">Odchod: nezadáno</string>
-
-
-    <string name="hour">\u0020h</string>
-    <string name="zeroHour">\u00200h</string>
     <string name="arriveTooltip">Zadejte čas příchodu do práce</string>
     <string name="departureTooltip">Zadejte čas odchodu z práce</string>
     <string name="todayShiftLabel">Dnešní směna:</string>
-
     <string name="arrivalNeeded">První musíte zadat čas příchodu</string>
 
     <!-- preview popisky -->

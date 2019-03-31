@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
@@ -15,7 +15,9 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+    </style>
 
     <!-- RED Progress Bar-->
     <style name="AppTheme.Red">
@@ -24,7 +26,7 @@
 
     <!-- PURPLE Progress Bar-->
     <style name="AppTheme.Purple">
-        <item name="colorAccent">#4E0072</item>
+        <item name="colorAccent">@color/colorPurple</item>
     </style>
 
 </resources>

@@ -1,14 +1,9 @@
 package com.example.workhours.data;
 
 import android.content.ContentResolver;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.provider.BaseColumns;
-
-import com.example.workhours.R;
-
-import java.lang.reflect.Array;
-
+@SuppressWarnings("WeakerAccess")
 public final class ShiftsContract {
 
     private ShiftsContract(){}
@@ -42,11 +37,9 @@ public final class ShiftsContract {
         public final static int HOLIDAY_INCOMPLETE = 4;                                                 // nekompletní záznam
 
 
+        @SuppressWarnings("BooleanMethodIsAlwaysInverted")
         public static boolean isValidHoliday(int holiday) {
-            if (holiday == HOLIDAY_SHIFT || holiday == HOLIDAY_COMPENSATION || holiday == HOLIDAY_PUBLIC || holiday == HOLIDAY_VACATION || holiday == HOLIDAY_INCOMPLETE ) {
-                return true;
-            }
-            return false;
+            return holiday == HOLIDAY_SHIFT || holiday == HOLIDAY_COMPENSATION || holiday == HOLIDAY_PUBLIC || holiday == HOLIDAY_VACATION || holiday == HOLIDAY_INCOMPLETE;
         }
     }
 }

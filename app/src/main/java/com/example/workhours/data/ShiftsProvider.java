@@ -1,23 +1,18 @@
 package com.example.workhours.data;
 
 import android.content.ContentProvider;
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
-import android.app.Application;
-import android.content.res.Resources;
-
 import com.example.workhours.data.ShiftsContract.ShiftEntry;
-import android.content.ContentResolver;
 
-/**
- * {@link ContentProvider} for Pets app.
- */
+
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class ShiftsProvider extends ContentProvider {
 
     private ShiftsDbHelper mDbHelper;
@@ -43,7 +38,7 @@ public class ShiftsProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
         SQLiteDatabase database = mDbHelper.getReadableDatabase();
         Cursor cursor;
@@ -77,7 +72,7 @@ public class ShiftsProvider extends ContentProvider {
     }
 
     @Override
-    public Uri insert(Uri uri, ContentValues contentValues) {                                           // TODO dodělat validaci input dat z contentValues
+    public Uri insert(@NonNull Uri uri, ContentValues contentValues) {                                           // TODO dodělat validaci input dat z contentValues
 
         final int match = sUriMatcher.match(uri);
         switch (match){
@@ -130,7 +125,7 @@ public class ShiftsProvider extends ContentProvider {
      * Updates the data at the given selection and selection arguments, with the new ContentValues.
      */
     @Override
-    public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+    public int update(@NonNull Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case SHIFTS:
@@ -144,7 +139,8 @@ public class ShiftsProvider extends ContentProvider {
         }
     }
 
-    public int updateShift (Uri uri, ContentValues values, String selection, String[] selectionArgs ){
+
+    public int updateShift (@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs ){
         // data check
         int date =  values.getAsInteger(ShiftEntry.COLUMN_DATE);
         if (date == 0){
@@ -181,7 +177,7 @@ public class ShiftsProvider extends ContentProvider {
      * Delete the data at the given selection and selection arguments.
      */
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         switch (match) {
@@ -200,7 +196,7 @@ public class ShiftsProvider extends ContentProvider {
      * Returns the MIME type of data for the content URI.
      */
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case SHIFTS:
