@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -20,6 +21,7 @@ import java.util.Calendar;
 
 @SuppressWarnings("ConstantConditions")
 public class MonthYearPickerDialog extends DialogFragment {
+    SharedPreferences pref;
 
     //private static final int MAX_YEAR = 2099;
     private DatePickerDialog.OnDateSetListener listener;
@@ -32,7 +34,23 @@ public class MonthYearPickerDialog extends DialogFragment {
     @SuppressLint("InflateParams")
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        //AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        pref = requireActivity().getSharedPreferences("Settings", 0);
+        String savedLayout = "light";
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        if (pref.contains("layout")) { savedLayout = pref.getString("layout", "light");}
+        if (savedLayout != null) {
+            switch (savedLayout) {
+                case "light":
+                    builder = new AlertDialog.Builder(requireActivity());
+                    break;
+                case "dark":
+                    builder = new AlertDialog.Builder(requireActivity(), R.style.darkDialogTheme);
+                    break;
+                default:
+                    builder = new AlertDialog.Builder(requireActivity(), R.style.darkDialogTheme);
+            }
+        }
         // Get the layout inflater
 
         LayoutInflater inflater = getActivity().getLayoutInflater();

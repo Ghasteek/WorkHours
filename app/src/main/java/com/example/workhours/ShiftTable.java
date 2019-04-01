@@ -2,6 +2,7 @@ package com.example.workhours;
 
 import android.content.ContentUris;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,7 @@ public class ShiftTable extends AppCompatActivity {
     String monthYearStr;*/
     public static int year;
     public static int month;
+    SharedPreferences pref;
 
 
     @Override
@@ -37,6 +39,15 @@ public class ShiftTable extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        pref = getApplicationContext().getSharedPreferences("Settings", 0);
+        if (pref.contains("layout")){
+            String savedLayout = pref.getString("layout", "light");
+            if (savedLayout.equals("light")){
+                setTheme(R.style.AppTheme);
+            } else {
+                setTheme(R.style.AppDarkTheme);
+            }
+        }
         setContentView(R.layout.activity_shift_table);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

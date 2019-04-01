@@ -1,11 +1,11 @@
 package com.example.workhours;
 
-import android.app.Activity;
-import android.app.Application;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -58,8 +58,10 @@ public class MainActivity extends AppCompatActivity
             String savedLayout = pref.getString("layout", "light");
             if (savedLayout.equals("light")){
                 setTheme(R.style.AppTheme);
+                setTheme(R.style.MainTheme);
             } else {
                 setTheme(R.style.AppDarkTheme);
+                setTheme(R.style.MainTheme);
             }
         }
 
@@ -149,11 +151,10 @@ public class MainActivity extends AppCompatActivity
         Globals.timeOutHours = Integer.parseInt(timeOutArray[0]);
         Globals.timeOutMinutes = Integer.parseInt(timeOutArray[1]);
 
-
-
         checkYesterday();
         showInfo();
     }
+
 
     private void checkYesterday() {
         Date today = calendar.getTime();

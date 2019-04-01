@@ -73,6 +73,15 @@ public class SettingsDefault extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        pref = getApplicationContext().getSharedPreferences("Settings", 0);
+        if (pref.contains("layout")){
+            String savedLayout = pref.getString("layout", "light");
+            if (savedLayout.equals("light")){
+                setTheme(R.style.AppTheme);
+            } else {
+                setTheme(R.style.AppDarkTheme);
+            }
+        }
         setContentView(R.layout.activity_settings_default);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

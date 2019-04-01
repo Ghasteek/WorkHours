@@ -152,6 +152,15 @@ public class Shift extends AppCompatActivity {
         temp = getSharedPreferences("Temporary", 0);
         pref = getSharedPreferences("Settings", 0);
         super.onCreate(savedInstanceState);
+        pref = getApplicationContext().getSharedPreferences("Settings", 0);
+        if (pref.contains("layout")){
+            String savedLayout = pref.getString("layout", "light");
+            if (savedLayout.equals("light")){
+                setTheme(R.style.AppTheme);
+            } else {
+                setTheme(R.style.AppDarkTheme);
+            }
+        }
         setContentView(R.layout.content_shift);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -472,7 +481,21 @@ public class Shift extends AppCompatActivity {
             DialogInterface.OnClickListener deleteButtonClickListener) {
         // Create an AlertDialog.Builder and set the message, and click listeners
         // for the postivie and negative buttons on the dialog.
+        String savedLayout = "light";
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (pref.contains("layout")) { savedLayout = pref.getString("layout", "light");}
+        if (savedLayout != null) {
+            switch (savedLayout) {
+                case "light":
+                    builder = new AlertDialog.Builder(this);
+                    break;
+                case "dark":
+                    builder = new AlertDialog.Builder(this, R.style.darkDialogTheme);
+                    break;
+                default:
+                    builder = new AlertDialog.Builder(this, R.style.darkDialogTheme);
+            }
+        }
         builder.setMessage(R.string.delete_acceptance_dialog_msg);
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
