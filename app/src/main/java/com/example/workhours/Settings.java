@@ -2,20 +2,19 @@ package com.example.workhours;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 @SuppressWarnings("WeakerAccess")
 public class Settings extends AppCompatActivity {
 
-    private TextView firstRowView, secondRowView;
+    private TextView firstRowView, secondRowView, thirdRowView;
 
     private final View.OnTouchListener mTouchListener = new View.OnTouchListener() {                      // listener to any user touch on a view for editing
         @Override
@@ -31,6 +30,9 @@ public class Settings extends AppCompatActivity {
                     } else if (idSelected == secondRowView.getId()) {
                         Intent settingsCorrection = new Intent(Settings.this, SettingsCorrection.class);
                         startActivity(settingsCorrection);
+                    } else if (idSelected == thirdRowView.getId()) {
+                        Intent settingsTheme = new Intent(Settings.this, SettingsTheme.class);
+                        startActivity(settingsTheme);
                     }
                 case MotionEvent.ACTION_UP:
                     view.performClick();
@@ -69,6 +71,15 @@ public class Settings extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("Settings", 0);
+        if (pref.contains("layout")){
+            String savedLayout = pref.getString("layout", "light");
+            if (savedLayout.equals("light")){
+                setTheme(R.style.AppTheme);
+            } else {
+                setTheme(R.style.AppDarkTheme);
+            }
+        }
         setContentView(R.layout.activity_settings);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -77,15 +88,12 @@ public class Settings extends AppCompatActivity {
 
         firstRowView = findViewById(R.id.firstRow);
         secondRowView = findViewById(R.id.secondRow);
+        thirdRowView = findViewById(R.id.thirdRow);
 
         firstRowView.setOnTouchListener(mTouchListener);
         secondRowView.setOnTouchListener(mTouchListener);
+        thirdRowView.setOnTouchListener(mTouchListener);
 
 
-    }
-
-    protected void showDefault () {
-        Intent settingsDefault = new Intent(Settings.this, SettingsDefault.class);
-        startActivity(settingsDefault);
     }
 }

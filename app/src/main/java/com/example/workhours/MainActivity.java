@@ -1,5 +1,7 @@
 package com.example.workhours;
 
+import android.app.Activity;
+import android.app.Application;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -48,6 +50,19 @@ public class MainActivity extends AppCompatActivity
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
+
+        pref = getApplicationContext().getSharedPreferences("Settings", 0);                 // definovani SharedPreference
+        temp = getApplicationContext().getSharedPreferences("Temporary", 0);
+
+        if (pref.contains("layout")){
+            String savedLayout = pref.getString("layout", "light");
+            if (savedLayout.equals("light")){
+                setTheme(R.style.AppTheme);
+            } else {
+                setTheme(R.style.AppDarkTheme);
+            }
+        }
+
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -108,9 +123,6 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-        pref = getApplicationContext().getSharedPreferences("Settings", 0);                 // definovani SharedPreference
-        temp = getApplicationContext().getSharedPreferences("Temporary", 0);
-
         todayArrivalInfo = findViewById(R.id.todayArrivalInfoId);                                       // definmování textových polí na hlavní stránce
         todayDepartureInfo = findViewById(R.id.todayDepartureInfoId);
 
@@ -136,6 +148,8 @@ public class MainActivity extends AppCompatActivity
         Globals.timeInMinutes = Integer.parseInt(timeInArray[1]);
         Globals.timeOutHours = Integer.parseInt(timeOutArray[0]);
         Globals.timeOutMinutes = Integer.parseInt(timeOutArray[1]);
+
+
 
         checkYesterday();
         showInfo();

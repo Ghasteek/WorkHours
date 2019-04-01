@@ -168,7 +168,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="6dp"
         android:textSize="18sp"
-        android:hint="@string/breakLength"
+        android:text="@string/breakLength"
         app:layout_constraintStart_toEndOf="@+id/editTodayButtonId"
         app:layout_constraintTop_toTopOf="@+id/editTodayButtonId" />
 

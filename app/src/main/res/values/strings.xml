@@ -26,6 +26,9 @@
     <string name="settingsDefaultVacation">Dovolené za rok :</string>
     <string name="settingsOvertimeCorrection">Ruční úprava přesčasu (m) : </string>
     <string name="settingsHolidayCorrection">Ruční úprava dovolené (D) : </string>
+    <string name="settingsDefaultValues">Výchozí hodnoty</string>
+    <string name="settingsManualCorrection">Manuální korekce</string>
+    <string name="settingsColorTheme">Barevné schéma aplikace</string>
 
     <!-- SHIFT stranka -->
     <string name="date">Datum : </string>

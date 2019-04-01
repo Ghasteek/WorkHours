@@ -6,6 +6,10 @@
         <item name="colorPrimary">@color/colorPrimaryDark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/colorBackgroundLight</item>
+        <item name="android:textColor">@color/primaryText</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -26,6 +30,57 @@
 
     <!-- PURPLE Progress Bar-->
     <style name="AppTheme.Purple">
+        <item name="colorAccent">@color/colorPurple</item>
+    </style>
+
+
+    <!-- Dark application theme. -->
+    <style name="AppDarkTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/primaryText</item>
+        <item name="android:textColor">@color/colorBackgroundLight</item>
+        <item name="itemTextColor">@color/colorBackgroundLight</item>
+        <item name="itemIconTint">@color/colorBackgroundLight</item>
+        <item name="android:editTextColor">@color/colorBackgroundLight</item>
+        <item name="android:editTextBackground">@color/editTextBackground</item>
+        <item name="android:popupBackground">@color/editTextBackground</item>
+        <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemDarkStyle</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppDarkTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="darkDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/editTextBackground</item>
+    </style>
+
+    <style name="mySpinnerItemDarkStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+        <item name="android:textColor">@color/colorBackgroundLight</item>
+        <item name="android:background">@color/editTextBackground</item>
+        <item name="android:windowBackground">@color/editTextBackground</item>
+        <item name="android:checkMark">@drawable/triangle</item>
+    </style>
+
+    <style name="AppDarkTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppDarkTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+    </style>
+
+    <!-- RED Progress Bar-->
+    <style name="AppDarkTheme.Red">
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- PURPLE Progress Bar-->
+    <style name="AppDarkTheme.Purple">
         <item name="colorAccent">@color/colorPurple</item>
     </style>
 
