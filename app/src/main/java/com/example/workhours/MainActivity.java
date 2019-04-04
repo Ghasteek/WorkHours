@@ -4,8 +4,6 @@ import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -56,7 +54,7 @@ public class MainActivity extends AppCompatActivity
 
         if (pref.contains("layout")){
             String savedLayout = pref.getString("layout", "light");
-            if (savedLayout.equals("light")){
+            if (savedLayout != null && savedLayout.equals("light")){
                 setTheme(R.style.AppTheme);
                 setTheme(R.style.MainTheme);
             } else {

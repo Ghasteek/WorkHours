@@ -30,7 +30,7 @@ public class Preview extends AppCompatActivity {
         pref = getApplicationContext().getSharedPreferences("Settings", 0);
         if (pref.contains("layout")){
             String savedLayout = pref.getString("layout", "light");
-            if (savedLayout.equals("light")){
+            if (savedLayout != null && savedLayout.equals("light")){
                 setTheme(R.style.AppTheme);
             } else {
                 setTheme(R.style.AppDarkTheme);

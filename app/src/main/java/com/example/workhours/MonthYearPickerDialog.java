@@ -19,7 +19,7 @@ import java.util.Calendar;
  * Created by ankititjunkies on 20/03/18.
  */
 
-@SuppressWarnings("ConstantConditions")
+@SuppressWarnings({"ConstantConditions", "WeakerAccess"})
 public class MonthYearPickerDialog extends DialogFragment {
     SharedPreferences pref;
 

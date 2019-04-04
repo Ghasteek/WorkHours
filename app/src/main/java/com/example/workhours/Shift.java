@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.StyleRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,7 +41,6 @@ public class Shift extends AppCompatActivity {
     SharedPreferences temp, pref;
     int holidayTypeInt;
     InputMethodManager im;
-    View clickedView;
 
 
     private final View.OnTouchListener mTouchListener = new View.OnTouchListener() {                      // listener to any user touch on a view for editing
@@ -54,7 +52,6 @@ public class Shift extends AppCompatActivity {
                     return false;
                 case MotionEvent.ACTION_UP:
                     view.performClick();
-                    clickedView = view;
                     im = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                     im.showSoftInput(view, 0);
                     return false;
@@ -155,7 +152,7 @@ public class Shift extends AppCompatActivity {
         pref = getApplicationContext().getSharedPreferences("Settings", 0);
         if (pref.contains("layout")){
             String savedLayout = pref.getString("layout", "light");
-            if (savedLayout.equals("light")){
+            if (savedLayout != null && savedLayout.equals("light")){
                 setTheme(R.style.AppTheme);
             } else {
                 setTheme(R.style.AppDarkTheme);

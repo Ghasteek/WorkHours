@@ -11,7 +11,7 @@ import android.widget.Toast;
 @SuppressWarnings("WeakerAccess")
 public class SettingsDefault extends AppCompatActivity {
 
-    EditText timeIn, timeOut, breakTime, overtimeCorrection, defaultShiftLength, holidayDaysEdit;
+    EditText timeIn, timeOut, breakTime, defaultShiftLength, holidayDaysEdit;
     SharedPreferences temp, pref;
 
 
@@ -76,7 +76,7 @@ public class SettingsDefault extends AppCompatActivity {
         pref = getApplicationContext().getSharedPreferences("Settings", 0);
         if (pref.contains("layout")){
             String savedLayout = pref.getString("layout", "light");
-            if (savedLayout.equals("light")){
+            if (savedLayout != null && savedLayout.equals("light")){
                 setTheme(R.style.AppTheme);
             } else {
                 setTheme(R.style.AppDarkTheme);
@@ -93,7 +93,6 @@ public class SettingsDefault extends AppCompatActivity {
         timeIn = findViewById(R.id.defaultArrivalTimeEdit);
         timeOut = findViewById(R.id.defaultDepartureTimeEdit);
         breakTime = findViewById(R.id.defaultBreakTimeEdit);
-        overtimeCorrection = findViewById(R.id.overtimeCorrectionEdit);
         defaultShiftLength = findViewById(R.id.defaultShiftLengthEdit);
         holidayDaysEdit = findViewById(R.id.holidayDaysEdit);
 

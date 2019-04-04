@@ -23,7 +23,7 @@
     <string name="settingsDefaultDepartureTime">Výchozí čas odchodu : </string>
     <string name="settingsDefaultBreakLength">Výchozí délka pauzy : </string>
     <string name="settingsDefaultShiftLength">Délka směny : </string>
-    <string name="settingsDefaultVacation">Dovolené za rok :</string>
+    <string name="settingsDefaultVacation">Dní dovolené za rok :</string>
     <string name="settingsOvertimeCorrection">Ruční úprava přesčasu (m) : </string>
     <string name="settingsHolidayCorrection">Ruční úprava dovolené (D) : </string>
     <string name="settingsDefaultValues">Výchozí hodnoty</string>
@@ -80,6 +80,10 @@
     <string name="delete">Smazat</string>
     <string name="keep_shift">Zpět</string>
 
+    <!-- RESTART  dialog -->
+    <string name="restart_app_dialog_msg">Změna barevného tématu vyžaduje restart aplikace.</string>
+    <string name="shutdown">Restartovat aplikaci</string>
+
     <!-- SPINNER Shift types -->
     <string name="regular_shift">Směna</string>
 
@@ -104,7 +108,7 @@
     <string name="todayShiftLabel">Dnešní směna:</string>
     <string name="arrivalNeeded">První musíte zadat čas příchodu</string>
 
-    <!-- preview popisky -->
+    <!-- PREVIEW popisky -->
     <string name="workHoursPlan">Předpis práce:</string>
     <string name="workHoursDone">Odpracovaná doba:</string>
     <string name="workHoursMonthlyDifference">Měsíční rozdíl:</string>
@@ -112,4 +116,7 @@
     <string name="usedHoliday">Použitá dovolená:</string>
     <string name="remainingHoliday">Zbývající dovolená:</string>
     <string name="publicHolidays">Státní svátky:</string>
+
+    <!-- THEME popisky -->
+    <string name="darkTheme">Tmavé téma:</string>
 </resources>

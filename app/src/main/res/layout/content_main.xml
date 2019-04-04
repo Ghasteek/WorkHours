@@ -85,6 +85,8 @@
         android:layout_height="1dp"
         android:layout_marginTop="30dp"
         android:background="?android:attr/listDivider"
+        android:dividerHeight="4dp"
+        android:divider="@color/colorDivider"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/monthShiftsProgress" />
 
@@ -192,6 +194,8 @@
         android:layout_height="1dp"
         android:layout_marginTop="30dp"
         android:background="?android:attr/listDivider"
+        android:dividerHeight="4dp"
+        android:divider="@color/colorDivider"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTodayButtonId" />
 
