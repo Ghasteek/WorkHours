@@ -204,6 +204,67 @@ public class MainActivity extends AppCompatActivity
                 editorTemp.apply();
             }
         }
+                                                                                                    // add new month into MONTHS table if it is new month with actual overtime sum and resetting actual temp overtime
+        String[] projection2 = {ShiftEntry.COLUMN_DATE_MONTHS,};
+        String sortOrder2 = ShiftEntry.COLUMN_DATE_MONTHS + " DESC LIMIT 1";
+        Cursor cursor2 = getContentResolver().query(
+                ShiftEntry.CONTENT_URI_MONTHS,
+                projection2,
+                null,
+                null,
+                sortOrder2);
+
+        String thisMonthString = String.valueOf(todayInt).substring(0, 6);
+        int thisMonth = Integer.parseInt(thisMonthString);
+        String todayYearStr = String.valueOf(todayInt).substring(0, 4);
+        String todayMonthStr = String.valueOf(todayInt).substring(4, 6);
+        int todayYearInt = Integer.parseInt(todayYearStr);
+        int todayMonthInt = Integer.parseInt(todayMonthStr);
+        String lastMonthToDb = "";
+
+        if (todayMonthInt == 1){
+            lastMonthToDb = (todayYearInt - 1) + "12";
+        } else if (todayMonthInt >= 10 && todayMonthInt <= 12) {
+            lastMonthToDb = todayYearStr + (todayMonthInt - 1);
+        }
+        else if (todayMonthInt >= 2 && todayMonthInt <= 9) {
+            lastMonthToDb = todayYearStr + "0" + (todayMonthInt - 1);
+        }
+
+        if (cursor2 != null && cursor2.getCount() != 0) {
+            int dateMonthsColumnIndex = cursor2.getColumnIndex(ShiftEntry.COLUMN_DATE_MONTHS);
+            int lastDbMonthDate = 0;
+            try {
+                while (cursor2.moveToNext()) {
+                    lastDbMonthDate = cursor2.getInt(dateMonthsColumnIndex);
+                }
+            } finally {
+                cursor2.close();
+            }
+            if (lastDbMonthDate < (thisMonth - 1)) {
+                int actualOverwatch = 0;
+                if (temp.contains("overtimeSum")){
+                    actualOverwatch = temp.getInt("overtimeSum", 0);
+                    temp.edit().putInt("overtimeSum", 0).apply();
+                }
+                ContentValues monthValues = new ContentValues();
+                monthValues.put(ShiftsContract.ShiftEntry.COLUMN_DATE_MONTHS, lastMonthToDb);
+                monthValues.put(ShiftsContract.ShiftEntry.COLUMN_OVERTIMESUM_MONTHS, actualOverwatch);
+                Uri newUriMonth = getContentResolver().insert(ShiftsContract.ShiftEntry.CONTENT_URI_MONTHS, monthValues);
+                if (newUriMonth == null) {
+                    Toast.makeText(this, "chyba pridani MONTH", Toast.LENGTH_SHORT).show();
+                } //else { Toast.makeText(this, getText(R.string.editor_insert_shift_successful), Toast.LENGTH_SHORT).show();}
+            }
+
+        } else /*if (cursor2 != null && cursor2.getCount() == 0)*/ {
+            ContentValues monthValues = new ContentValues();
+            monthValues.put(ShiftsContract.ShiftEntry.COLUMN_DATE_MONTHS, Integer.parseInt(lastMonthToDb));
+            monthValues.put(ShiftsContract.ShiftEntry.COLUMN_OVERTIMESUM_MONTHS, 0);
+            Uri newUriMonth = getContentResolver().insert(ShiftsContract.ShiftEntry.CONTENT_URI_MONTHS, monthValues);
+            if (newUriMonth == null) {
+                Toast.makeText(this, "chyba pridani MONTH", Toast.LENGTH_SHORT).show();
+            } //else { Toast.makeText(this, getText(R.string.editor_insert_shift_successful), Toast.LENGTH_SHORT).show(); }
+        }
     }
 
     @SuppressWarnings("TryFinallyCanBeTryWithResources")
@@ -240,11 +301,40 @@ public class MainActivity extends AppCompatActivity
                 null);
 
         Cursor cursor2 = getContentResolver().query(
-                        ShiftsContract.ShiftEntry.CONTENT_URI,
-                        projectionHolidays,
-                        selectionHolidays,
-                        selectionArgsHolidays,
-                        null);
+                ShiftsContract.ShiftEntry.CONTENT_URI,
+                projectionHolidays,
+                selectionHolidays,
+                selectionArgsHolidays,
+                null);
+
+
+        String[] projectionOvertime = {ShiftEntry.COLUMN_OVERTIMESUM_MONTHS };
+
+        //String selectionOvertime = ShiftEntry.COLUMN_DATE_MONTHS + " BETWEEN ? AND ? AND " + ShiftEntry.COLUMN_DATE + " LIKE ?";
+
+        //String[] selectionArgsOvertime = new String[] { String.valueOf(ShiftEntry.HOLIDAY_PUBLIC), String.valueOf(ShiftEntry.HOLIDAY_VACATION), String.valueOf(year) + monthStr + "%" };
+
+        Cursor cursorOvertime = getContentResolver().query(
+                ShiftEntry.CONTENT_URI_MONTHS,
+                projectionOvertime,
+                null, //selectionOvertime,
+                null, //selectionArgsOvertime,
+                null);
+
+        int overtimeSUmFromDb = 0;
+        //String overtimeSUmFromDb = "";
+
+        if (cursorOvertime != null){
+            int overtimeLengthColumnIndex = cursorOvertime.getColumnIndex(ShiftEntry.COLUMN_OVERTIMESUM_MONTHS);
+            //overtimeSUmFromDb = cursorOvertime.getInt(1);
+            while (cursorOvertime.moveToNext()){
+                overtimeSUmFromDb = overtimeSUmFromDb + cursorOvertime.getInt(overtimeLengthColumnIndex);
+                //overtimeSUmFromDb = cursorOvertime.getInt(overtimeLengthColumnIndex);
+                //overtimeSUmFromDb = cursorOvertime.getColumnName(0);
+            }
+            cursorOvertime.close();
+        }
+
 
         String [] monthArray = getResources().getStringArray(R.array.months);                           // nastavení popisku tohoto měsíce a roku
         thisMonthView.setText(getString(R.string.firstRow, monthArray[month], year));
@@ -265,8 +355,8 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (temp.contains("overtimeSum")){
-            overtimeSumView.setText(getString(R.string.thirdRow,Tools.timeIntToStr(temp.getInt("overtimeSum",0))));
-        } else {overtimeSumView.setText(getString(R.string.thirdRow,"0"));}
+            overtimeSumView.setText(getString(R.string.thirdRow, Tools.timeIntToStr(temp.getInt("overtimeSum",0)), overtimeSUmFromDb));
+        } else {overtimeSumView.setText(getString(R.string.thirdRow,"0", overtimeSUmFromDb));}
 
         if (temp.contains("arrivalTime")){
             if ((temp.getInt("arrivalDate", 0)) == (Tools.dateDateToInt(calendar.getTime()))) {
@@ -374,7 +464,7 @@ public class MainActivity extends AppCompatActivity
             int departureTimeInt = Tools.timeStrToInt(departureTimeHelp);
             int breakLengthInt = Tools.timeStrToInt(todayBreakInput.getText().toString());
             int shiftLengthInt = departureTimeInt - arrivalTimeInt - breakLengthInt;                                // vypocet delky smeny
-            String defaultShiftHelpStr = "";
+            String defaultShiftHelpStr = "8:00";
             int defaultShiftHelp = 0;
             if (pref.contains("defaultShift")){
                 defaultShiftHelpStr = pref.getString("defaultShift", "8:00");
@@ -409,6 +499,8 @@ public class MainActivity extends AppCompatActivity
                 editTodayButton.setVisibility(View.VISIBLE);
                 showInfo();
             }  //else {Toast.makeText(this,"chyba ", Toast.LENGTH_LONG).show();}
+
+            //TODO dodělat přidání overwatche do MONTHS tabulky po přidání dokončené směny + dodělat korekce v SHIFTS - insert/delete/update
             todayBreakInput.setVisibility(View.INVISIBLE);
             todayBreak.setVisibility(View.INVISIBLE);
         }

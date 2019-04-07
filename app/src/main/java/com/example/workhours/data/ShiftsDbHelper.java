@@ -30,6 +30,14 @@ public class ShiftsDbHelper extends SQLiteOpenHelper {
                         + ShiftEntry.COLUMN_HOLIDAY + " INTEGER);";
 
         db.execSQL(SQL_CREATE_SHIFTS_TABLE);
+
+        String SQL_CREATE_MONTHS_TABLE =
+                "CREATE TABLE " + ShiftEntry.TABLE_MONTHS_NAME + " ("
+                        + ShiftEntry._ID_MONTHS + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        + ShiftEntry.COLUMN_DATE_MONTHS + " INTEGER, "
+                        + ShiftEntry.COLUMN_OVERTIMESUM_MONTHS + " INTEGER);";
+
+        db.execSQL(SQL_CREATE_MONTHS_TABLE);
         }
 
     @Override

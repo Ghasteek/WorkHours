@@ -196,6 +196,8 @@ public class Shift extends AppCompatActivity {
             fillUp(clickedShiftUri);
 
         }
+
+        editDbSum("201904", 15);
     }
 
     public void setDefault() {
@@ -225,7 +227,7 @@ public class Shift extends AppCompatActivity {
         }
         holidayTypeSpinner.setSelection(0);
 
-        Toast.makeText(this, getText(R.string.defaults_loaded), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, getText(R.string.defaults_loaded), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -435,6 +437,52 @@ public class Shift extends AppCompatActivity {
             MainActivity.Globals.isEdited = false;
         }
     }
+
+    private void editDbSum(String whichMonth, int overtimeDif){
+        //String[] projectionOvertime = {ShiftEntry.COLUMN_OVERTIMESUM_MONTHS };
+
+        String selectionOvertime = ShiftEntry.COLUMN_DATE_MONTHS + " LIKE ?";
+
+        String[] selectionArgsOvertime = new String[] { whichMonth };
+
+        Cursor cursorOvertime = getContentResolver().query(
+                ShiftEntry.CONTENT_URI_MONTHS,
+                null, //projectionOvertime,
+                selectionOvertime,
+                selectionArgsOvertime,
+                null);
+
+        //String overtimeSUmFromDb = "";
+
+        if (cursorOvertime != null && cursorOvertime.getCount() == 1){
+            int overtimeLengthColumnIndex = cursorOvertime.getColumnIndex(ShiftEntry.COLUMN_OVERTIMESUM_MONTHS);
+            int id ;
+            while (cursorOvertime.moveToNext()){
+                int oldSum = cursorOvertime.getInt(overtimeLengthColumnIndex);
+                id = cursorOvertime.getInt(0);
+                Uri editUri = Uri.withAppendedPath(ShiftEntry.CONTENT_URI_MONTHS, String.valueOf(id));
+                Toast.makeText(this, "editing uri-" + editUri.toString(), Toast.LENGTH_SHORT).show();
+
+                ContentValues monthValues = new ContentValues();
+                monthValues.put(ShiftEntry.COLUMN_OVERTIMESUM_MONTHS, (oldSum + overtimeDif));
+
+                int rowsAffected = getContentResolver().update(editUri, monthValues, null, null);
+                if (rowsAffected == 0) {
+                    Toast.makeText(this, getText(R.string.editor_update_shift_failed), Toast.LENGTH_SHORT).show();
+                } else {Toast.makeText(this, "added " + (oldSum + overtimeDif) + " min to URI-" + editUri.toString() , Toast.LENGTH_LONG).show();}
+            }
+            cursorOvertime.close();
+        } else {
+            ContentValues monthValues = new ContentValues();
+            monthValues.put(ShiftsContract.ShiftEntry.COLUMN_DATE_MONTHS, Integer.parseInt(whichMonth));
+            monthValues.put(ShiftsContract.ShiftEntry.COLUMN_OVERTIMESUM_MONTHS, overtimeDif);
+            Uri newUriMonth = getContentResolver().insert(ShiftsContract.ShiftEntry.CONTENT_URI_MONTHS, monthValues);
+            if (newUriMonth == null) {
+                Toast.makeText(this, "chyba pridani MONTH", Toast.LENGTH_SHORT).show();
+            } //else { Toast.makeText(this, getText(R.string.editor_insert_shift_successful), Toast.LENGTH_SHORT).show();}
+        }
+    }
+
 
     private void showUnsavedChangesDialog(
             DialogInterface.OnClickListener discardButtonClickListener) {

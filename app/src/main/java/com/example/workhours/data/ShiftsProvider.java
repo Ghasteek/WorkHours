@@ -19,10 +19,14 @@ public class ShiftsProvider extends ContentProvider {
 
     private static final int SHIFTS = 100;
     private static final int SHIFT_ID = 101;
+    private static final int MONTHS = 200;
+    private static final int MONTHS_ID = 201;
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     static {
         sUriMatcher.addURI(ShiftsContract.CONTENT_AUTHORITY, ShiftsContract.PATH_SHIFTS, SHIFTS);
         sUriMatcher.addURI(ShiftsContract.CONTENT_AUTHORITY, ShiftsContract.PATH_SHIFTS + "/#", SHIFT_ID);
+        sUriMatcher.addURI(ShiftsContract.CONTENT_AUTHORITY, ShiftsContract.PATH_MONTHS, MONTHS);
+        sUriMatcher.addURI(ShiftsContract.CONTENT_AUTHORITY, ShiftsContract.PATH_MONTHS + "/#", MONTHS_ID);
     }
 
     /** Tag for the log messages */
@@ -65,6 +69,26 @@ public class ShiftsProvider extends ContentProvider {
                         null,
                         sortOrder);
                 break;
+            case MONTHS:
+                cursor = database.query(ShiftEntry.TABLE_MONTHS_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            case MONTHS_ID:
+                selection = ShiftEntry._ID + "=?";
+                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                cursor = database.query(ShiftEntry.TABLE_MONTHS_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
             default:
                 throw new IllegalArgumentException( "Cannot query unknown URI " + uri);
         }
@@ -78,6 +102,8 @@ public class ShiftsProvider extends ContentProvider {
         switch (match){
             case SHIFTS:
                 return insertShift(uri, contentValues);
+            case MONTHS:
+                return insertMonth(uri, contentValues);
             default:
                 throw new IllegalArgumentException( "Insertion is not supported for " + uri);
         }
@@ -121,6 +147,24 @@ public class ShiftsProvider extends ContentProvider {
         return ContentUris.withAppendedId(uri, id);
     }
 
+    private Uri insertMonth(Uri uri, ContentValues values){
+        //TODO data check
+
+        int date =  values.getAsInteger(ShiftEntry.COLUMN_DATE);
+        if (date == 0){
+            throw new IllegalArgumentException( "Date needed.");
+        }
+
+        //data insertion into the database
+
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        long id = database.insert(ShiftEntry.TABLE_MONTHS_NAME, null, values);
+        if (id == -1) {
+            Log.e(LOG_TAG, "Failed to insert row for " + uri);
+        }
+        return ContentUris.withAppendedId(uri, id);
+    }
+
     /**
      * Updates the data at the given selection and selection arguments, with the new ContentValues.
      */
@@ -134,6 +178,12 @@ public class ShiftsProvider extends ContentProvider {
                 selection = ShiftEntry._ID + "=?";
                 selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
                 return updateShift(uri, contentValues, selection, selectionArgs);
+            case MONTHS:
+                return updateMonth(uri, contentValues, selection, selectionArgs);
+            case MONTHS_ID:
+                selection = ShiftEntry._ID_MONTHS + "=?";
+                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                return updateMonth(uri, contentValues, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
         }
@@ -173,6 +223,19 @@ public class ShiftsProvider extends ContentProvider {
         return database.update(ShiftEntry.TABLE_NAME, values, selection, selectionArgs);
     }
 
+    public int updateMonth (@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs ){
+        // data check
+        /*int date =  values.getAsInteger(ShiftEntry.COLUMN_DATE);
+        if (date == 0){
+            throw new IllegalArgumentException( "Date needed.");
+        }*/
+        if (values.size() == 0){
+            return 0;
+        }
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        return database.update(ShiftEntry.TABLE_MONTHS_NAME, values, selection, selectionArgs);
+    }
+
     /**
      * Delete the data at the given selection and selection arguments.
      */
@@ -187,6 +250,12 @@ public class ShiftsProvider extends ContentProvider {
                 selection = ShiftEntry._ID + "=?";
                 selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
                 return database.delete(ShiftEntry.TABLE_NAME, selection, selectionArgs);
+            case MONTHS:
+                return database.delete(ShiftEntry.TABLE_MONTHS_NAME, selection, selectionArgs);
+            case MONTHS_ID:
+                selection = ShiftEntry._ID_MONTHS + "=?";
+                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                return database.delete(ShiftEntry.TABLE_MONTHS_NAME, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
         }
@@ -203,6 +272,10 @@ public class ShiftsProvider extends ContentProvider {
                 return ShiftEntry.CONTENT_LIST_TYPE;
             case SHIFT_ID:
                 return ShiftEntry.CONTENT_ITEM_TYPE;
+            case MONTHS:
+                return ShiftEntry.CONTENT_LIST_TYPE_MONTHS;
+            case MONTHS_ID:
+                return ShiftEntry.CONTENT_ITEM_TYPE_MONTHS;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
         }
