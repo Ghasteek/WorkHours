@@ -25,6 +25,7 @@ import android.content.DialogInterface;
 import com.example.workhours.data.ShiftsContract;
 import com.example.workhours.data.ShiftsContract.ShiftEntry;
 import java.util.Calendar;
+import java.util.Date;
 
 @SuppressWarnings("WeakerAccess")
 public class Shift extends AppCompatActivity {
@@ -356,6 +357,15 @@ public class Shift extends AppCompatActivity {
         String defaultShiftLoadedStr = "" + pref.getString("defaultShift", "8:00");
 
         SharedPreferences.Editor editorTemp = temp.edit();
+// získání string tohoto měsíce YYYYMM
+        Calendar cal = Calendar.getInstance();
+        Date today = cal.getTime();
+        int todayInt = Tools.dateDateToInt(today);
+        String todayYearMonthString = String.valueOf(todayInt).substring(0, 6);
+
+// získání string měsíce
+        String shiftYearMonthStr = String.valueOf(dateInt).substring(0, 6);
+
         if (holidayTypeSelectedInt == ShiftEntry.HOLIDAY_SHIFT) {
             int overtimeSumOld = 0;
             if (temp.contains("overtimeSum")) {
