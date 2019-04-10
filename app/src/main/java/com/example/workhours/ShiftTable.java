@@ -138,6 +138,8 @@ public class ShiftTable extends AppCompatActivity {
         switch (item.getItemId()){
             case (android.R.id.home):
                 onBackPressed();
+                year = 0;
+                month = 0;
                 return true;
         }
         return super.onOptionsItemSelected(item);

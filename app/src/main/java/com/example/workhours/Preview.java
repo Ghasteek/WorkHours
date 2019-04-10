@@ -1,31 +1,46 @@
 package com.example.workhours;
 
 
+import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.workhours.data.ShiftsContract;
 
 import java.util.Calendar;
+import java.util.Date;
+
 @SuppressWarnings("WeakerAccess")
 public class Preview extends AppCompatActivity {
 
-    TextView workHoursPlanValue, workHoursDoneValue, workHoursMonthlyDifferenceValue,
+    TextView overtimeFromLastMonthValue, workHoursPlanValue, workHoursDoneValue, workHoursMonthlyDifferenceValue,
                 workHoursToNextMonthValue, usedHolidayValue, remainingHolidayValue, publicHolidaysValue;
     SharedPreferences temp, pref;
-    Calendar calendar;
+    //Calendar calendar;
+    public static int year;
+    public static int month;
 
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        showData(year, month);
+    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         temp = getApplicationContext().getSharedPreferences("Temporary", 0);
         pref = getApplicationContext().getSharedPreferences("Settings", 0);
-        calendar = Calendar.getInstance();
+        //calendar = Calendar.getInstance();
         super.onCreate(savedInstanceState);
         pref = getApplicationContext().getSharedPreferences("Settings", 0);
         if (pref.contains("layout")){
@@ -42,6 +57,7 @@ public class Preview extends AppCompatActivity {
             getSupportActionBar().setHomeButtonEnabled(true);
         }
 
+        overtimeFromLastMonthValue = findViewById(R.id.overtimeFromLastMonthValueId);
         workHoursPlanValue = findViewById(R.id.workHoursPlanValueId);
         workHoursDoneValue = findViewById(R.id.workHoursDoneValueId);
         workHoursMonthlyDifferenceValue = findViewById(R.id.workHoursMonthlyDifferenceValueId);
@@ -51,8 +67,79 @@ public class Preview extends AppCompatActivity {
         publicHolidaysValue = findViewById(R.id.publicHolidaysValueId);
 
 
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
+        final TextView showMonthYear = findViewById(R.id.showMonthYearId);
+        final ImageButton changeSelection = findViewById(R.id.button);
+        if (year == 0) {
+            Calendar cal = Calendar.getInstance();
+            year = cal.get(Calendar.YEAR);
+            month = cal.get(Calendar.MONTH) + 1;
+        }
+        String [] monthArray = getResources().getStringArray(R.array.months);
+        int i = month - 1;
+        showMonthYear.setText(getString(R.string.firstRow, monthArray[i], year));
+        showData(year, month);
+
+        changeSelection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MonthYearPickerDialog pickerDialog = new MonthYearPickerDialog();
+                pickerDialog.setListener(new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year2, int month2, int i2) {
+                        //Toast.makeText(ShiftTable.this, year + " - " + month, Toast.LENGTH_SHORT).show();
+                        year = year2;
+                        month = month2;
+                        String [] monthArray = getResources().getStringArray(R.array.months);
+                        int i = month - 1;
+                        showMonthYear.setText(getString(R.string.firstRow, monthArray[i], year));
+                        showData(year, month);
+                    }
+                });
+                pickerDialog.show(getSupportFragmentManager(), "MonthYearPickerDialog");
+            }
+        });
+    }
+
+    public void showData(int year, int month) {
+        String yearMonthStr;
+        if (month <= 9 ) {
+            yearMonthStr = year + "0" + month;
+        } else { yearMonthStr = year + "" + month;}
+
+        //Toast.makeText(this, "zobrazuji - " + yearMonthStr, Toast.LENGTH_LONG).show();
+        String [] projectionOvertime =  {
+                ShiftsContract.ShiftEntry.COLUMN_DATE_MONTHS,
+                ShiftsContract.ShiftEntry.COLUMN_OVERTIMESUM_MONTHS};
+        int yearMonthInt = Integer.parseInt(yearMonthStr);
+        String selectionOvertime = ShiftsContract.ShiftEntry.COLUMN_DATE_MONTHS + " <= " + yearMonthInt;
+        //String[] selectionArgsOvertime =  new String[] {ShiftsContract.ShiftEntry.COLUMN_DATE_MONTHS, yearMonthStr };
+
+        Cursor cursorOvertime = getContentResolver().query(
+                ShiftsContract.ShiftEntry.CONTENT_URI_MONTHS,
+                projectionOvertime,
+                selectionOvertime,
+                null, //selectionArgsOvertime,
+                null);
+
+        int overtimeSUmFromDb = 0;
+        int overtimeToNextMonth = 0;
+
+        if (cursorOvertime != null){
+            int overtimeLengthColumnIndex = cursorOvertime.getColumnIndex(ShiftsContract.ShiftEntry.COLUMN_OVERTIMESUM_MONTHS);
+            int dateSumOvertimeIndex = cursorOvertime.getColumnIndex(ShiftsContract.ShiftEntry.COLUMN_DATE_MONTHS);
+            //overtimeSUmFromDb = cursorOvertime.getInt(1);
+            while (cursorOvertime.moveToNext()){
+                if (cursorOvertime.getInt(dateSumOvertimeIndex) == Integer.parseInt(yearMonthStr)) {
+                    overtimeToNextMonth = cursorOvertime.getInt(overtimeLengthColumnIndex);
+                    //Toast.makeText(this, "do dalsiho - " + cursorOvertime.getInt(overtimeLengthColumnIndex), Toast.LENGTH_LONG).show();
+                }else {
+                    overtimeSUmFromDb = overtimeSUmFromDb + cursorOvertime.getInt(overtimeLengthColumnIndex);
+                    //overtimeSUmFromDb = cursorOvertime.getInt(overtimeLengthColumnIndex);
+                    //overtimeSUmFromDb = cursorOvertime.getColumnName(0);
+                }
+            }
+            cursorOvertime.close();
+        }
 
         String[] projection = {
                 ShiftsContract.ShiftEntry.COLUMN_DATE,
@@ -68,15 +155,10 @@ public class Preview extends AppCompatActivity {
 
         String selectionHolidays = ShiftsContract.ShiftEntry.COLUMN_HOLIDAY + " BETWEEN ? AND ? AND " + ShiftsContract.ShiftEntry.COLUMN_DATE + " LIKE ?";
 
-        int monthLength = (int) (Math.log10(month+1) + 1);                                                    // logarytmicka metoda zjisteni poctu cifer v cisle
-        String monthStr;
-        if (monthLength == 1) {
-            monthStr = "0" + (month + 1);
-        } else { monthStr = String.valueOf(month); }
 
-        String[] selectionArgs = new String[] { String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_SHIFT), String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_COMPENSATION), String.valueOf(year) + monthStr + "%" };
+        String[] selectionArgs = new String[] { String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_SHIFT), String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_COMPENSATION), yearMonthStr + "%" };
 
-        String[] selectionArgsHolidays = new String[] { String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_PUBLIC), String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_VACATION), String.valueOf(year) + monthStr + "%" };
+        String[] selectionArgsHolidays = new String[] { String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_PUBLIC), String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_VACATION), yearMonthStr + "%" };
 
         Cursor cursor = getContentResolver().query(
                 ShiftsContract.ShiftEntry.CONTENT_URI,
@@ -115,7 +197,7 @@ public class Preview extends AppCompatActivity {
         String workDaysInMonth = Tools.getWorkDaysInMonth(month, year);
         int workDaysInMonthCorrected = Integer.parseInt(workDaysInMonth) - holidaysThisMonth;
         String defaultShiftLengthLoaded = "8:00";
-         if (pref.contains("defaultShift")) {defaultShiftLengthLoaded = "" + pref.getString("defaultShift", "8:00");}
+        if (pref.contains("defaultShift")) {defaultShiftLengthLoaded = "" + pref.getString("defaultShift", "8:00");}
         int defaultShiftLength = Tools.timeStrToInt(defaultShiftLengthLoaded);
         int workHoursPlan = workDaysInMonthCorrected * defaultShiftLength;
         workHoursPlanValue.setText(Tools.timeIntToStr(workHoursPlan));                              // setup value of work hours plan to this month
@@ -126,19 +208,32 @@ public class Preview extends AppCompatActivity {
         int workHoursMonthlyDifference = workHoursThisMonth - workHoursPlan;
         workHoursMonthlyDifferenceValue.setText(Tools.timeIntToStr(workHoursMonthlyDifference));
 
-        workHoursToNextMonthValue.setText(Tools.timeIntToStr(temp.getInt("overtimeSum", 0)));
+        // získání string tohoto měsíce YYYYMM
+        Calendar cal = Calendar.getInstance();
+        Date today = cal.getTime();
+        int todayInt = Tools.dateDateToInt(today);
+        String todayYearMonthString = String.valueOf(todayInt).substring(0, 6);
+
+        if (yearMonthStr.equals(todayYearMonthString)) {
+            workHoursToNextMonthValue.setText(Tools.timeIntToStr(temp.getInt("overtimeSum", 0))); //TODO validně zobrait SUM do dalšího měsíce dle zadaného měsíce
+        } else {workHoursToNextMonthValue.setText(Tools.timeIntToStr(overtimeToNextMonth + overtimeSUmFromDb));}
 
         usedHolidayValue.setText(String.valueOf(usedHoliday));
 
         remainingHolidayValue.setText(String.valueOf(temp.getInt("holidaySum", 0)));
 
         publicHolidaysValue.setText(String.valueOf(usedPublicHoliday));
+
+        overtimeFromLastMonthValue.setText(Tools.timeIntToStr(overtimeSUmFromDb));
+
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case (android.R.id.home):
                 super.onBackPressed();
+                year = 0;
+                month = 0;
                 return true;
         }
         return true;

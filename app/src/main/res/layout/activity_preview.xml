@@ -6,7 +6,37 @@
     android:layout_height="match_parent"
     tools:context=".Preview">
 
-    <!--                 first row
+    <TextView
+        android:id="@+id/showMonthYearId"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginRight="56dp"
+        android:layout_toStartOf="@+id/button"
+        android:layout_toLeftOf="@+id/button"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RelativeOverlap" />
+
+    <ImageButton
+        android:id="@+id/button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintStart_toEndOf="@+id/showMonthYearId"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_my_calendar"
+        tools:ignore="ContentDescription" />
+
+    <!--                 zero row -->
     <TextView
         android:id="@+id/overtimeFromLastMonthId"
         android:layout_width="wrap_content"
@@ -15,8 +45,9 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
         android:textSize="20sp"
+        android:text="@string/overtimeFromLastMonth"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/showMonthYearId" />
 
     <TextView
         android:id="@+id/overtimeFromLastMonthValueId"
@@ -27,7 +58,7 @@
         android:layout_marginRight="30dp"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />  -->
+        app:layout_constraintTop_toBottomOf="@+id/showMonthYearId" />
 
     <!--                 first row              -->
     <TextView
@@ -40,7 +71,7 @@
         android:textSize="20sp"
         android:text="@string/workHoursPlan"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/overtimeFromLastMonthId" />
 
     <TextView
         android:id="@+id/workHoursPlanValueId"
@@ -51,7 +82,7 @@
         android:layout_marginRight="30dp"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/overtimeFromLastMonthValueId" />
 
     <!--                 second row              -->
 

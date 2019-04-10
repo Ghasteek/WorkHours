@@ -61,13 +61,15 @@ public class MonthYearPickerDialog extends DialogFragment {
         final NumberPicker monthPicker = dialog.findViewById(R.id.picker_month);
         final NumberPicker yearPicker = dialog.findViewById(R.id.picker_year);
 
-        int monthHelp = ShiftTable.month;
+        int monthHelp;
+        if (ShiftTable.month != 0) { monthHelp = ShiftTable.month;} else {monthHelp = Preview.month;}
 
         monthPicker.setMinValue(1);
         monthPicker.setMaxValue(12);
         monthPicker.setValue(monthHelp);
 
-        int yearHelp = ShiftTable.year;
+        int yearHelp;
+        if (ShiftTable.year != 0) { yearHelp = ShiftTable.year;} else {yearHelp = Preview.year;}
 
         int year = cal.get(Calendar.YEAR);
         yearPicker.setMinValue(2000);

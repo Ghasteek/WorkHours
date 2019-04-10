@@ -355,8 +355,8 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (temp.contains("overtimeSum")){
-            overtimeSumView.setText(getString(R.string.thirdRow, Tools.timeIntToStr(temp.getInt("overtimeSum",0)), Tools.timeIntToStr(overtimeSUmFromDb)));
-        } else {overtimeSumView.setText(getString(R.string.thirdRow,"0", Tools.timeIntToStr(overtimeSUmFromDb)));}
+            overtimeSumView.setText(getString(R.string.thirdRow, Tools.timeIntToStr(temp.getInt("overtimeSum",0) + overtimeSUmFromDb)));
+        } else {overtimeSumView.setText(getString(R.string.thirdRow, Tools.timeIntToStr(overtimeSUmFromDb)));}
 
         if (temp.contains("arrivalTime")){
             if ((temp.getInt("arrivalDate", 0)) == (Tools.dateDateToInt(calendar.getTime()))) {

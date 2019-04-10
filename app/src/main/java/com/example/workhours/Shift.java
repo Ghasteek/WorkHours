@@ -377,30 +377,33 @@ public class Shift extends AppCompatActivity {
             } else {
                 editDbSum(shiftYearMonthStr, overtimeDifference);
             }
-        } else {
+        }/* else {
             departureTimeInt = arriveTimeInt + (Tools.timeStrToInt(defaultShiftLoadedStr)) + breakLengthInt; // pokud neni zadany typ smena, automaticky se vypocita departure time
-            }
+            }*/
 
 
-        if (holidayTypeSelectedInt == ShiftEntry.HOLIDAY_COMPENSATION && holidayTypeInt != ShiftEntry.HOLIDAY_COMPENSATION){ // je zvolena kompenzace, ale nebyla
+        if (holidayTypeSelectedInt == ShiftEntry.HOLIDAY_COMPENSATION && holidayTypeInt != ShiftEntry.HOLIDAY_COMPENSATION){ // je zvolena kompenzace, ale nebyla         ***** OK *****
             if (todayYearMonthString.equals(shiftYearMonthStr)) {
                 int oldOvertime = temp.getInt("overtimeSum", 0);
-                int newOvertime = oldOvertime - (Tools.timeStrToInt(defaultShiftLoadedStr)) - overtimeLengthInt;
+                int newOvertime = oldOvertime - (Tools.timeStrToInt(defaultShiftLoadedStr)) - Tools.timeStrToInt(overtimeLengthStr);
                 editorTemp.putInt("overtimeSum", newOvertime);                                                      // pokud je stejny mesic v upravovane smene a dnesni, tak se prida OT jen do temp
             } else {
-                int diff = 0 - (Tools.timeStrToInt(defaultShiftLoadedStr)) - overtimeLengthInt;
+                int diff = 0 - (Tools.timeStrToInt(defaultShiftLoadedStr)) - Tools.timeStrToInt(overtimeLengthStr);
                 //Toast.makeText(this, "menim o " + diff , Toast.LENGTH_LONG).show();
                 editDbSum(shiftYearMonthStr, diff);                                                                 //pokud neni, upravi se v DB suma
             }
+            if (departureTimeInt == 0) {departureTimeInt = arriveTimeInt + Tools.timeStrToInt(defaultShiftLoaded) + breakLengthInt;}
             overtimeLengthInt = 0 - (Tools.timeStrToInt(defaultShiftLoadedStr));
             shiftLengthInt = Tools.timeStrToInt(defaultShiftLoadedStr);
         } else if (holidayTypeSelectedInt != ShiftEntry.HOLIDAY_COMPENSATION && holidayTypeInt == ShiftEntry.HOLIDAY_COMPENSATION) { // neni zvolena kompenzace, ale byla
+            int overtimeInShift = Tools.timeStrToInt(departureTime.getText().toString()) -  Tools.timeStrToInt(arriveTime.getText().toString()) - Tools.timeStrToInt(breakLenght.getText().toString()) - Tools.timeStrToInt(defaultShiftLoadedStr);
             if (todayYearMonthString.equals(shiftYearMonthStr)) {
                 int oldOvertime = temp.getInt("overtimeSum", 0);
-                int newOvertime = oldOvertime + (Tools.timeStrToInt(defaultShiftLoadedStr)) + overtimeLengthInt;
+                int newOvertime = oldOvertime + (Tools.timeStrToInt(defaultShiftLoadedStr)) + overtimeInShift;
+                //Toast.makeText(this, "menim o " + overtimeInShift , Toast.LENGTH_LONG).show();
                 editorTemp.putInt("overtimeSum", newOvertime);                                                      // pokud je stejny mesic v upravovane smene a dnesni, tak se prida OT jen do temp
             } else {
-                int diff = (Tools.timeStrToInt(defaultShiftLoadedStr)) + overtimeLengthInt;
+                int diff = (Tools.timeStrToInt(defaultShiftLoadedStr)) + overtimeInShift;
                 //Toast.makeText(this, "menim o " + diff , Toast.LENGTH_LONG).show();
                 editDbSum(shiftYearMonthStr, diff);                                                                 //pokud neni, upravi se v DB suma
             }
@@ -414,21 +417,22 @@ public class Shift extends AppCompatActivity {
             if (holidayTypeInt != ShiftEntry.HOLIDAY_COMPENSATION) {
                 if (todayYearMonthString.equals(shiftYearMonthStr)) {
                     int oldOvertime = temp.getInt("overtimeSum", 0);
-                    int newOvertime = oldOvertime - overtimeLengthInt;
+                    int newOvertime = oldOvertime - Tools.timeStrToInt(overtimeLengthStr);
                     editorTemp.putInt("overtimeSum", newOvertime);                                                      // pokud je stejny mesic v upravovane smene a dnesni, tak se prida OT jen do temp
                 } else {
-                    int diff = 0 - overtimeLengthInt;
+                    int diff = 0 - Tools.timeStrToInt(overtimeLengthStr);
                     editDbSum(shiftYearMonthStr, diff);                                                                 //pokud neni, upravi se v DB suma
                 }
             }
 //TODO Neodečítá overtime při přechodu ze směny na náhradní volno a z5
 
             shiftLengthInt = Tools.timeStrToInt(defaultShiftLoadedStr);
-            departureTimeInt = arriveTimeInt + shiftLengthInt + breakLengthInt;
+            departureTimeInt = arriveTimeInt + shiftLengthInt + breakLengthInt ;
             overtimeLengthInt = 0;
 
         }
         if ((holidayTypeSelectedInt != ShiftEntry.HOLIDAY_VACATION) && (holidayTypeInt == ShiftEntry.HOLIDAY_VACATION)) { // neni zvolena dovolena, ale byla
+            int overtimeInShift = Tools.timeStrToInt(departureTime.getText().toString()) -  Tools.timeStrToInt(arriveTime.getText().toString()) - Tools.timeStrToInt(breakLenght.getText().toString()) - Tools.timeStrToInt(defaultShiftLoadedStr);
             int oldHolidaySum = temp.getInt("holidaySum", 0);
             int newHolidaySum = oldHolidaySum + 1;
             editorTemp.putInt("holidaySum", newHolidaySum);
@@ -436,10 +440,10 @@ public class Shift extends AppCompatActivity {
             if (holidayTypeSelectedInt != ShiftEntry.HOLIDAY_COMPENSATION) {
                 if (todayYearMonthString.equals(shiftYearMonthStr)) {
                     int oldOvertime = temp.getInt("overtimeSum", 0);
-                    int newOvertime = oldOvertime + overtimeLengthInt;
+                    int newOvertime = oldOvertime + overtimeInShift;
                     editorTemp.putInt("overtimeSum", newOvertime);                                                      // pokud je stejny mesic v upravovane smene a dnesni, tak se prida OT jen do temp
                 } else {
-                    editDbSum(shiftYearMonthStr, overtimeLengthInt);                                                                 //pokud neni, upravi se v DB suma
+                    editDbSum(shiftYearMonthStr, overtimeInShift);                                                                 //pokud neni, upravi se v DB suma
                 }
             }
         }

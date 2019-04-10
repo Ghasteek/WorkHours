@@ -98,8 +98,8 @@
     <string name="thisMonthOvertime">Tento měsíc přesčasů:\u0020</string>
     <string name="firstRow">%1$s %2$d</string>
     <string name="secondRow">Odpracováno %1$d dní z %2$d</string>
-    <!--<string name="thirdRow">Převod pro další měsíc: %1$s h</string>-->
-    <string name="thirdRow">tento: %1$s / z minula %2$s</string>
+    <string name="thirdRow">Převod pro další měsíc: %1$s h</string>
+    <!--<string name="thirdRow">tento: %1$s / z minula %2$s</string>-->
     <string name="todayShiftArrivalLabel">Příchod: %1$s</string>
     <string name="todayShiftDepartureLabel">Odchod: %1$s</string>
     <string name="todayShiftArrivalNaLabel">Příchod: nezadáno</string>
@@ -117,6 +117,7 @@
     <string name="usedHoliday">Použitá dovolená:</string>
     <string name="remainingHoliday">Zbývající dovolená:</string>
     <string name="publicHolidays">Státní svátky:</string>
+    <string name="overtimeFromLastMonth">Převod z minulého měsíce:</string>
 
     <!-- THEME popisky -->
     <string name="darkTheme">Tmavé téma:</string>
