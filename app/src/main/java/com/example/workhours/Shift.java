@@ -392,7 +392,7 @@ public class Shift extends AppCompatActivity {
                 //Toast.makeText(this, "menim o " + diff , Toast.LENGTH_LONG).show();
                 editDbSum(shiftYearMonthStr, diff);                                                                 //pokud neni, upravi se v DB suma
             }
-            if (departureTimeInt == 0) {departureTimeInt = arriveTimeInt + Tools.timeStrToInt(defaultShiftLoaded) + breakLengthInt;}
+            if (departureTimeInt == 0 && defaultShiftLoaded != null) {departureTimeInt = arriveTimeInt + Tools.timeStrToInt(defaultShiftLoaded) + breakLengthInt;}
             overtimeLengthInt = 0 - (Tools.timeStrToInt(defaultShiftLoadedStr));
             shiftLengthInt = Tools.timeStrToInt(defaultShiftLoadedStr);
         } else if (holidayTypeSelectedInt != ShiftEntry.HOLIDAY_COMPENSATION && holidayTypeInt == ShiftEntry.HOLIDAY_COMPENSATION) { // neni zvolena kompenzace, ale byla
@@ -424,8 +424,6 @@ public class Shift extends AppCompatActivity {
                     editDbSum(shiftYearMonthStr, diff);                                                                 //pokud neni, upravi se v DB suma
                 }
             }
-//TODO Neodečítá overtime při přechodu ze směny na náhradní volno a z5
-
             shiftLengthInt = Tools.timeStrToInt(defaultShiftLoadedStr);
             departureTimeInt = arriveTimeInt + shiftLengthInt + breakLengthInt ;
             overtimeLengthInt = 0;
