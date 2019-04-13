@@ -1,4 +1,4 @@
-package com.example.workhours;
+package com.workhours;
 
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
+
 
 @SuppressWarnings("WeakerAccess")
 public class SettingsCorrection extends AppCompatActivity {

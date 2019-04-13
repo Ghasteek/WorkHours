@@ -1,4 +1,4 @@
-package com.example.workhours;
+package com.workhours;
 
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
@@ -25,8 +25,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.database.Cursor;
 import android.widget.Toast;
-import com.example.workhours.data.ShiftsContract;
-import com.example.workhours.data.ShiftsContract.ShiftEntry;
+import com.workhours.data.ShiftsContract;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -158,10 +157,10 @@ public class MainActivity extends AppCompatActivity
         Date today = calendar.getTime();
         int todayInt = Tools.dateDateToInt(today);
 
-        String[] projection = {ShiftEntry.COLUMN_DATE,};                                                //get last row from DB according date
-        String sortOrder = ShiftEntry.COLUMN_DATE + " DESC LIMIT 1";
+        String[] projection = {ShiftsContract.ShiftEntry.COLUMN_DATE,};                                                //get last row from DB according date
+        String sortOrder = ShiftsContract.ShiftEntry.COLUMN_DATE + " DESC LIMIT 1";
         Cursor cursor = getContentResolver().query(
-                ShiftEntry.CONTENT_URI,
+                ShiftsContract.ShiftEntry.CONTENT_URI,
                 projection,
                 null,
                 null,
@@ -169,7 +168,7 @@ public class MainActivity extends AppCompatActivity
 
 
         if (cursor != null && cursor.getCount() != 0) {
-            int dateColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_DATE);
+            int dateColumnIndex = cursor.getColumnIndex(ShiftsContract.ShiftEntry.COLUMN_DATE);
             //TextView displayView = (TextView) findViewById(R.id.text_view_table);
             int lastDbDate = 0;
             try {                                                                                   //get date of last row in DB according to date
@@ -205,10 +204,10 @@ public class MainActivity extends AppCompatActivity
             }
         }
                                                                                                     // add new month into MONTHS table if it is new month with actual overtime sum and resetting actual temp overtime
-        String[] projection2 = {ShiftEntry.COLUMN_DATE_MONTHS,};
-        String sortOrder2 = ShiftEntry.COLUMN_DATE_MONTHS + " DESC LIMIT 1";
+        String[] projection2 = {ShiftsContract.ShiftEntry.COLUMN_DATE_MONTHS,};
+        String sortOrder2 = ShiftsContract.ShiftEntry.COLUMN_DATE_MONTHS + " DESC LIMIT 1";
         Cursor cursor2 = getContentResolver().query(
-                ShiftEntry.CONTENT_URI_MONTHS,
+                ShiftsContract.ShiftEntry.CONTENT_URI_MONTHS,
                 projection2,
                 null,
                 null,
@@ -232,7 +231,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (cursor2 != null && cursor2.getCount() != 0) {
-            int dateMonthsColumnIndex = cursor2.getColumnIndex(ShiftEntry.COLUMN_DATE_MONTHS);
+            int dateMonthsColumnIndex = cursor2.getColumnIndex(ShiftsContract.ShiftEntry.COLUMN_DATE_MONTHS);
             int lastDbMonthDate = 0;
             try {
                 while (cursor2.moveToNext()) {
@@ -273,15 +272,15 @@ public class MainActivity extends AppCompatActivity
         int month = calendar.get(Calendar.MONTH);
 
         String[] projection = {
-                ShiftEntry.COLUMN_HOLIDAY};
+                ShiftsContract.ShiftEntry.COLUMN_HOLIDAY};
 
 
-        String selection = ShiftEntry.COLUMN_HOLIDAY + " BETWEEN ? AND ? AND " + ShiftEntry.COLUMN_DATE + " LIKE ?";
+        String selection = ShiftsContract.ShiftEntry.COLUMN_HOLIDAY + " BETWEEN ? AND ? AND " + ShiftsContract.ShiftEntry.COLUMN_DATE + " LIKE ?";
 
         String[] projectionHolidays = {
-                ShiftEntry.COLUMN_HOLIDAY};
+                ShiftsContract.ShiftEntry.COLUMN_HOLIDAY};
 
-        String selectionHolidays = ShiftEntry.COLUMN_HOLIDAY + " BETWEEN ? AND ? AND " + ShiftEntry.COLUMN_DATE + " LIKE ?";
+        String selectionHolidays = ShiftsContract.ShiftEntry.COLUMN_HOLIDAY + " BETWEEN ? AND ? AND " + ShiftsContract.ShiftEntry.COLUMN_DATE + " LIKE ?";
 
         int monthLength = (int) (Math.log10(month+1) + 1);                                                    // logarytmicka metoda zjisteni poctu cifer v cisle
         String monthStr;
@@ -289,9 +288,9 @@ public class MainActivity extends AppCompatActivity
             monthStr = "0" + (month + 1);
         } else { monthStr = String.valueOf(month); }
 
-        String[] selectionArgs = new String[] { String.valueOf(ShiftEntry.HOLIDAY_SHIFT), String.valueOf(ShiftEntry.HOLIDAY_COMPENSATION), String.valueOf(year) + monthStr + "%" };
+        String[] selectionArgs = new String[] { String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_SHIFT), String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_COMPENSATION), String.valueOf(year) + monthStr + "%" };
 
-        String[] selectionArgsHolidays = new String[] { String.valueOf(ShiftEntry.HOLIDAY_PUBLIC), String.valueOf(ShiftEntry.HOLIDAY_VACATION), String.valueOf(year) + monthStr + "%" };
+        String[] selectionArgsHolidays = new String[] { String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_PUBLIC), String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_VACATION), String.valueOf(year) + monthStr + "%" };
 
         Cursor cursor = getContentResolver().query(
                 ShiftsContract.ShiftEntry.CONTENT_URI,
@@ -308,14 +307,14 @@ public class MainActivity extends AppCompatActivity
                 null);
 
 
-        String[] projectionOvertime = {ShiftEntry.COLUMN_OVERTIMESUM_MONTHS };
+        String[] projectionOvertime = {ShiftsContract.ShiftEntry.COLUMN_OVERTIMESUM_MONTHS };
 
         //String selectionOvertime = ShiftEntry.COLUMN_DATE_MONTHS + " BETWEEN ? AND ? AND " + ShiftEntry.COLUMN_DATE + " LIKE ?";
 
         //String[] selectionArgsOvertime = new String[] { String.valueOf(ShiftEntry.HOLIDAY_PUBLIC), String.valueOf(ShiftEntry.HOLIDAY_VACATION), String.valueOf(year) + monthStr + "%" };
 
         Cursor cursorOvertime = getContentResolver().query(
-                ShiftEntry.CONTENT_URI_MONTHS,
+                ShiftsContract.ShiftEntry.CONTENT_URI_MONTHS,
                 projectionOvertime,
                 null, //selectionOvertime,
                 null, //selectionArgsOvertime,
@@ -325,7 +324,7 @@ public class MainActivity extends AppCompatActivity
         //String overtimeSUmFromDb = "";
 
         if (cursorOvertime != null){
-            int overtimeLengthColumnIndex = cursorOvertime.getColumnIndex(ShiftEntry.COLUMN_OVERTIMESUM_MONTHS);
+            int overtimeLengthColumnIndex = cursorOvertime.getColumnIndex(ShiftsContract.ShiftEntry.COLUMN_OVERTIMESUM_MONTHS);
             //overtimeSUmFromDb = cursorOvertime.getInt(1);
             while (cursorOvertime.moveToNext()){
                 overtimeSUmFromDb = overtimeSUmFromDb + cursorOvertime.getInt(overtimeLengthColumnIndex);
@@ -343,7 +342,7 @@ public class MainActivity extends AppCompatActivity
             try {
                 int shiftsThisMonth = cursor.getCount();                                                    //nastavení popisku odpracovaných směn
                 int holidaysThisMonth = cursor2.getCount();
-                String workDaysInMonth = Tools.getWorkDaysInMonth(month, year);
+                String workDaysInMonth = Tools.getWorkDaysInMonth((month+1), year);
                 int workDaysInMonthCorrected = Integer.parseInt(workDaysInMonth) - holidaysThisMonth;
                 shiftsInfoView.setText(getString(R.string.secondRow, shiftsThisMonth, workDaysInMonthCorrected));
                 monthShifts.setMax(workDaysInMonthCorrected);
@@ -432,15 +431,15 @@ public class MainActivity extends AppCompatActivity
             editorTemp.putInt("arrivalDate", Tools.dateDateToInt(calendar.getTime()));
 
             ContentValues shiftValues = new ContentValues();
-            shiftValues.put(ShiftEntry.COLUMN_DATE, Tools.dateDateToInt(calendar.getTime()));
-            shiftValues.put(ShiftEntry.COLUMN_ARRIVAL, Tools.timeStrToInt(arrivalTimeHelp));
-            shiftValues.put(ShiftEntry.COLUMN_DEPARTURE, 0);
-            shiftValues.put(ShiftEntry.COLUMN_BREAK_LENGTH, pref.getInt("defaultPause", 30));
-            shiftValues.put(ShiftEntry.COLUMN_SHIFT_LENGTH, 0);
-            shiftValues.put(ShiftEntry.COLUMN_OVERTIME, 0);
-            shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, ShiftEntry.HOLIDAY_INCOMPLETE);
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_DATE, Tools.dateDateToInt(calendar.getTime()));
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_ARRIVAL, Tools.timeStrToInt(arrivalTimeHelp));
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_DEPARTURE, 0);
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_BREAK_LENGTH, pref.getInt("defaultPause", 30));
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_SHIFT_LENGTH, 0);
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_OVERTIME, 0);
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_HOLIDAY, ShiftsContract.ShiftEntry.HOLIDAY_INCOMPLETE);
 
-            Uri incompleteShiftUri = getContentResolver().insert(ShiftEntry.CONTENT_URI, shiftValues);      // insertin of incomplete row into DB after adding arrival time
+            Uri incompleteShiftUri = getContentResolver().insert(ShiftsContract.ShiftEntry.CONTENT_URI, shiftValues);      // insertin of incomplete row into DB after adding arrival time
             String uriStr = null;
             if (incompleteShiftUri != null) {
                 uriStr = incompleteShiftUri.toString();
@@ -473,13 +472,13 @@ public class MainActivity extends AppCompatActivity
             int overtimeLengthInt = shiftLengthInt - defaultShiftHelp ;
 
             ContentValues shiftValues = new ContentValues();
-            shiftValues.put(ShiftEntry.COLUMN_DATE, temp.getInt("arrivalDate", 0));
-            shiftValues.put(ShiftEntry.COLUMN_ARRIVAL,arrivalTimeInt);
-            shiftValues.put(ShiftEntry.COLUMN_DEPARTURE, departureTimeInt);
-            shiftValues.put(ShiftEntry.COLUMN_BREAK_LENGTH, breakLengthInt);
-            shiftValues.put(ShiftEntry.COLUMN_SHIFT_LENGTH, shiftLengthInt);
-            shiftValues.put(ShiftEntry.COLUMN_OVERTIME, overtimeLengthInt);
-            shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, ShiftEntry.HOLIDAY_SHIFT);
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_DATE, temp.getInt("arrivalDate", 0));
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_ARRIVAL,arrivalTimeInt);
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_DEPARTURE, departureTimeInt);
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_BREAK_LENGTH, breakLengthInt);
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_SHIFT_LENGTH, shiftLengthInt);
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_OVERTIME, overtimeLengthInt);
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_HOLIDAY, ShiftsContract.ShiftEntry.HOLIDAY_SHIFT);
 
             if (temp.contains("incompleteUri")) {
                  Uri updatingUri = Uri.parse(temp.getString("incompleteUri", " "));
@@ -600,14 +599,14 @@ public class MainActivity extends AppCompatActivity
             arrivalHelp = Tools.timeStrToInt(arrivalString);
         }
         ContentValues shiftValues = new ContentValues();
-        shiftValues.put(ShiftEntry.COLUMN_DATE, Tools.dateStrToInt(dateInput));
-        shiftValues.put(ShiftEntry.COLUMN_ARRIVAL, arrivalHelp);
-        shiftValues.put(ShiftEntry.COLUMN_DEPARTURE, 0);
-        shiftValues.put(ShiftEntry.COLUMN_BREAK_LENGTH, pref.getInt("defaultPause", 30));
-        shiftValues.put(ShiftEntry.COLUMN_SHIFT_LENGTH, 0);
-        shiftValues.put(ShiftEntry.COLUMN_OVERTIME, 0);
-        shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, ShiftEntry.HOLIDAY_INCOMPLETE);
-        Uri newUri = getContentResolver().insert(ShiftEntry.CONTENT_URI, shiftValues);
+        shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_DATE, Tools.dateStrToInt(dateInput));
+        shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_ARRIVAL, arrivalHelp);
+        shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_DEPARTURE, 0);
+        shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_BREAK_LENGTH, pref.getInt("defaultPause", 30));
+        shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_SHIFT_LENGTH, 0);
+        shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_OVERTIME, 0);
+        shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_HOLIDAY, ShiftsContract.ShiftEntry.HOLIDAY_INCOMPLETE);
+        Uri newUri = getContentResolver().insert(ShiftsContract.ShiftEntry.CONTENT_URI, shiftValues);
         if (newUri == null) {
             Toast.makeText(this, getText(R.string.editor_insert_shift_failed), Toast.LENGTH_SHORT).show();
         } //else {Toast.makeText(this, getText(R.string.editor_insert_shift_successful), Toast.LENGTH_SHORT).show();}
@@ -615,14 +614,14 @@ public class MainActivity extends AppCompatActivity
 
     private void insertDummyData (){
         ContentValues shiftValues = new ContentValues();
-            shiftValues.put(ShiftEntry.COLUMN_DATE, 20190302);
-            shiftValues.put(ShiftEntry.COLUMN_ARRIVAL, 360);
-            shiftValues.put(ShiftEntry.COLUMN_DEPARTURE, 915);
-            shiftValues.put(ShiftEntry.COLUMN_BREAK_LENGTH, 30);
-            shiftValues.put(ShiftEntry.COLUMN_SHIFT_LENGTH, 525);
-            shiftValues.put(ShiftEntry.COLUMN_OVERTIME, 45);
-            shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, ShiftEntry.HOLIDAY_SHIFT);
-        Uri newUri = getContentResolver().insert(ShiftEntry.CONTENT_URI, shiftValues);
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_DATE, 20190302);
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_ARRIVAL, 360);
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_DEPARTURE, 915);
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_BREAK_LENGTH, 30);
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_SHIFT_LENGTH, 525);
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_OVERTIME, 45);
+            shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_HOLIDAY, ShiftsContract.ShiftEntry.HOLIDAY_SHIFT);
+        Uri newUri = getContentResolver().insert(ShiftsContract.ShiftEntry.CONTENT_URI, shiftValues);
         if (newUri == null) {
             Toast.makeText(this, getText(R.string.editor_insert_shift_failed), Toast.LENGTH_SHORT).show();
         } else {Toast.makeText(this, getText(R.string.editor_insert_shift_successful), Toast.LENGTH_SHORT).show();}

@@ -1,4 +1,4 @@
-package com.example.workhours.data;
+package com.workhours.data;
 
 import android.content.ContentResolver;
 import android.net.Uri;
@@ -8,7 +8,7 @@ public final class ShiftsContract {
 
     private ShiftsContract(){}
 
-    public final static String CONTENT_AUTHORITY = "com.example.workhours";
+    public final static String CONTENT_AUTHORITY = "com.workhours";
     public final static Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     public final static String PATH_SHIFTS = "shifts";
     public final static String PATH_MONTHS = "months";

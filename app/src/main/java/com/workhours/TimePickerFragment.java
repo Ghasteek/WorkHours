@@ -1,4 +1,4 @@
-package com.example.workhours;
+package com.workhours;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;

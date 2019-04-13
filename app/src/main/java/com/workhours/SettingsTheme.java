@@ -1,4 +1,4 @@
-package com.example.workhours;
+package com.workhours;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Switch;
 import android.widget.CompoundButton;
+
 
 @SuppressWarnings("WeakerAccess")
 public class SettingsTheme extends AppCompatActivity {

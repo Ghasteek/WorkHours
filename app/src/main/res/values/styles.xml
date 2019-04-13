@@ -4,12 +4,12 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/colorBackgroundLight</item>
         <item name="android:textColor">@color/primaryText</item>
-        <item name="itemTextColor">@color/primaryText</item>
-        <item name="itemIconTint">@color/primaryText</item>
+        <item name="itemTextColor">@color/itemTextColor</item>
+        <item name="itemIconTint">@color/itemIconTint</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -42,16 +42,16 @@
     <!-- Dark application theme. -->
     <style name="AppDarkTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/primaryText</item>
-        <item name="android:textColor">@color/colorBackgroundLight</item>
-        <item name="itemTextColor">@color/colorBackgroundLight</item>
-        <item name="itemIconTint">@color/colorBackgroundLight</item>
-        <item name="android:editTextColor">@color/colorBackgroundLight</item>
-        <item name="android:editTextBackground">@color/editTextBackground</item>
-        <item name="android:popupBackground">@color/editTextBackground</item>
+        <item name="colorPrimary">@color/darkColorPrimary</item>
+        <item name="colorPrimaryDark">@color/darkColorPrimaryDark</item>
+        <item name="colorAccent">@color/darkColorAccent</item>
+        <item name="android:windowBackground">@color/darkColorBackground</item>
+        <item name="android:textColor">@color/darkPrimaryText</item>
+        <item name="itemTextColor">@color/darkItemTextColor</item>
+        <item name="itemIconTint">@color/darkItemIconTint</item>
+        <item name="android:editTextColor">@color/darkEditTextColor</item>
+        <item name="android:editTextBackground">@color/darkEditTextBackground</item>
+        <item name="android:popupBackground">@color/darkPopUpBackground</item>
         <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemDarkStyle</item>
     </style>
 
@@ -61,20 +61,22 @@
     </style>
 
     <style name="darkDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:background">@color/editTextBackground</item>
+        <item name="android:background">@color/darkEditTextBackground</item>
+        <item name="android:textColor">@color/darkPopupTextColor</item>
+        <item name="android:textColorPrimary">@color/darkPopupTextColor</item>
     </style>
 
     <style name="mySpinnerItemDarkStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
-        <item name="android:textColor">@color/colorBackgroundLight</item>
-        <item name="android:background">@color/editTextBackground</item>
-        <item name="android:windowBackground">@color/editTextBackground</item>
+        <item name="android:textColor">@color/darkSpinnerTextColor</item>
+        <item name="android:background">@color/darkEditTextBackground</item>
+        <item name="android:windowBackground">@color/darkEditTextBackground</item>
         <item name="android:checkMark">@drawable/triangle</item>
     </style>
 
     <style name="AppDarkTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppDarkTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
-        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/darkColorPrimaryDark</item>
     </style>
 
     <!-- RED Progress Bar-->

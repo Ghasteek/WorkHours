@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ShiftTable">
+    tools:context="com.workhours.ShiftTable">
 
     <ListView
         android:id="@+id/ListViewItems"
@@ -19,6 +19,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageButton
+        android:id="@+id/monthDownId"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_toStartOf="@+id/showMonthYearId"
+        android:layout_toLeftOf="@+id/showMonthYearId"
+        android:rotation="90"
+        app:srcCompat="@android:drawable/arrow_down_float"
+        tools:ignore="ContentDescription" />
+
     <TextView
         android:id="@+id/showMonthYearId"
         android:layout_width="wrap_content"
@@ -29,25 +42,35 @@
         android:layout_toStartOf="@+id/button"
         android:layout_toLeftOf="@+id/button"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="RelativeOverlap" />
 
     <ImageButton
         android:id="@+id/button"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        app:layout_constraintStart_toEndOf="@+id/showMonthYearId"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_toStartOf="@+id/monthUpId"
+        android:layout_toLeftOf="@+id/monthUpId"
         app:srcCompat="@android:drawable/ic_menu_my_calendar"
         tools:ignore="ContentDescription" />
+
+    <ImageButton
+        android:id="@+id/monthUpId"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:rotation="270"
+        app:srcCompat="@android:drawable/arrow_down_float"
+        tools:ignore="ContentDescription" />
+
 
     <RelativeLayout
         android:id="@+id/empty_view"

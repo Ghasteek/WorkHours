@@ -1,4 +1,4 @@
-package com.example.workhours;
+package com.workhours;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -98,21 +98,26 @@ public class Tools extends AppCompatActivity {
     }
 
     public static String getWorkDaysInMonth (int monthInput, int yearInput) {
-        Calendar calendar = Calendar.getInstance();
-        int lastDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-        int newMonth = monthInput + 1;
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-        String startDateInt = "01-" + newMonth + "-" + yearInput;
-        String endDateInt = lastDay + "-" + newMonth + "-" + yearInput;
+        String startDateInt = "01-" + monthInput + "-" + yearInput;
+
         Date startDate = null , endDate = null;
         try {
             startDate = sdf.parse(startDateInt);
-            endDate = sdf.parse(endDateInt);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         Calendar startCal = Calendar.getInstance();
         startCal.setTime(startDate);
+
+        int lastDay = startCal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        String endDateInt = lastDay + "-" + monthInput + "-" + yearInput;
+
+        try {
+            endDate = sdf.parse(endDateInt);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         Calendar endCal = Calendar.getInstance();
         endCal.setTime(endDate);
@@ -128,6 +133,7 @@ public class Tools extends AppCompatActivity {
             startCal.add(Calendar.DAY_OF_MONTH, 1);
         }
         return(String.valueOf(workDaysInMonth));
+        //return(startDateInt + " / " + endDateInt);
     }
 
     public static String getWorkDaysInPeriod (int startDateInt, int endDateInt) {                   // vrací string s daty jednotlivych pracovnich dni oddelene pomlckami

@@ -1,4 +1,4 @@
-package com.example.workhours.data;
+package com.workhours.data;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import com.example.workhours.data.ShiftsContract.ShiftEntry;
 
 
 @SuppressWarnings({"WeakerAccess", "unused"})
@@ -50,7 +49,7 @@ public class ShiftsProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         switch (match) {
             case SHIFTS:
-                cursor = database.query(ShiftEntry.TABLE_NAME,
+                cursor = database.query(ShiftsContract.ShiftEntry.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -59,9 +58,9 @@ public class ShiftsProvider extends ContentProvider {
                         sortOrder);
                 break;
             case SHIFT_ID:
-                selection = ShiftEntry._ID + "=?";
+                selection = ShiftsContract.ShiftEntry._ID + "=?";
                 selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
-                cursor = database.query(ShiftEntry.TABLE_NAME,
+                cursor = database.query(ShiftsContract.ShiftEntry.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -70,7 +69,7 @@ public class ShiftsProvider extends ContentProvider {
                         sortOrder);
                 break;
             case MONTHS:
-                cursor = database.query(ShiftEntry.TABLE_MONTHS_NAME,
+                cursor = database.query(ShiftsContract.ShiftEntry.TABLE_MONTHS_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -79,9 +78,9 @@ public class ShiftsProvider extends ContentProvider {
                         sortOrder);
                 break;
             case MONTHS_ID:
-                selection = ShiftEntry._ID + "=?";
+                selection = ShiftsContract.ShiftEntry._ID + "=?";
                 selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
-                cursor = database.query(ShiftEntry.TABLE_MONTHS_NAME,
+                cursor = database.query(ShiftsContract.ShiftEntry.TABLE_MONTHS_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -111,28 +110,28 @@ public class ShiftsProvider extends ContentProvider {
 
     private Uri insertShift(Uri uri, ContentValues values){
         // data check
-        int date =  values.getAsInteger(ShiftEntry.COLUMN_DATE);
+        int date =  values.getAsInteger(ShiftsContract.ShiftEntry.COLUMN_DATE);
         if (date == 0){
             throw new IllegalArgumentException( "Date needed.");
         }
-        int arrival = values.getAsInteger(ShiftEntry.COLUMN_ARRIVAL);
+        int arrival = values.getAsInteger(ShiftsContract.ShiftEntry.COLUMN_ARRIVAL);
         if ((arrival > 1439) || (arrival == 0)){
             throw new IllegalArgumentException( "Arrival time invalid.");
         }
-        int departure = values.getAsInteger(ShiftEntry.COLUMN_DEPARTURE);
+        int departure = values.getAsInteger(ShiftsContract.ShiftEntry.COLUMN_DEPARTURE);
         if (departure > 1439){
             throw new IllegalArgumentException( "Departure time invalid.");
         }
 
-        int holiday = values.getAsInteger(ShiftEntry.COLUMN_HOLIDAY);
-        if (!ShiftEntry.isValidHoliday(holiday)){
+        int holiday = values.getAsInteger(ShiftsContract.ShiftEntry.COLUMN_HOLIDAY);
+        if (!ShiftsContract.ShiftEntry.isValidHoliday(holiday)){
             throw new IllegalArgumentException( "Holiday selection invalid.");
         }
 
         if (arrival > departure && holiday != 4){
             throw new IllegalArgumentException( "Arrival time must be before departure.");
         }
-        int breakLength = values.getAsInteger(ShiftEntry.COLUMN_BREAK_LENGTH);
+        int breakLength = values.getAsInteger(ShiftsContract.ShiftEntry.COLUMN_BREAK_LENGTH);
         if ((breakLength > 1439) || (breakLength == 0)){
             throw new IllegalArgumentException( "Break length invalid.");
         }
@@ -140,7 +139,7 @@ public class ShiftsProvider extends ContentProvider {
         //data insertion into the database
 
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
-        long id = database.insert(ShiftEntry.TABLE_NAME, null, values);
+        long id = database.insert(ShiftsContract.ShiftEntry.TABLE_NAME, null, values);
         if (id == -1) {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
         }
@@ -150,7 +149,7 @@ public class ShiftsProvider extends ContentProvider {
     private Uri insertMonth(Uri uri, ContentValues values){
         //TODO data check
 
-        int date =  values.getAsInteger(ShiftEntry.COLUMN_DATE);
+        int date =  values.getAsInteger(ShiftsContract.ShiftEntry.COLUMN_DATE);
         if (date == 0){
             throw new IllegalArgumentException( "Date needed.");
         }
@@ -158,7 +157,7 @@ public class ShiftsProvider extends ContentProvider {
         //data insertion into the database
 
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
-        long id = database.insert(ShiftEntry.TABLE_MONTHS_NAME, null, values);
+        long id = database.insert(ShiftsContract.ShiftEntry.TABLE_MONTHS_NAME, null, values);
         if (id == -1) {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
         }
@@ -175,13 +174,13 @@ public class ShiftsProvider extends ContentProvider {
             case SHIFTS:
                 return updateShift(uri, contentValues, selection, selectionArgs);
             case SHIFT_ID:
-                selection = ShiftEntry._ID + "=?";
+                selection = ShiftsContract.ShiftEntry._ID + "=?";
                 selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
                 return updateShift(uri, contentValues, selection, selectionArgs);
             case MONTHS:
                 return updateMonth(uri, contentValues, selection, selectionArgs);
             case MONTHS_ID:
-                selection = ShiftEntry._ID_MONTHS + "=?";
+                selection = ShiftsContract.ShiftEntry._ID_MONTHS + "=?";
                 selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
                 return updateMonth(uri, contentValues, selection, selectionArgs);
             default:
@@ -192,27 +191,27 @@ public class ShiftsProvider extends ContentProvider {
 
     public int updateShift (@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs ){
         // data check
-        int date =  values.getAsInteger(ShiftEntry.COLUMN_DATE);
+        int date =  values.getAsInteger(ShiftsContract.ShiftEntry.COLUMN_DATE);
         if (date == 0){
             throw new IllegalArgumentException( "Date needed.");
         }
-        int arrival = values.getAsInteger(ShiftEntry.COLUMN_ARRIVAL);
+        int arrival = values.getAsInteger(ShiftsContract.ShiftEntry.COLUMN_ARRIVAL);
         if ((arrival > 1439) || (arrival == 0)){
             throw new IllegalArgumentException( "Arrival time invalid.");
         }
-        int departure = values.getAsInteger(ShiftEntry.COLUMN_DEPARTURE);
+        int departure = values.getAsInteger(ShiftsContract.ShiftEntry.COLUMN_DEPARTURE);
         if ((departure > 1439) || (departure == 0)){
             throw new IllegalArgumentException( "Departure time invalid.");
         }
         if (arrival > departure){
             throw new IllegalArgumentException( "Arrival time must be before departure.");
         }
-        int breakLength = values.getAsInteger(ShiftEntry.COLUMN_BREAK_LENGTH);
+        int breakLength = values.getAsInteger(ShiftsContract.ShiftEntry.COLUMN_BREAK_LENGTH);
         if ((breakLength > 1439) || (breakLength == 0)){
             throw new IllegalArgumentException( "Break length invalid.");
         }
-        int holiday = values.getAsInteger(ShiftEntry.COLUMN_HOLIDAY);
-        if (!ShiftEntry.isValidHoliday(holiday)){
+        int holiday = values.getAsInteger(ShiftsContract.ShiftEntry.COLUMN_HOLIDAY);
+        if (!ShiftsContract.ShiftEntry.isValidHoliday(holiday)){
             throw new IllegalArgumentException( "Holiday selection invalid.");
         }
         if (values.size() == 0){
@@ -220,7 +219,7 @@ public class ShiftsProvider extends ContentProvider {
         }
 
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
-        return database.update(ShiftEntry.TABLE_NAME, values, selection, selectionArgs);
+        return database.update(ShiftsContract.ShiftEntry.TABLE_NAME, values, selection, selectionArgs);
     }
 
     public int updateMonth (@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs ){
@@ -233,7 +232,7 @@ public class ShiftsProvider extends ContentProvider {
             return 0;
         }
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
-        return database.update(ShiftEntry.TABLE_MONTHS_NAME, values, selection, selectionArgs);
+        return database.update(ShiftsContract.ShiftEntry.TABLE_MONTHS_NAME, values, selection, selectionArgs);
     }
 
     /**
@@ -245,17 +244,17 @@ public class ShiftsProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case SHIFTS:
-                return database.delete(ShiftEntry.TABLE_NAME, selection, selectionArgs);
+                return database.delete(ShiftsContract.ShiftEntry.TABLE_NAME, selection, selectionArgs);
             case SHIFT_ID:
-                selection = ShiftEntry._ID + "=?";
+                selection = ShiftsContract.ShiftEntry._ID + "=?";
                 selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
-                return database.delete(ShiftEntry.TABLE_NAME, selection, selectionArgs);
+                return database.delete(ShiftsContract.ShiftEntry.TABLE_NAME, selection, selectionArgs);
             case MONTHS:
-                return database.delete(ShiftEntry.TABLE_MONTHS_NAME, selection, selectionArgs);
+                return database.delete(ShiftsContract.ShiftEntry.TABLE_MONTHS_NAME, selection, selectionArgs);
             case MONTHS_ID:
-                selection = ShiftEntry._ID_MONTHS + "=?";
+                selection = ShiftsContract.ShiftEntry._ID_MONTHS + "=?";
                 selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
-                return database.delete(ShiftEntry.TABLE_MONTHS_NAME, selection, selectionArgs);
+                return database.delete(ShiftsContract.ShiftEntry.TABLE_MONTHS_NAME, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
         }
@@ -269,13 +268,13 @@ public class ShiftsProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case SHIFTS:
-                return ShiftEntry.CONTENT_LIST_TYPE;
+                return ShiftsContract.ShiftEntry.CONTENT_LIST_TYPE;
             case SHIFT_ID:
-                return ShiftEntry.CONTENT_ITEM_TYPE;
+                return ShiftsContract.ShiftEntry.CONTENT_ITEM_TYPE;
             case MONTHS:
-                return ShiftEntry.CONTENT_LIST_TYPE_MONTHS;
+                return ShiftsContract.ShiftEntry.CONTENT_LIST_TYPE_MONTHS;
             case MONTHS_ID:
-                return ShiftEntry.CONTENT_ITEM_TYPE_MONTHS;
+                return ShiftsContract.ShiftEntry.CONTENT_ITEM_TYPE_MONTHS;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
         }

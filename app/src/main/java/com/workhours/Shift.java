@@ -1,4 +1,4 @@
-package com.example.workhours;
+package com.workhours;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -21,9 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.database.Cursor;
 import android.content.DialogInterface;
-
-import com.example.workhours.data.ShiftsContract;
-import com.example.workhours.data.ShiftsContract.ShiftEntry;
+import com.workhours.data.ShiftsContract;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -241,13 +239,13 @@ public class Shift extends AppCompatActivity {
 
             if (cursor != null) {
                 while (cursor.moveToNext()) {
-                    int dateColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_DATE);
-                    int arrivalColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_ARRIVAL);
-                    int departureColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_DEPARTURE);
-                    int breakLengthColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_BREAK_LENGTH);
-                    int shiftLengthColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_SHIFT_LENGTH);
-                    int overtimeLengthColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_OVERTIME);
-                    int holidayTypeColumnIndex = cursor.getColumnIndex(ShiftEntry.COLUMN_HOLIDAY);
+                    int dateColumnIndex = cursor.getColumnIndex(ShiftsContract.ShiftEntry.COLUMN_DATE);
+                    int arrivalColumnIndex = cursor.getColumnIndex(ShiftsContract.ShiftEntry.COLUMN_ARRIVAL);
+                    int departureColumnIndex = cursor.getColumnIndex(ShiftsContract.ShiftEntry.COLUMN_DEPARTURE);
+                    int breakLengthColumnIndex = cursor.getColumnIndex(ShiftsContract.ShiftEntry.COLUMN_BREAK_LENGTH);
+                    int shiftLengthColumnIndex = cursor.getColumnIndex(ShiftsContract.ShiftEntry.COLUMN_SHIFT_LENGTH);
+                    int overtimeLengthColumnIndex = cursor.getColumnIndex(ShiftsContract.ShiftEntry.COLUMN_OVERTIME);
+                    int holidayTypeColumnIndex = cursor.getColumnIndex(ShiftsContract.ShiftEntry.COLUMN_HOLIDAY);
 
                     String dateStr = Tools.dateIntToStr(cursor.getInt(dateColumnIndex));
                     String arrivalStr = Tools.timeIntToStr(cursor.getInt(arrivalColumnIndex));
@@ -266,7 +264,7 @@ public class Shift extends AppCompatActivity {
                     overtimeLength.setText(overtimeLengthStr);
 
 
-                    if (holidayTypeInt == ShiftEntry.HOLIDAY_INCOMPLETE) {
+                    if (holidayTypeInt == ShiftsContract.ShiftEntry.HOLIDAY_INCOMPLETE) {
                         holidayTypeSpinner.setSelection(0);
                     } else {
                         holidayTypeSpinner.setSelection(cursor.getInt(holidayTypeColumnIndex));
@@ -280,9 +278,9 @@ public class Shift extends AppCompatActivity {
         String dateHELP = date.getText().toString();
 
         String[] projection = {
-                ShiftEntry.COLUMN_DATE};
+                ShiftsContract.ShiftEntry.COLUMN_DATE};
 
-        String selection = ShiftEntry.COLUMN_DATE + "=?";
+        String selection = ShiftsContract.ShiftEntry.COLUMN_DATE + "=?";
         String selectionArgs[] = {""+Tools.dateStrToInt(dateHELP)};
         Cursor cursor = getContentResolver().query(
                 ShiftsContract.ShiftEntry.CONTENT_URI,
@@ -366,7 +364,7 @@ public class Shift extends AppCompatActivity {
         String shiftYearMonthStr = String.valueOf(dateInt).substring(0, 6);
 
 
-        if (holidayTypeSelectedInt == ShiftEntry.HOLIDAY_SHIFT && holidayTypeInt != ShiftEntry.HOLIDAY_COMPENSATION && holidayTypeInt != ShiftEntry.HOLIDAY_VACATION ) {       //pokud je zadany typ SMENA
+        if (holidayTypeSelectedInt == ShiftsContract.ShiftEntry.HOLIDAY_SHIFT && holidayTypeInt != ShiftsContract.ShiftEntry.HOLIDAY_COMPENSATION && holidayTypeInt != ShiftsContract.ShiftEntry.HOLIDAY_VACATION ) {       //pokud je zadany typ SMENA
             int overtimeSumOld = 0;
             if (temp.contains("overtimeSum")) {
                 overtimeSumOld = temp.getInt("overtimeSum", 0);
@@ -382,7 +380,7 @@ public class Shift extends AppCompatActivity {
             }*/
 
 
-        if (holidayTypeSelectedInt == ShiftEntry.HOLIDAY_COMPENSATION && holidayTypeInt != ShiftEntry.HOLIDAY_COMPENSATION){ // je zvolena kompenzace, ale nebyla         ***** OK *****
+        if (holidayTypeSelectedInt == ShiftsContract.ShiftEntry.HOLIDAY_COMPENSATION && holidayTypeInt != ShiftsContract.ShiftEntry.HOLIDAY_COMPENSATION){ // je zvolena kompenzace, ale nebyla         ***** OK *****
             if (todayYearMonthString.equals(shiftYearMonthStr)) {
                 int oldOvertime = temp.getInt("overtimeSum", 0);
                 int newOvertime = oldOvertime - (Tools.timeStrToInt(defaultShiftLoadedStr)) - Tools.timeStrToInt(overtimeLengthStr);
@@ -395,7 +393,7 @@ public class Shift extends AppCompatActivity {
             if (departureTimeInt == 0 && defaultShiftLoaded != null) {departureTimeInt = arriveTimeInt + Tools.timeStrToInt(defaultShiftLoaded) + breakLengthInt;}
             overtimeLengthInt = 0 - (Tools.timeStrToInt(defaultShiftLoadedStr));
             shiftLengthInt = Tools.timeStrToInt(defaultShiftLoadedStr);
-        } else if (holidayTypeSelectedInt != ShiftEntry.HOLIDAY_COMPENSATION && holidayTypeInt == ShiftEntry.HOLIDAY_COMPENSATION) { // neni zvolena kompenzace, ale byla
+        } else if (holidayTypeSelectedInt != ShiftsContract.ShiftEntry.HOLIDAY_COMPENSATION && holidayTypeInt == ShiftsContract.ShiftEntry.HOLIDAY_COMPENSATION) { // neni zvolena kompenzace, ale byla
             int overtimeInShift = Tools.timeStrToInt(departureTime.getText().toString()) -  Tools.timeStrToInt(arriveTime.getText().toString()) - Tools.timeStrToInt(breakLenght.getText().toString()) - Tools.timeStrToInt(defaultShiftLoadedStr);
             if (todayYearMonthString.equals(shiftYearMonthStr)) {
                 int oldOvertime = temp.getInt("overtimeSum", 0);
@@ -409,12 +407,12 @@ public class Shift extends AppCompatActivity {
             }
         }
 
-        if ((holidayTypeSelectedInt == ShiftEntry.HOLIDAY_VACATION) && (holidayTypeInt != ShiftEntry.HOLIDAY_VACATION)) { // je zvolena dovolena, ale nebyla
+        if ((holidayTypeSelectedInt == ShiftsContract.ShiftEntry.HOLIDAY_VACATION) && (holidayTypeInt != ShiftsContract.ShiftEntry.HOLIDAY_VACATION)) { // je zvolena dovolena, ale nebyla
             int oldHolidaySum = temp.getInt("holidaySum", 0);
             int newHolidaySum = oldHolidaySum - 1;
             editorTemp.putInt("holidaySum", newHolidaySum);
 
-            if (holidayTypeInt != ShiftEntry.HOLIDAY_COMPENSATION) {
+            if (holidayTypeInt != ShiftsContract.ShiftEntry.HOLIDAY_COMPENSATION) {
                 if (todayYearMonthString.equals(shiftYearMonthStr)) {
                     int oldOvertime = temp.getInt("overtimeSum", 0);
                     int newOvertime = oldOvertime - Tools.timeStrToInt(overtimeLengthStr);
@@ -429,13 +427,13 @@ public class Shift extends AppCompatActivity {
             overtimeLengthInt = 0;
 
         }
-        if ((holidayTypeSelectedInt != ShiftEntry.HOLIDAY_VACATION) && (holidayTypeInt == ShiftEntry.HOLIDAY_VACATION)) { // neni zvolena dovolena, ale byla
+        if ((holidayTypeSelectedInt != ShiftsContract.ShiftEntry.HOLIDAY_VACATION) && (holidayTypeInt == ShiftsContract.ShiftEntry.HOLIDAY_VACATION)) { // neni zvolena dovolena, ale byla
             int overtimeInShift = Tools.timeStrToInt(departureTime.getText().toString()) -  Tools.timeStrToInt(arriveTime.getText().toString()) - Tools.timeStrToInt(breakLenght.getText().toString()) - Tools.timeStrToInt(defaultShiftLoadedStr);
             int oldHolidaySum = temp.getInt("holidaySum", 0);
             int newHolidaySum = oldHolidaySum + 1;
             editorTemp.putInt("holidaySum", newHolidaySum);
 
-            if (holidayTypeSelectedInt != ShiftEntry.HOLIDAY_COMPENSATION) {
+            if (holidayTypeSelectedInt != ShiftsContract.ShiftEntry.HOLIDAY_COMPENSATION) {
                 if (todayYearMonthString.equals(shiftYearMonthStr)) {
                     int oldOvertime = temp.getInt("overtimeSum", 0);
                     int newOvertime = oldOvertime + overtimeInShift;
@@ -449,16 +447,16 @@ public class Shift extends AppCompatActivity {
         editorTemp.apply();
 
         ContentValues shiftValues = new ContentValues();
-        shiftValues.put(ShiftEntry.COLUMN_DATE, dateInt);
-        shiftValues.put(ShiftEntry.COLUMN_ARRIVAL, arriveTimeInt);
-        shiftValues.put(ShiftEntry.COLUMN_DEPARTURE, departureTimeInt);
-        shiftValues.put(ShiftEntry.COLUMN_BREAK_LENGTH, breakLengthInt);
-        shiftValues.put(ShiftEntry.COLUMN_SHIFT_LENGTH, shiftLengthInt);
-        shiftValues.put(ShiftEntry.COLUMN_OVERTIME, overtimeLengthInt);
-        shiftValues.put(ShiftEntry.COLUMN_HOLIDAY, holidayTypeSelectedInt);
+        shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_DATE, dateInt);
+        shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_ARRIVAL, arriveTimeInt);
+        shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_DEPARTURE, departureTimeInt);
+        shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_BREAK_LENGTH, breakLengthInt);
+        shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_SHIFT_LENGTH, shiftLengthInt);
+        shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_OVERTIME, overtimeLengthInt);
+        shiftValues.put(ShiftsContract.ShiftEntry.COLUMN_HOLIDAY, holidayTypeSelectedInt);
 
         if (clickedShiftUri == null) {
-            Uri newUri = getContentResolver().insert(ShiftEntry.CONTENT_URI, shiftValues);
+            Uri newUri = getContentResolver().insert(ShiftsContract.ShiftEntry.CONTENT_URI, shiftValues);
             if (newUri == null) {
                 Toast.makeText(this, getText(R.string.editor_insert_shift_failed), Toast.LENGTH_SHORT).show();
             } else {Toast.makeText(this, getText(R.string.editor_insert_shift_successful), Toast.LENGTH_SHORT).show();}
@@ -481,12 +479,12 @@ public class Shift extends AppCompatActivity {
     private void editDbSum(String whichMonth, int overtimeDif){
         //String[] projectionOvertime = {ShiftEntry.COLUMN_OVERTIMESUM_MONTHS };
 
-        String selectionOvertime = ShiftEntry.COLUMN_DATE_MONTHS + " LIKE ?";
+        String selectionOvertime = ShiftsContract.ShiftEntry.COLUMN_DATE_MONTHS + " LIKE ?";
 
         String[] selectionArgsOvertime = new String[] { whichMonth };
 
         Cursor cursorOvertime = getContentResolver().query(
-                ShiftEntry.CONTENT_URI_MONTHS,
+                ShiftsContract.ShiftEntry.CONTENT_URI_MONTHS,
                 null, //projectionOvertime,
                 selectionOvertime,
                 selectionArgsOvertime,
@@ -495,16 +493,16 @@ public class Shift extends AppCompatActivity {
         //String overtimeSUmFromDb = "";
 
         if (cursorOvertime != null && cursorOvertime.getCount() == 1){
-            int overtimeLengthColumnIndex = cursorOvertime.getColumnIndex(ShiftEntry.COLUMN_OVERTIMESUM_MONTHS);
+            int overtimeLengthColumnIndex = cursorOvertime.getColumnIndex(ShiftsContract.ShiftEntry.COLUMN_OVERTIMESUM_MONTHS);
             int id ;
             while (cursorOvertime.moveToNext()){
                 int oldSum = cursorOvertime.getInt(overtimeLengthColumnIndex);
                 id = cursorOvertime.getInt(0);
-                Uri editUri = Uri.withAppendedPath(ShiftEntry.CONTENT_URI_MONTHS, String.valueOf(id));
+                Uri editUri = Uri.withAppendedPath(ShiftsContract.ShiftEntry.CONTENT_URI_MONTHS, String.valueOf(id));
                 Toast.makeText(this, "editing uri-" + editUri.toString(), Toast.LENGTH_SHORT).show();
 
                 ContentValues monthValues = new ContentValues();
-                monthValues.put(ShiftEntry.COLUMN_OVERTIMESUM_MONTHS, (oldSum + overtimeDif));
+                monthValues.put(ShiftsContract.ShiftEntry.COLUMN_OVERTIMESUM_MONTHS, (oldSum + overtimeDif));
 
                 int rowsAffected = getContentResolver().update(editUri, monthValues, null, null);
                 if (rowsAffected == 0) {
@@ -616,7 +614,7 @@ public class Shift extends AppCompatActivity {
 
         //int holidayTypeSelectedInt = holidayTypeSpinner.getSelectedItemPosition();
 
-        if (holidayTypeInt == ShiftEntry.HOLIDAY_SHIFT) {
+        if (holidayTypeInt == ShiftsContract.ShiftEntry.HOLIDAY_SHIFT) {
             int overtimeLengthOldSum = temp.getInt("overtimeSum", 0);
             int overtimeHelp = Tools.timeStrToInt(overtimeLengthStr);
             int overtimeNewSum = overtimeLengthOldSum - overtimeHelp;
@@ -627,7 +625,7 @@ public class Shift extends AppCompatActivity {
                 editDbSum(shiftYearMonthStr, diff);
             }
         }
-        if (holidayTypeInt == ShiftEntry.HOLIDAY_COMPENSATION) {
+        if (holidayTypeInt == ShiftsContract.ShiftEntry.HOLIDAY_COMPENSATION) {
             int overtimeOld = temp.getInt("overtimeSum", 0);
             String defaultShiftHelp = "" + pref.getString("defaultShift", "0");
             int overtimeNew = overtimeOld + (Tools.timeStrToInt(defaultShiftHelp));
@@ -638,7 +636,7 @@ public class Shift extends AppCompatActivity {
             }
         }
 
-        if (holidayTypeInt == ShiftEntry.HOLIDAY_VACATION) {
+        if (holidayTypeInt == ShiftsContract.ShiftEntry.HOLIDAY_VACATION) {
             int oldHolidaySum = temp.getInt("holidaySum", 0);
             int newHolidaySum = oldHolidaySum + 1;
             editorTemp.putInt("holidaySum", newHolidaySum);

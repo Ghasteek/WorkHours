@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--<color name="colorPrimary">#008577</color>-->
-    <!--<color name="colorPrimary">#B3E2A1</color>-->
     <color name="colorPrimary">#55A239</color>
     <color name="colorPrimaryLight">#B7E3A5</color>
     <color name="colorPrimaryDark">#346323</color>
     <color name="colorAccent">#D81B60</color>
     <color name="primaryText">#000000</color>
+    <color name="itemTextColor">#000000</color>
+    <color name="itemIconTint">#000000</color>
     <color name="buttonNormal">#e30425</color>
     <color name="buttonHighlight">#ff554f</color>
     <color name="buttonText">#FFFFFF</color>
     <color name="colorPurple">#511B80</color>
     <color name="colorText">#511B80</color>
-    <color name="editTextBackground">#5b5858</color>
     <color name="colorDivider">#5b5b5b</color>
     <color name="colorBackgroundLight">#FFFFFF</color>
+
+    <color name="darkColorPrimary">#55A239</color>
+    <color name="darkColorPrimaryDark">#346323</color>
+    <color name="darkColorAccent">#D81B60</color>
+    <color name="darkColorBackground">#000000</color>
+    <color name="darkPrimaryText">#FFFFFF</color>
+    <color name="darkItemTextColor">#FFFFFF</color>
+    <color name="darkItemIconTint">#FFFFFF</color>
+    <color name="darkEditTextColor">#FFFFFF</color>
+    <color name="darkEditTextBackground">#5b5858</color>
+    <color name="darkPopUpBackground">#5b5858</color>
+    <color name="darkSpinnerTextColor">#FFFFFF</color>
+    <color name="darkPopupTextColor">#FFFFFF</color>
+
 </resources>

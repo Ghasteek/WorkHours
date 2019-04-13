@@ -4,19 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Preview">
+    tools:context="com.workhours.Preview">
+
+    <ImageButton
+        android:id="@+id/monthDownId"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:rotation="90"
+        app:layout_constraintEnd_toStartOf="@+id/showMonthYearId"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/arrow_down_float"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/showMonthYearId"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_toStartOf="@+id/button"
         android:layout_toLeftOf="@+id/button"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="RelativeOverlap" />
 
@@ -31,9 +46,24 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        app:layout_constraintStart_toEndOf="@+id/showMonthYearId"
+        app:layout_constraintEnd_toStartOf="@+id/monthUpId"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_my_calendar"
+        tools:ignore="ContentDescription" />
+
+    <ImageButton
+        android:id="@+id/monthUpId"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:rotation="270"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/arrow_down_float"
         tools:ignore="ContentDescription" />
 
     <!--                 zero row -->

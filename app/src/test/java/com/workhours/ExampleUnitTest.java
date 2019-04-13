@@ -1,4 +1,4 @@
-package com.example.workhours;
+package com.workhours;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.example.workhours;
+package com.workhours;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

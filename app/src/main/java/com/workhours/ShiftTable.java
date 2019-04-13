@@ -1,4 +1,4 @@
-package com.example.workhours;
+package com.workhours;
 
 import android.content.ContentUris;
 import android.content.Intent;
@@ -16,7 +16,7 @@ import android.app.DatePickerDialog;
 import android.widget.DatePicker;
 import java.util.Calendar;
 import android.widget.TextView;
-import com.example.workhours.data.ShiftsContract;
+import com.workhours.data.ShiftsContract;
 
 @SuppressWarnings("WeakerAccess")
 public class ShiftTable extends AppCompatActivity {
@@ -27,6 +27,8 @@ public class ShiftTable extends AppCompatActivity {
     public static int year;
     public static int month;
     SharedPreferences pref;
+    TextView showMonthYear;
+    ImageButton changeSelection, monthUp, monthDown;
 
 
     @Override
@@ -54,8 +56,12 @@ public class ShiftTable extends AppCompatActivity {
             getSupportActionBar().setHomeButtonEnabled(true);
         }
 
-        final TextView showMonthYear = findViewById(R.id.showMonthYearId);
-        final ImageButton changeSelection = findViewById(R.id.button);
+        monthDown = findViewById(R.id.monthDownId);
+        showMonthYear = findViewById(R.id.showMonthYearId);
+        changeSelection = findViewById(R.id.button);
+        monthUp = findViewById(R.id.monthUpId);
+
+
         if (year == 0) {
             Calendar cal = Calendar.getInstance();
             year = cal.get(Calendar.YEAR);
@@ -76,9 +82,6 @@ public class ShiftTable extends AppCompatActivity {
                         //Toast.makeText(ShiftTable.this, year + " - " + month, Toast.LENGTH_SHORT).show();
                         year = year2;
                         month = month2;
-                        String [] monthArray = getResources().getStringArray(R.array.months);
-                        int i = month - 1;
-                        showMonthYear.setText(getString(R.string.firstRow, monthArray[i], year));
                         showData(year, month);
                     }
                 });
@@ -100,10 +103,40 @@ public class ShiftTable extends AppCompatActivity {
                 //Toast.makeText(ShiftTable.this, "URI - " + clickedShiftUri, Toast.LENGTH_SHORT).show();
             }
         });
+
+        monthDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (month == 1){
+                    month = 12;
+                    year = --year;
+                } else {
+                    month = --month;
+                }
+                showData(year, month);
+            }
+        });
+
+        monthUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (month == 12){
+                    month = 1;
+                    year = ++year;
+                } else {
+                    month = ++month;
+                }
+                showData(year, month);
+            }
+        });
     }
 
 
     public void showData(int year, int month) {
+        String [] monthArray = getResources().getStringArray(R.array.months);
+        int i = month - 1;
+        showMonthYear.setText(getString(R.string.firstRow, monthArray[i], year));
+
         String[] projection = {
                 ShiftsContract.ShiftEntry._ID,
                 ShiftsContract.ShiftEntry.COLUMN_DATE,

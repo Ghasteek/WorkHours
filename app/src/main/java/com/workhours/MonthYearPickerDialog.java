@@ -1,4 +1,4 @@
-package com.example.workhours;
+package com.workhours;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -12,7 +12,6 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
-
 import java.util.Calendar;
 
 /**

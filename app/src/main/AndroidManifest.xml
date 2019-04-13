@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.workhours">
+    package="com.workhours">
 
     <application
         android:allowBackup="true"
@@ -11,32 +11,32 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SettingsTheme"
+            android:name="com.workhours.SettingsTheme"
             android:label="@string/settingsColorTheme"/>
         <activity
-            android:name=".SettingsCorrection"
+            android:name="com.workhours.SettingsCorrection"
             android:label="@string/settingsManualCorrection"/>
         <activity
-            android:name=".Preview"
+            android:name="com.workhours.Preview"
             android:label="@string/previewLabel"
             android:windowSoftInputMode="stateAlwaysVisible" />
         <activity
-            android:name=".ShiftTable"
+            android:name="com.workhours.ShiftTable"
             android:label="@string/shiftsTableLabel"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".Settings"
+            android:name="com.workhours.Settings"
             android:label="@string/settingsLabel"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".SettingsDefault"
+            android:name="com.workhours.SettingsDefault"
             android:label="@string/settingsDefaultLabel"
             android:windowSoftInputMode="stateAlwaysVisible" />
         <activity
-            android:name=".Shift"
+            android:name="com.workhours.Shift"
             android:windowSoftInputMode="stateAlwaysVisible" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.workhours.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden">
@@ -46,10 +46,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Tools" />
+        <activity android:name="com.workhours.Tools" />
         <provider
-            android:name=".data.ShiftsProvider"
-            android:authorities="com.example.workhours"
+            android:name="com.workhours.data.ShiftsProvider"
+            android:authorities="com.workhours"
             android:exported="false" />
     </application>
 

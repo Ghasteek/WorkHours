@@ -1,4 +1,4 @@
-package com.example.workhours;
+package com.workhours;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;

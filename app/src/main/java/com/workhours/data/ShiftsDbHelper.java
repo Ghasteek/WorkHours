@@ -1,9 +1,9 @@
-package com.example.workhours.data;
+package com.workhours.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.example.workhours.data.ShiftsContract.ShiftEntry;
+import com.workhours.data.ShiftsContract.ShiftEntry;
 
 @SuppressWarnings("WeakerAccess")
 public class ShiftsDbHelper extends SQLiteOpenHelper {
