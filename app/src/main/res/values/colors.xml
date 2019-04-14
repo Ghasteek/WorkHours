@@ -23,8 +23,8 @@
     <color name="darkItemTextColor">#FFFFFF</color>
     <color name="darkItemIconTint">#FFFFFF</color>
     <color name="darkEditTextColor">#FFFFFF</color>
-    <color name="darkEditTextBackground">#5b5858</color>
-    <color name="darkPopUpBackground">#5b5858</color>
+    <color name="darkEditTextBackground">#212121</color>
+    <color name="darkPopUpBackground">#FFFFFF</color>
     <color name="darkSpinnerTextColor">#FFFFFF</color>
     <color name="darkPopupTextColor">#FFFFFF</color>
 

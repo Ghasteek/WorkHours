@@ -20,7 +20,7 @@
         <item>Náhradní volno</item>
         <item>Státní svátek</item>
         <item>Dovolená</item>
-        <item>Nekompletní záznam</item>
+        <!--<item>Nekompletní záznam</item>-->
     </string-array>
 
     <string-array name="daysOfWeek">.

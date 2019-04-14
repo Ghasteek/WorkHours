@@ -50,9 +50,11 @@
         <item name="itemTextColor">@color/darkItemTextColor</item>
         <item name="itemIconTint">@color/darkItemIconTint</item>
         <item name="android:editTextColor">@color/darkEditTextColor</item>
-        <item name="android:editTextBackground">@color/darkEditTextBackground</item>
         <item name="android:popupBackground">@color/darkPopUpBackground</item>
         <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemDarkStyle</item>
+        <item name="colorControlNormal">@color/darkEditTextColor</item>
+        <item name="colorControlActivated">@color/darkEditTextColor</item>
+        <item name="colorControlHighlight">@color/darkEditTextColor</item>
     </style>
 
     <style name="AppDarkTheme.NoActionBar">
@@ -68,8 +70,7 @@
 
     <style name="mySpinnerItemDarkStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
         <item name="android:textColor">@color/darkSpinnerTextColor</item>
-        <item name="android:background">@color/darkEditTextBackground</item>
-        <item name="android:windowBackground">@color/darkEditTextBackground</item>
+        <item name="android:background">@color/darkColorBackground</item>
         <item name="android:checkMark">@drawable/triangle</item>
     </style>
 
