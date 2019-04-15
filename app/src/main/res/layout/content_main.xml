@@ -8,17 +8,6 @@
     tools:context="com.workhours.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-
-    <!--<TextView
-        android:id="@+id/textViewId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="360dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />-->
-
-
     <ProgressBar
         android:id="@+id/monthShiftsProgress"
         android:layout_width="100dp"
@@ -35,6 +24,7 @@
         android:max="100"
         android:progress="50"/>
 
+
     <TextView
         android:id="@+id/thisMonthViewId"
         android:layout_width="wrap_content"
@@ -43,20 +33,45 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="15dp"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/monthShiftsProgress"
-        app:layout_constraintTop_toTopOf="@+id/monthShiftsProgress" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/shiftsInfoView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="2dp"
+        android:textSize="18sp"
+        android:text="@string/secondRowLabel"
+        app:layout_constraintStart_toStartOf="@+id/thisMonthViewId"
+        app:layout_constraintTop_toBottomOf="@+id/thisMonthViewId" />
 
     <TextView
         android:id="@+id/shiftsInfoViewId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="2dp"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/monthShiftsProgress"
-        app:layout_constraintTop_toBottomOf="@+id/thisMonthViewId" />
+        app:layout_constraintStart_toStartOf="@+id/thisMonthViewId"
+        app:layout_constraintTop_toBottomOf="@+id/shiftsInfoView" />
 
+    <TextView
+        android:id="@+id/overtimeSumView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="2dp"
+        android:textSize="18sp"
+        android:text="@string/thirdRowLabel"
+        app:layout_constraintStart_toStartOf="@+id/thisMonthViewId"
+        app:layout_constraintTop_toBottomOf="@+id/shiftsInfoViewId" />
 
     <TextView
         android:id="@+id/overtimeSumViewId"
@@ -66,8 +81,8 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="2dp"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/monthShiftsProgress"
-        app:layout_constraintTop_toBottomOf="@+id/shiftsInfoViewId" />
+        app:layout_constraintStart_toStartOf="@+id/thisMonthViewId"
+        app:layout_constraintTop_toBottomOf="@+id/overtimeSumView" />
 
     <View
         android:id="@+id/divider"
@@ -118,6 +133,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
         android:textSize="18sp"
+        android:textStyle="bold"
         android:text="@string/todayShiftLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
@@ -128,9 +144,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="6dp"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/todayLabelId"
         app:layout_constraintTop_toBottomOf="@+id/todayLabelId" />
 
     <TextView
@@ -139,9 +155,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="6dp"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/todayLabelId"
         app:layout_constraintTop_toBottomOf="@+id/todayArrivalInfoId" />
 
     <ImageButton
@@ -149,11 +165,11 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="0dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
         android:visibility="invisible"
-        app:layout_constraintStart_toEndOf="@+id/todayLabelId"
-        app:layout_constraintTop_toTopOf="@+id/todayLabelId"
+        app:layout_constraintStart_toEndOf="@+id/todayDepartureInfoId"
+        app:layout_constraintTop_toTopOf="@+id/todayDepartureInfoId"
         app:srcCompat="@android:drawable/ic_menu_edit"
         tools:ignore="ContentDescription" />
 
@@ -163,24 +179,24 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="0dp"
         android:textSize="18sp"
         android:text="@string/breakLength"
-        app:layout_constraintStart_toEndOf="@+id/editTodayButtonId"
-        app:layout_constraintTop_toTopOf="@+id/editTodayButtonId" />
+        app:layout_constraintStart_toEndOf="@+id/todayArrivalInfoId"
+        app:layout_constraintTop_toTopOf="@+id/todayArrivalInfoId" />
 
     <EditText
         android:id="@+id/todayBreakInputId"
         android:layout_width="50dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="0dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="3dp"
         android:textSize="18sp"
         android:inputType="time"
         android:hint="@string/timeHint"
         app:layout_constraintStart_toEndOf="@+id/todayBreakId"
-        app:layout_constraintTop_toTopOf="@+id/editTodayButtonId"
+        app:layout_constraintTop_toBottomOf="@+id/todayLabelId"
         tools:ignore="Autofill"/>
 
     <View
