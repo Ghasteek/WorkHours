@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20sp"
         android:layout_marginStart="20sp"
-        android:layout_marginLeft="20sp"
         android:text="@string/darkTheme"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +22,6 @@
         android:layout_width="55dp"
         android:layout_height="25dp"
         android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
         android:layout_marginTop="5dp"
         app:layout_constraintStart_toEndOf="@+id/textView3"
         app:layout_constraintTop_toTopOf="@+id/textView3" />

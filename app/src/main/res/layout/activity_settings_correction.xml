@@ -12,7 +12,6 @@
         android:layout_height="52dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="35dp"
-        android:layout_marginRight="35dp"
         android:ems="10"
         android:inputType="numberSigned"
         android:hint="@string/vacationHint"
@@ -28,7 +27,6 @@
         android:text="@string/settingsOvertimeCorrection"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/overtimeCorrectionEdit"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -39,7 +37,6 @@
         android:layout_height="52dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="35dp"
-        android:layout_marginRight="35dp"
         android:ems="10"
         android:inputType="numberSigned"
         android:hint="@string/vacationHint"
@@ -55,7 +52,6 @@
         android:text="@string/settingsHolidayCorrection"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/overtimeCorrectionEdit"
         app:layout_constraintTop_toBottomOf="@+id/textView2"/>

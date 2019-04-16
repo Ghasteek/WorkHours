@@ -12,9 +12,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:textAppearance="?android:textAppearanceMedium"
-        android:paddingRight="10dp"
         android:paddingEnd="10dp"
-        android:paddingLeft="5dp"
         android:paddingStart="5dp"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"/>
@@ -56,10 +54,9 @@
     <ProgressBar
         android:id="@+id/shiftProgressBar"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="80dp"
+        android:layout_width="70dp"
         android:layout_height="25dp"
         android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
         android:layout_marginTop="5dp"
         android:max="480"
         android:progress="480"
@@ -68,10 +65,9 @@
     <ProgressBar
         android:id="@+id/overtimeProgressBar"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="40dp"
+        android:layout_width="30dp"
         android:layout_height="25dp"
         android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
         android:layout_marginTop="5dp"
         android:visibility="invisible"
         android:max="240"

@@ -25,9 +25,7 @@
         android:layout_height="30dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_toStartOf="@+id/showMonthYearId"
-        android:layout_toLeftOf="@+id/showMonthYearId"
         android:rotation="90"
         app:srcCompat="@android:drawable/arrow_down_float"
         tools:ignore="ContentDescription" />
@@ -40,7 +38,6 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_toStartOf="@+id/button"
-        android:layout_toLeftOf="@+id/button"
         android:textSize="20sp"
         tools:ignore="RelativeOverlap" />
 
@@ -49,12 +46,9 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:layout_toStartOf="@+id/monthUpId"
-        android:layout_toLeftOf="@+id/monthUpId"
         app:srcCompat="@android:drawable/ic_menu_my_calendar"
         tools:ignore="ContentDescription" />
 
@@ -63,10 +57,8 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:rotation="270"
         app:srcCompat="@android:drawable/arrow_down_float"
         tools:ignore="ContentDescription" />

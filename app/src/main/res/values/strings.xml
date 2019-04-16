@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Píchačky</string>
+    <string name="app_name">Docházka</string>
     <string name="navigation_drawer_open">Otevřít navigaci</string>
     <string name="navigation_drawer_close">Zavřít navigaci</string>
-    <string name="nav_header_title">Píchačky</string>
+    <string name="nav_header_title">Docházka</string>
     <string name="nav_header_subtitle">Registrace směn</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="ok">OK</string>
@@ -52,6 +52,9 @@
     <string name="empty_holiday_warning">Typ směny musí být zadán</string>
     <string name="used_date_warning">Pro toto datum již směna existuje</string>
     <string name="settings_saved">Nastavení uloženo</string>
+    <string name="correctionDone">Korekce provedena</string>
+    <string name="addMonthFailed">Chyba při přidávání přesčasu pro minulý měsíc</string>
+    <string name="nothingToSave">Neprovedena žádná změna.</string>
 
     <!-- popisky menu -->
     <string name="action_preview">Podrobnosti měsíce</string>

@@ -10,24 +10,47 @@ import android.support.v4.app.DialogFragment;
 import java.util.Calendar;
 
 public class TimePickerFragment extends DialogFragment {
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        String theme = MainActivity.Globals.theme;
         int hour, minute;
         switch (MainActivity.Globals.whichTime) {
             case "IN":
                 hour = MainActivity.Globals.timeInHours;//c.get(Calendar.HOUR_OF_DAY);
                 minute = MainActivity.Globals.timeInMinutes;//c.get(Calendar.MINUTE);
-                return new TimePickerDialog(getActivity(), (TimePickerDialog.OnTimeSetListener) getActivity(), hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
-            case "OUT":
+                switch (theme){
+                    case "light":
+                        return new TimePickerDialog(getActivity(), R.style.lightTimePickerDialogStyle, (TimePickerDialog.OnTimeSetListener) getActivity(), hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
+                    case "dark":
+                        return new TimePickerDialog(getActivity(), R.style.darkTimePickerDialogStyle, (TimePickerDialog.OnTimeSetListener) getActivity(), hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
+                    default:
+                        return new TimePickerDialog(getActivity(), R.style.lightTimePickerDialogStyle, (TimePickerDialog.OnTimeSetListener) getActivity(), hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
+                }
+                case "OUT":
                 hour = MainActivity.Globals.timeOutHours;
                 minute = MainActivity.Globals.timeOutMinutes;
-                return new TimePickerDialog(getActivity(), (TimePickerDialog.OnTimeSetListener) getActivity(), hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
-            default:
+                switch (theme){
+                    case "light":
+                        return new TimePickerDialog(getActivity(), R.style.lightTimePickerDialogStyle, (TimePickerDialog.OnTimeSetListener) getActivity(), hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
+                    case "dark":
+                        return new TimePickerDialog(getActivity(), R.style.darkTimePickerDialogStyle, (TimePickerDialog.OnTimeSetListener) getActivity(), hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
+                    default:
+                        return new TimePickerDialog(getActivity(), R.style.lightTimePickerDialogStyle, (TimePickerDialog.OnTimeSetListener) getActivity(), hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
+                }
+                default:
                 Calendar c = Calendar.getInstance();
                 hour = c.get(Calendar.HOUR_OF_DAY);
                 minute = c.get(Calendar.MINUTE);
-                return new TimePickerDialog(getActivity(), (TimePickerDialog.OnTimeSetListener) getActivity(), hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
+                switch (theme){
+                    case "light":
+                        return new TimePickerDialog(getActivity(), R.style.lightTimePickerDialogStyle, (TimePickerDialog.OnTimeSetListener) getActivity(), hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
+                    case "dark":
+                        return new TimePickerDialog(getActivity(), R.style.darkTimePickerDialogStyle, (TimePickerDialog.OnTimeSetListener) getActivity(), hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
+                    default:
+                        return new TimePickerDialog(getActivity(), R.style.lightTimePickerDialogStyle, (TimePickerDialog.OnTimeSetListener) getActivity(), hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
+                }
         }
     }
 }

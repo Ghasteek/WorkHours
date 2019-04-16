@@ -200,10 +200,10 @@ public class ShiftsProvider extends ContentProvider {
             throw new IllegalArgumentException( "Arrival time invalid.");
         }
         int departure = values.getAsInteger(ShiftsContract.ShiftEntry.COLUMN_DEPARTURE);
-        if ((departure > 1439) || (departure == 0)){
+        if ((departure > 1439)){
             throw new IllegalArgumentException( "Departure time invalid.");
         }
-        if (arrival > departure){
+        if (departure != 0 && arrival > departure){
             throw new IllegalArgumentException( "Arrival time must be before departure.");
         }
         int breakLength = values.getAsInteger(ShiftsContract.ShiftEntry.COLUMN_BREAK_LENGTH);

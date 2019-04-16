@@ -44,7 +44,7 @@ public class SettingsCorrection extends AppCompatActivity {
             editorTemp.apply();
         }
 
-        Toast.makeText(this, getString(R.string.settings_saved), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.correctionDone), Toast.LENGTH_SHORT).show();
     }
 
     @Override

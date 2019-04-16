@@ -85,7 +85,9 @@ public class Shift extends AppCompatActivity {
                 showUnsavedChangesDialog(discardButtonClickListener);
                 return true;
             case (R.id.action_save):
-                saveShift();
+                if (mShiftChanged) {
+                    saveShift();
+                } else {Toast.makeText(this, getText(R.string.nothingToSave), Toast.LENGTH_SHORT).show();}
                 finish();
                 return true;
             case (R.id.action_delete):
@@ -255,6 +257,9 @@ public class Shift extends AppCompatActivity {
                     overtimeLengthStr = Tools.timeIntToStr(cursor.getInt(overtimeLengthColumnIndex));
                     holidayTypeInt = cursor.getInt(holidayTypeColumnIndex);
 
+                    if (departureStr.equals("0:00")){
+                        departureStr = pref.getString("defaultOutTime", "14:30");
+                    }
 
                     date.setText(dateStr);
                     arriveTime.setText(arrivalStr);
@@ -407,6 +412,8 @@ public class Shift extends AppCompatActivity {
             }
         }
 
+        if (overtimeLengthStr == null){overtimeLengthStr = "0:00";}
+
         if ((holidayTypeSelectedInt == ShiftsContract.ShiftEntry.HOLIDAY_VACATION) && (holidayTypeInt != ShiftsContract.ShiftEntry.HOLIDAY_VACATION)) { // je zvolena dovolena, ale nebyla
             int oldHolidaySum = temp.getInt("holidaySum", 0);
             int newHolidaySum = oldHolidaySum - 1;
@@ -499,15 +506,15 @@ public class Shift extends AppCompatActivity {
                 int oldSum = cursorOvertime.getInt(overtimeLengthColumnIndex);
                 id = cursorOvertime.getInt(0);
                 Uri editUri = Uri.withAppendedPath(ShiftsContract.ShiftEntry.CONTENT_URI_MONTHS, String.valueOf(id));
-                Toast.makeText(this, "editing uri-" + editUri.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "editing uri-" + editUri.toString(), Toast.LENGTH_SHORT).show();
 
                 ContentValues monthValues = new ContentValues();
                 monthValues.put(ShiftsContract.ShiftEntry.COLUMN_OVERTIMESUM_MONTHS, (oldSum + overtimeDif));
 
                 int rowsAffected = getContentResolver().update(editUri, monthValues, null, null);
                 if (rowsAffected == 0) {
-                    Toast.makeText(this, getText(R.string.editor_update_shift_failed), Toast.LENGTH_SHORT).show();
-                } else {Toast.makeText(this, "added " + (oldSum + overtimeDif) + " min to URI-" + editUri.toString() , Toast.LENGTH_LONG).show();}
+                    Toast.makeText(this, getText(R.string.addMonthFailed), Toast.LENGTH_SHORT).show();
+                } //else {Toast.makeText(this, "added " + (oldSum + overtimeDif) + " min to URI-" + editUri.toString() , Toast.LENGTH_LONG).show();}
             }
             cursorOvertime.close();
         } else {
@@ -516,7 +523,7 @@ public class Shift extends AppCompatActivity {
             monthValues.put(ShiftsContract.ShiftEntry.COLUMN_OVERTIMESUM_MONTHS, overtimeDif);
             Uri newUriMonth = getContentResolver().insert(ShiftsContract.ShiftEntry.CONTENT_URI_MONTHS, monthValues);
             if (newUriMonth == null) {
-                Toast.makeText(this, "chyba pridani MONTH", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getText(R.string.addMonthFailed), Toast.LENGTH_SHORT).show();
             } //else { Toast.makeText(this, getText(R.string.editor_insert_shift_successful), Toast.LENGTH_SHORT).show();}
         }
     }

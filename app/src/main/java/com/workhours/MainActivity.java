@@ -51,6 +51,9 @@ public class MainActivity extends AppCompatActivity
         pref = getApplicationContext().getSharedPreferences("Settings", 0);                 // definovani SharedPreference
         temp = getApplicationContext().getSharedPreferences("Temporary", 0);
 
+        Globals.theme = "light";
+        if (pref.contains("layout")) {Globals.theme = pref.getString("layout", "light");}
+
         if (pref.contains("layout")){
             String savedLayout = pref.getString("layout", "light");
             if (savedLayout != null && savedLayout.equals("light")){
@@ -190,7 +193,6 @@ public class MainActivity extends AppCompatActivity
                 }
                 //Toast.makeText(this, " " + workDaysArray.length, Toast.LENGTH_LONG).show();
             } //else {displayView.append("\n zaznamy kompletni");}
-//TODO zkontrolovat doplnění defaultních dní dovolené pro temp při překlopení roku
             String dateHelp = String.valueOf(lastDbDate);
             int lastDbDateYear = Integer.parseInt(dateHelp.substring(0, 4));
             int todayYear = calendar.get(Calendar.YEAR);
@@ -251,7 +253,7 @@ public class MainActivity extends AppCompatActivity
                 monthValues.put(ShiftsContract.ShiftEntry.COLUMN_OVERTIMESUM_MONTHS, actualOverwatch);
                 Uri newUriMonth = getContentResolver().insert(ShiftsContract.ShiftEntry.CONTENT_URI_MONTHS, monthValues);
                 if (newUriMonth == null) {
-                    Toast.makeText(this, "chyba pridani MONTH", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getText(R.string.addMonthFailed), Toast.LENGTH_SHORT).show();
                 } //else { Toast.makeText(this, getText(R.string.editor_insert_shift_successful), Toast.LENGTH_SHORT).show();}
             }
 
@@ -261,7 +263,7 @@ public class MainActivity extends AppCompatActivity
             monthValues.put(ShiftsContract.ShiftEntry.COLUMN_OVERTIMESUM_MONTHS, 0);
             Uri newUriMonth = getContentResolver().insert(ShiftsContract.ShiftEntry.CONTENT_URI_MONTHS, monthValues);
             if (newUriMonth == null) {
-                Toast.makeText(this, "chyba pridani MONTH", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getText(R.string.addMonthFailed), Toast.LENGTH_SHORT).show();
             } //else { Toast.makeText(this, getText(R.string.editor_insert_shift_successful), Toast.LENGTH_SHORT).show(); }
         }
     }
@@ -498,8 +500,6 @@ public class MainActivity extends AppCompatActivity
                 editTodayButton.setVisibility(View.VISIBLE);
                 showInfo();
             }  //else {Toast.makeText(this,"chyba ", Toast.LENGTH_LONG).show();}
-
-            //TODO dodělat přidání overwatche do MONTHS tabulky po přidání dokončené směny + dodělat korekce v SHIFTS - insert/delete/update
             todayBreakInput.setVisibility(View.INVISIBLE);
             todayBreak.setVisibility(View.INVISIBLE);
         }
@@ -635,5 +635,6 @@ public class MainActivity extends AppCompatActivity
         public static int timeOutHours;
         public static int timeOutMinutes;
         public static boolean isEdited;
+        public static String theme;
     }
 }

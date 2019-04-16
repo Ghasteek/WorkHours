@@ -10,7 +10,21 @@
         <item name="android:textColor">@color/primaryText</item>
         <item name="itemTextColor">@color/itemTextColor</item>
         <item name="itemIconTint">@color/itemIconTint</item>
+        <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemLightStyle</item>
     </style>
+
+    <style name="lightTimePickerDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/colorPrimaryDark</item> <!-- barva headeru -->
+        <item name="colorControlNormal">@color/colorPrimaryDark</item>
+        <item name="colorControlActivated">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="mySpinnerItemLightStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+        <item name="android:textColor">@color/primaryText</item>
+        <item name="android:background">@color/colorBackgroundLight</item>
+        <item name="android:checkMark">@drawable/triangle</item>
+    </style>
+
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
@@ -55,6 +69,7 @@
         <item name="colorControlNormal">@color/darkEditTextColor</item>
         <item name="colorControlActivated">@color/darkEditTextColor</item>
         <item name="colorControlHighlight">@color/darkEditTextColor</item>
+        <item name="android:timePickerDialogTheme">@style/darkTimePickerDialogStyle</item>
     </style>
 
     <style name="AppDarkTheme.NoActionBar">
@@ -66,6 +81,14 @@
         <item name="android:background">@color/darkEditTextBackground</item>
         <item name="android:textColor">@color/darkPopupTextColor</item>
         <item name="android:textColorPrimary">@color/darkPopupTextColor</item>
+    </style>
+
+    <style name="darkTimePickerDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">#111111</item> <!-- barva headeru -->
+        <item name="android:windowBackground">@color/darkEditTextBackground</item> <!-- barva pozadi okna -->
+        <item name="android:colorPrimaryDark">@color/darkColorPrimaryDark</item>
+        <item name="colorControlNormal">#88000000</item>
+        <item name="colorControlActivated">#88000000</item>
     </style>
 
     <style name="mySpinnerItemDarkStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
