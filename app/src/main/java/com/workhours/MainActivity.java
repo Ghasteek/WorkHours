@@ -33,7 +33,6 @@ import android.widget.TimePicker;
 import android.database.Cursor;
 import android.widget.Toast;
 import com.workhours.data.ShiftsContract;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,13 +45,14 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener{    // pro time picker třeba implementovat TimePickerDialog.OnTimeSetListener
 
-    private TextView todayArrivalInfo,todayDepartureInfo, thisMonthView,shiftsInfoView, overtimeSumView, todayBreak, updateAvailable;
+    private TextView todayArrivalInfo,todayDepartureInfo, thisMonthView,shiftsInfoView, overtimeSumView, todayBreak;
     //private TextView textView;
     private ProgressBar monthShifts;
     private SharedPreferences pref, temp;
     private Calendar calendar;
     private ImageButton showTimePickerIn, showTimePickerOut, editTodayButton;
     private EditText todayBreakInput;
+    private static TextView updateAvailable;
 
 
     @Override
@@ -149,7 +149,17 @@ public class MainActivity extends AppCompatActivity
         editTodayButton = findViewById(R.id.editTodayButtonId);
         todayBreakInput = findViewById(R.id.todayBreakInputId);
         todayBreak = findViewById(R.id.todayBreakId);
+        updateAvailable = findViewById(R.id.updateAvailableId);
         //textView = findViewById(R.id.textViewId);
+
+        updateAvailable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                makeUpdate();
+            }
+        });
+
+
 
         calendar = Calendar.getInstance();
 
@@ -165,9 +175,16 @@ public class MainActivity extends AppCompatActivity
         Globals.timeOutHours = Integer.parseInt(timeOutArray[0]);
         Globals.timeOutMinutes = Integer.parseInt(timeOutArray[1]);
 
+        File file = new File(Environment.getExternalStorageDirectory() + "/"
+                + Utils.downloadDirectory + "/version.txt");
+        file.delete();
+        File file2 = new File(Environment.getExternalStorageDirectory() + "/"
+                + Utils.downloadDirectory + "/workHours.apk");
+        file2.delete();
+
         checkYesterday();
         showInfo();
-        checkVersion();
+        //checkVersion();
     }
 
 
@@ -598,6 +615,9 @@ public class MainActivity extends AppCompatActivity
                 Intent Preview = new Intent(MainActivity.this, Preview.class);
                 startActivity(Preview);
                 return true;
+            case R.id.nav_get:
+               getVersionFromWeb();
+               return  true;
        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -651,65 +671,65 @@ public class MainActivity extends AppCompatActivity
             return false;
     }
 
-    private void checkVersion() {
+    private void getVersionFromWeb() {
         if (isConnectingToInternet()) {
-            new DownloadTask(MainActivity.this, Utils.downloadVersionUrl);
-
-            Handler handler = new Handler();
+            new DownloadTask(MainActivity.this, updateAvailable , Utils.downloadVersionUrl);
+            final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
-
                 @Override
                 public void run() {
-                    // change image
-                }
+                    // Do something after 5s = 5000ms
+                    int webVersion = 0;
+                    FileInputStream is;
+                    BufferedReader reader;
+                    File file = new File(Environment.getExternalStorageDirectory() + "/"
+                            + Utils.downloadDirectory + "/version.txt");
 
+                    if (file.exists()) {
+                        try {
+                            is = new FileInputStream(file);
+                            reader = new BufferedReader(new InputStreamReader(is));
+                            String line = reader.readLine();
+                            webVersion = Integer.parseInt(line);
+
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        boolean isDeleted = file.delete();
+                    }
+                    if (Globals.version < webVersion){
+                        updateAvailable.setText(getString(R.string.updateAvailable, webVersion, MainActivity.Globals.version));
+                        //updateAvailable.setVisibility(View.INVISIBLE);
+                        //Toast.makeText(this, verCode + " updatuji na - " + webVersion, Toast.LENGTH_LONG).show();
+                        //new DownloadTask(MainActivity.this, updateAvailable, Utils.downloadApkUrl);
+                        //makeUpdate();
+                    }
+                }
             }, 5000);
-
-            FileInputStream is;
-            BufferedReader reader;
-            final File file = new File(Environment.getExternalStorageDirectory() + "/"
-                    + Utils.downloadDirectory + "/version.txt");
-            int webVersion = 0;
-            if (file.exists()) {
-                try {
-                    is = new FileInputStream(file);
-                    reader = new BufferedReader(new InputStreamReader(is));
-                    String line = reader.readLine();
-                    webVersion = Integer.parseInt(line);
-
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                boolean isDeleted = file.delete();
-            }
-            int verCode = 0;
-            String version = "";
-            try {
-                PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
-                version = pInfo.versionName;
-                verCode = pInfo.versionCode;
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            if (verCode < webVersion){
-                //Toast.makeText(this, verCode + " updatuji na - " + webVersion, Toast.LENGTH_LONG).show();
-                updateAvailable = findViewById(R.id.updateAvailableId);
-                updateAvailable.setText(getString(R.string.updateAvailable, webVersion, version));
-                //makeUpdate();
-            }
         }
     }
 
+
     public void makeUpdate() {
-        new DownloadTask(MainActivity.this, Utils.downloadApkUrl);
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/"
-                + Utils.downloadDirectory + "/workHours.apk")), "application/vnd.android.package-archive");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        new DownloadTask(MainActivity.this, updateAvailable, Utils.downloadApkUrl);
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this ,"start" , Toast.LENGTH_LONG).show();
+                // Do something after 5s = 5000ms
+                /*ntent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/"
+                        + Utils.downloadDirectory + "/workHours.apk")), "application/vnd.android.package-archive");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);*/
+            }
+        }, 10000);
+
+
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -721,5 +741,6 @@ public class MainActivity extends AppCompatActivity
         public static int timeOutMinutes;
         public static boolean isEdited;
         public static String theme;
+        public static int version = 101; //TODO S převerzováním upravit verzi i v globals!!!
     }
 }

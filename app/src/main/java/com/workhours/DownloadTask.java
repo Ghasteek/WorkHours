@@ -1,11 +1,15 @@
 package com.workhours;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -21,10 +25,12 @@ public class DownloadTask {
 
     private static final String TAG = "Download Task";
     private Context context;
+    private TextView updateAvailable;
     private String downloadUrl = "", downloadFileName = "";
 
-    public DownloadTask(Context context, String downloadUrl) {
+    public DownloadTask(Context context, TextView updateAvailable, String downloadUrl) {
         this.context = context;
+        this.updateAvailable = updateAvailable;
         this.downloadUrl = downloadUrl;
 
         downloadFileName = downloadUrl.replace(Utils.mainUrl, "");//Create file name by picking download file name from URL
@@ -47,9 +53,15 @@ public class DownloadTask {
         @Override
         protected void onPostExecute(Void result) {
             try {
-                if (outputFile == null) {
+                if (outputFile != null) {
+                    if (downloadFileName.equals("workHours.apk")) {
+                        //updateAvailable.setVisibility(View.VISIBLE);
+                        //updateAvailable.setText("!");
+                    }
+                } else {
                     Log.e(TAG, "Download Failed");
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(TAG, "Download Failed with Exception - " + e.getLocalizedMessage());
@@ -69,7 +81,6 @@ public class DownloadTask {
                 if (c.getResponseCode() != HttpURLConnection.HTTP_OK) {
                     Log.e(TAG, "Server returned HTTP " + c.getResponseCode()
                             + " " + c.getResponseMessage());
-
                 }
 
 
@@ -100,7 +111,7 @@ public class DownloadTask {
 
                 InputStream is = c.getInputStream();//Get InputStream for connection
 
-                byte[] buffer = new byte[1024];//Set buffer type
+                byte[] buffer = new byte[4096];//Set buffer type
                 int len1 = 0;//init length
                 while ((len1 = is.read(buffer)) != -1) {
                     fos.write(buffer, 0, len1);//Write new file

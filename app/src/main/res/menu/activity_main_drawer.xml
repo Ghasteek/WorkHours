@@ -22,6 +22,11 @@
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/action_settings"
             app:showAsAction="never" />
+        <item
+            android:id="@+id/nav_get"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="update"
+            app:showAsAction="never" />
     </group>
 
     <!--<item android:title="Communicate">
