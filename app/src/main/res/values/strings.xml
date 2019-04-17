@@ -113,6 +113,7 @@
     <string name="departureTooltip">Zadejte čas odchodu z práce</string>
     <string name="todayShiftLabel">Dnešní směna:</string>
     <string name="arrivalNeeded">První musíte zadat čas příchodu</string>
+    <string name="updateAvailable">Je dostupná nová verze v.%1$d / %2$s</string>
 
     <!-- PREVIEW popisky -->
     <string name="workHoursPlan">Předpis práce:</string>

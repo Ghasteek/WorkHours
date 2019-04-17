@@ -2,10 +2,17 @@ package com.workhours;
 
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
@@ -26,13 +33,20 @@ import android.widget.TimePicker;
 import android.database.Cursor;
 import android.widget.Toast;
 import com.workhours.data.ShiftsContract;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener{    // pro time picker třeba implementovat TimePickerDialog.OnTimeSetListener
 
-    private TextView todayArrivalInfo,todayDepartureInfo, thisMonthView,shiftsInfoView, overtimeSumView, todayBreak;
+    private TextView todayArrivalInfo,todayDepartureInfo, thisMonthView,shiftsInfoView, overtimeSumView, todayBreak, updateAvailable;
     //private TextView textView;
     private ProgressBar monthShifts;
     private SharedPreferences pref, temp;
@@ -153,6 +167,7 @@ public class MainActivity extends AppCompatActivity
 
         checkYesterday();
         showInfo();
+        checkVersion();
     }
 
 
@@ -625,6 +640,76 @@ public class MainActivity extends AppCompatActivity
         if (newUri == null) {
             Toast.makeText(this, getText(R.string.editor_insert_shift_failed), Toast.LENGTH_SHORT).show();
         } else {Toast.makeText(this, getText(R.string.editor_insert_shift_successful), Toast.LENGTH_SHORT).show();}
+    }
+
+    private boolean isConnectingToInternet() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null)
+            return networkInfo.isConnected();
+        else
+            return false;
+    }
+
+    private void checkVersion() {
+        if (isConnectingToInternet()) {
+            new DownloadTask(MainActivity.this, Utils.downloadVersionUrl);
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    // change image
+                }
+
+            }, 5000);
+
+            FileInputStream is;
+            BufferedReader reader;
+            final File file = new File(Environment.getExternalStorageDirectory() + "/"
+                    + Utils.downloadDirectory + "/version.txt");
+            int webVersion = 0;
+            if (file.exists()) {
+                try {
+                    is = new FileInputStream(file);
+                    reader = new BufferedReader(new InputStreamReader(is));
+                    String line = reader.readLine();
+                    webVersion = Integer.parseInt(line);
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                boolean isDeleted = file.delete();
+            }
+            int verCode = 0;
+            String version = "";
+            try {
+                PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+                version = pInfo.versionName;
+                verCode = pInfo.versionCode;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            if (verCode < webVersion){
+                //Toast.makeText(this, verCode + " updatuji na - " + webVersion, Toast.LENGTH_LONG).show();
+                updateAvailable = findViewById(R.id.updateAvailableId);
+                updateAvailable.setText(getString(R.string.updateAvailable, webVersion, version));
+                //makeUpdate();
+            }
+        }
+    }
+
+    public void makeUpdate() {
+        new DownloadTask(MainActivity.this, Utils.downloadApkUrl);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/"
+                + Utils.downloadDirectory + "/workHours.apk")), "application/vnd.android.package-archive");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     @SuppressWarnings("WeakerAccess")

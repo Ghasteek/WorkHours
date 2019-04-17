@@ -90,7 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:layout_marginEnd="220dp"
+        android:layout_marginEnd="170dp"
         android:text="@string/date"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
