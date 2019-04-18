@@ -5,8 +5,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -184,7 +182,7 @@ public class MainActivity extends AppCompatActivity
 
         checkYesterday();
         showInfo();
-        //checkVersion();
+        getVersionFromWeb();
     }
 
 
@@ -673,7 +671,7 @@ public class MainActivity extends AppCompatActivity
 
     private void getVersionFromWeb() {
         if (isConnectingToInternet()) {
-            new DownloadTask(MainActivity.this, updateAvailable , Utils.downloadVersionUrl);
+            new DownloadTask(MainActivity.this, Utils.downloadVersionUrl);
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -701,10 +699,6 @@ public class MainActivity extends AppCompatActivity
                     }
                     if (Globals.version < webVersion){
                         updateAvailable.setText(getString(R.string.updateAvailable, webVersion, MainActivity.Globals.version));
-                        //updateAvailable.setVisibility(View.INVISIBLE);
-                        //Toast.makeText(this, verCode + " updatuji na - " + webVersion, Toast.LENGTH_LONG).show();
-                        //new DownloadTask(MainActivity.this, updateAvailable, Utils.downloadApkUrl);
-                        //makeUpdate();
                     }
                 }
             }, 5000);
@@ -713,23 +707,26 @@ public class MainActivity extends AppCompatActivity
 
 
     public void makeUpdate() {
-        new DownloadTask(MainActivity.this, updateAvailable, Utils.downloadApkUrl);
+        new DownloadTask(MainActivity.this, Utils.downloadApkUrl);
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(MainActivity.this ,"start" , Toast.LENGTH_LONG).show();
-                // Do something after 5s = 5000ms
-                /*ntent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/"
-                        + Utils.downloadDirectory + "/workHours.apk")), "application/vnd.android.package-archive");
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);*/
+                openDownloadedFolder();
             }
         }, 10000);
+    }
 
-
+    private void openDownloadedFolder() {
+        File folder = new File("content://" + Environment.getExternalStorageDirectory() + "/Download/");
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        String path = folder.getPath();
+        Uri myImagesdir = Uri.parse("content://" + path );
+        intent.setDataAndType(myImagesdir,"*/*");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(intent);
     }
 
     @SuppressWarnings("WeakerAccess")
