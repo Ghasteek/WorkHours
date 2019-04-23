@@ -1,8 +1,10 @@
 package com.workhours;
 
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -13,6 +15,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -50,7 +53,7 @@ public class MainActivity extends AppCompatActivity
     private Calendar calendar;
     private ImageButton showTimePickerIn, showTimePickerOut, editTodayButton;
     private EditText todayBreakInput;
-    private static TextView updateAvailable;
+    private TextView updateAvailable;
 
 
     @Override
@@ -150,14 +153,16 @@ public class MainActivity extends AppCompatActivity
         updateAvailable = findViewById(R.id.updateAvailableId);
         //textView = findViewById(R.id.textViewId);
 
+        View hView =  navigationView.getHeaderView(0);
+        TextView headerNameWithVersion = hView.findViewById(R.id.headerNameWithVersionId);
+        headerNameWithVersion.setText(getString(R.string.nav_header_title, Globals.versionStr));
+
         updateAvailable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 makeUpdate();
             }
         });
-
-
 
         calendar = Calendar.getInstance();
 
@@ -175,14 +180,16 @@ public class MainActivity extends AppCompatActivity
 
         File file = new File(Environment.getExternalStorageDirectory() + "/"
                 + Utils.downloadDirectory + "/version.txt");
-        file.delete();
+        boolean isFileDeleted = file.delete();
+        if (isFileDeleted) { Log.e(null, "version.txt deleted");}
         File file2 = new File(Environment.getExternalStorageDirectory() + "/"
                 + Utils.downloadDirectory + "/workHours.apk");
-        file2.delete();
+        boolean isFile2Deleted = file2.delete();
+        if (isFile2Deleted) { Log.e(null, "workHours.apk deleted");}
 
         checkYesterday();
         showInfo();
-        getVersionFromWeb();
+        checkVersionFromWeb();
     }
 
 
@@ -298,7 +305,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @SuppressWarnings("TryFinallyCanBeTryWithResources")
     private void showInfo() {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -320,9 +326,11 @@ public class MainActivity extends AppCompatActivity
             monthStr = "0" + (month + 1);
         } else { monthStr = String.valueOf(month); }
 
-        String[] selectionArgs = new String[] { String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_SHIFT), String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_COMPENSATION), String.valueOf(year) + monthStr + "%" };
+        String yearStr = String.valueOf(year);
 
-        String[] selectionArgsHolidays = new String[] { String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_PUBLIC), String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_VACATION), String.valueOf(year) + monthStr + "%" };
+        String[] selectionArgs = new String[] { String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_SHIFT), String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_COMPENSATION), yearStr + monthStr + "%" };
+
+        String[] selectionArgsHolidays = new String[] { String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_PUBLIC), String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_VACATION), yearStr + monthStr + "%" };
 
         Cursor cursor = getContentResolver().query(
                 ShiftsContract.ShiftEntry.CONTENT_URI,
@@ -591,7 +599,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
@@ -613,9 +620,13 @@ public class MainActivity extends AppCompatActivity
                 Intent Preview = new Intent(MainActivity.this, Preview.class);
                 startActivity(Preview);
                 return true;
-            case R.id.nav_get:
-               getVersionFromWeb();
-               return  true;
+           case R.id.nav_about:
+               Intent About = new Intent(MainActivity.this, About.class);
+               startActivity(About);
+               return true;
+            /*case R.id.nav_get:
+                checkVersionFromWeb();
+               return  true;*/
        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -669,7 +680,7 @@ public class MainActivity extends AppCompatActivity
             return false;
     }
 
-    private void getVersionFromWeb() {
+    private void checkVersionFromWeb() {
         if (isConnectingToInternet()) {
             new DownloadTask(MainActivity.this, Utils.downloadVersionUrl);
             final Handler handler = new Handler();
@@ -695,7 +706,8 @@ public class MainActivity extends AppCompatActivity
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        boolean isDeleted = file.delete();
+                        boolean isFileDeleted = file.delete();
+                        if (isFileDeleted) { Log.e(null, "version.txt deleted");}
                     }
                     if (Globals.version < webVersion){
                         updateAvailable.setText(getString(R.string.updateAvailable, webVersion, MainActivity.Globals.version));
@@ -713,7 +725,8 @@ public class MainActivity extends AppCompatActivity
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                openDownloadedFolder();
+                //openDownloadedFolder();
+                showUpdateDialog();
             }
         }, 10000);
     }
@@ -722,11 +735,54 @@ public class MainActivity extends AppCompatActivity
         File folder = new File("content://" + Environment.getExternalStorageDirectory() + "/Download/");
         Intent intent = new Intent(Intent.ACTION_VIEW);
         String path = folder.getPath();
-        Uri myImagesdir = Uri.parse("content://" + path );
-        intent.setDataAndType(myImagesdir,"*/*");
+        Uri mydir = Uri.parse("content://" + path );
+        intent.setDataAndType(mydir,"file/*");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(intent);
+    }
+
+    @SuppressWarnings("unused")
+    private void showUpdateDialog() {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the postivie and negative buttons on the dialog.
+        String savedLayout = "light";
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (pref.contains("layout")) { savedLayout = pref.getString("layout", "light");}
+        if (savedLayout != null) {
+            switch (savedLayout) {
+                case "light":
+                    builder = new AlertDialog.Builder(this);
+                    break;
+                case "dark":
+                    builder = new AlertDialog.Builder(this, R.style.darkDialogTheme);
+                    break;
+                default:
+                    builder = new AlertDialog.Builder(this, R.style.darkDialogTheme);
+            }
+        }
+        builder.setMessage(R.string.makeUpdateDialogMsg);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                openDownloadedFolder();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Keep editing" button, so dismiss the dialog
+                // and continue editing the pet.
+                if (dialog != null) {
+                    File file2 = new File(Environment.getExternalStorageDirectory() + "/"
+                            + Utils.downloadDirectory + "/workHours.apk");
+                    boolean isFile2Deleted = file2.delete();
+                    if (isFile2Deleted) { Log.e(null, "workHours.apk deleted");}
+                    dialog.dismiss();
+                }
+            }
+        });
+        // Create and show the AlertDialog
+        AlertDialog updateDialog = builder.create();
+        updateDialog.show();
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -738,6 +794,7 @@ public class MainActivity extends AppCompatActivity
         public static int timeOutMinutes;
         public static boolean isEdited;
         public static String theme;
-        public static int version = 101; //TODO S převerzováním upravit verzi i v globals!!!
+        public static int version = 102; //TODO S převerzováním upravit verzi i v globals!!!
+        public static String versionStr = "v1.0.2.";
     }
 }

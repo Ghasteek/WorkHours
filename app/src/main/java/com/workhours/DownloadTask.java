@@ -1,10 +1,10 @@
 package com.workhours;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -34,6 +34,7 @@ public class DownloadTask {
         new DownloadingTask().execute();
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class DownloadingTask extends AsyncTask<Void, Void, Void> {
 
         File apkStorage = null;
@@ -57,6 +58,7 @@ public class DownloadTask {
             super.onPostExecute(result);
         }
 
+        @SuppressLint("ResultIgnored")
         @Override
         protected Void doInBackground(Void... arg0) {
             try {
@@ -83,16 +85,14 @@ public class DownloadTask {
 
                 //If File is not present create directory
                 if (!apkStorage.exists()) {
-                    apkStorage.mkdir();
-                    Log.e(TAG, "Directory Created.");
+                    if (apkStorage.mkdir()) {Log.e(TAG, "Directory Created.");}
                 }
 
                 outputFile = new File(apkStorage, downloadFileName);//Create Output file in Main File
 
                 //Create New File if not present
                 if (!outputFile.exists()) {
-                    outputFile.createNewFile();
-                    Log.e(TAG, "File Created");
+                    if (outputFile.createNewFile()) { Log.e(TAG, "File Created");}
                 }
 
                 FileOutputStream fos = new FileOutputStream(outputFile);//Get OutputStream for NewFile Location
@@ -100,7 +100,7 @@ public class DownloadTask {
                 InputStream is =  new BufferedInputStream(c.getInputStream());//Get InputStream for connection
 
                 byte[] buffer = new byte[4096];//Set buffer type
-                int len1 = 0;//init length
+                int len1;//init length
                 while ((len1 = is.read(buffer)) != -1) {
                     fos.write(buffer, 0, len1);//Write new file
                 }
@@ -109,7 +109,6 @@ public class DownloadTask {
                 fos.close();
 
                 is.close();
-
 
             } catch (Exception e) {
 

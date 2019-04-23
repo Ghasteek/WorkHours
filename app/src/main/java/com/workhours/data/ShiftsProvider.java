@@ -147,7 +147,6 @@ public class ShiftsProvider extends ContentProvider {
     }
 
     private Uri insertMonth(Uri uri, ContentValues values){
-        //TODO data check
 
         int date =  values.getAsInteger(ShiftsContract.ShiftEntry.COLUMN_DATE);
         if (date == 0){

@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.workhours">
-
-    <!--  Permission required for Downloading Files  -->
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <!--  Permission required for Checking Internet Connection  -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!--  Permission required for Reading Writing SD Card/Memory  -->
+    <!-- Permission required for Downloading Files -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- Permission required for Checking Internet Connection -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Permission required for Reading Writing SD Card/Memory -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
 
     <application
         android:allowBackup="true"
@@ -19,49 +13,52 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme"
-        android:screenOrientation="portrait" >
+        android:usesCleartextTraffic="true">
+        <activity android:name=".About"></activity>
         <activity
-            android:name="com.workhours.SettingsTheme"
-            android:label="@string/settingsColorTheme"/>
+            android:name=".SettingsTheme"
+            android:label="@string/settingsColorTheme" />
         <activity
-            android:name="com.workhours.SettingsCorrection"
-            android:label="@string/settingsManualCorrection"/>
+            android:name=".SettingsCorrection"
+            android:label="@string/settingsManualCorrection" />
         <activity
-            android:name="com.workhours.Preview"
+            android:name=".Preview"
             android:label="@string/previewLabel"
             android:windowSoftInputMode="stateAlwaysVisible" />
         <activity
-            android:name="com.workhours.ShiftTable"
+            android:name=".ShiftTable"
             android:label="@string/shiftsTableLabel"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="com.workhours.Settings"
+            android:name=".Settings"
             android:label="@string/settingsLabel"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="com.workhours.SettingsDefault"
+            android:name=".SettingsDefault"
             android:label="@string/settingsDefaultLabel"
             android:windowSoftInputMode="stateAlwaysVisible" />
         <activity
-            android:name="com.workhours.Shift"
+            android:name=".Shift"
             android:windowSoftInputMode="stateAlwaysVisible" />
         <activity
-            android:name="com.workhours.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.workhours.Tools" />
+        <activity android:name=".Tools" />
+
         <provider
-            android:name="com.workhours.data.ShiftsProvider"
+            android:name=".data.ShiftsProvider"
             android:authorities="com.workhours"
             android:exported="false" />
         <provider
@@ -71,7 +68,8 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
     </application>
+
 </manifest>

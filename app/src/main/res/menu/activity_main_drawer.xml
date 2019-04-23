@@ -23,10 +23,15 @@
             android:title="@string/action_settings"
             app:showAsAction="never" />
         <item
+            android:id="@+id/nav_about"
+            android:icon="@android:drawable/ic_dialog_info"
+            android:title="@string/action_about"
+            app:showAsAction="never" />
+        <!--<item
             android:id="@+id/nav_get"
             android:icon="@drawable/ic_menu_manage"
-            android:title="update"
-            app:showAsAction="never" />
+            android:title="check"
+            app:showAsAction="never" />-->
     </group>
 
     <!--<item android:title="Communicate">

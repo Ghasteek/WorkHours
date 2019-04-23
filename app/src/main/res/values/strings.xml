@@ -1,8 +1,8 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Docházka</string>
     <string name="navigation_drawer_open">Otevřít navigaci</string>
     <string name="navigation_drawer_close">Zavřít navigaci</string>
-    <string name="nav_header_title">Docházka</string>
+    <string name="nav_header_title">Docházka  %1$s</string>
     <string name="nav_header_subtitle">Registrace směn</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="ok">OK</string>
@@ -62,6 +62,7 @@
     <string name="action_dummy">Insert Dummy Data</string>
     <string name="action_add">Přidat směnu</string>
     <string name="action_shiftsTable">Měsíční výpis</string>
+    <string name="action_about">O aplikaci</string>
     <string name="menuTitleSave">Uložit</string>
     <string name="menuTitleDelete">Smazat</string>
 
@@ -86,6 +87,9 @@
     <!-- RESTART  dialog -->
     <string name="restart_app_dialog_msg">Změna barevného tématu vyžaduje restart aplikace.</string>
     <string name="shutdown">Restartovat aplikaci</string>
+
+    <!-- UPDATE  dialog -->
+    <string name="makeUpdateDialogMsg">Nyní se otevře složka, ve které prosím vyhledejte a spusťte soubor workHours.apk. Tím se provede aktualizace na novou verzi.</string>
 
     <!-- SPINNER Shift types -->
     <string name="regular_shift">Směna</string>
@@ -127,4 +131,10 @@
 
     <!-- THEME popisky -->
     <string name="darkTheme">Tmavé téma:</string>
+
+    <!-- ABOUT popisky -->
+    <string name="aboutFirstRow">Docházka </string>
+    <string name="aboutSecondRow">Verze: %1$s</string>
+    <string name="aboutThirdRow" tools:ignore="Typos">Autor: Tomáš Podolský </string>
+    <string name="aboutFourthRow">Kontakt: podolsky.tomas@gmail.com </string>
 </resources>

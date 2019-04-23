@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".About">
+
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/aboutFirstRowId"
+        android:layout_centerHorizontal="true"
+        app:srcCompat="@mipmap/ic_launcher"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/aboutFirstRowId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/aboutFirstRow"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textAppearance="?android:textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/aboutSecondRowId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/aboutFirstRowId"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="8dp"
+        android:text="@string/aboutSecondRow"
+        android:textColor="#A2AAB0" />
+
+    <TextView
+        android:id="@+id/aboutThirdRowId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/aboutSecondRowId"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="8dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/aboutThirdRow"/>
+
+    <TextView
+        android:id="@+id/aboutFourthRowId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/aboutThirdRowId"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="8dp"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/colorAccent"
+        android:text="@string/aboutFourthRow"/>
+
+
+</RelativeLayout>
