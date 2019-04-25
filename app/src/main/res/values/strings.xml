@@ -65,6 +65,7 @@
     <string name="action_about">O aplikaci</string>
     <string name="menuTitleSave">Uložit</string>
     <string name="menuTitleDelete">Smazat</string>
+    <string name="menuTitleExportPdf">Export do PDF</string>
 
     <!-- Popisky stranek -->
     <string name="shiftsTableLabel">Měsíční výpis</string>

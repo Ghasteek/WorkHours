@@ -4,18 +4,28 @@ package com.workhours;
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.pdf.PdfDocument;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.workhours.data.ShiftsContract;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
-@SuppressWarnings("WeakerAccess")
+
 public class Preview extends AppCompatActivity {
 
     TextView overtimeFromLastMonthValue, workHoursPlanValue, workHoursDoneValue, workHoursMonthlyDifferenceValue,
@@ -34,6 +44,12 @@ public class Preview extends AppCompatActivity {
         showData(year, month);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.preview_menu, menu);
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -253,12 +269,48 @@ public class Preview extends AppCompatActivity {
         overtimeFromLastMonthValue.setText(Tools.timeIntToStr(overtimeSUmFromDb));
     }
 
+    public void exportPdf() {
+
+        PdfDocument exportFile = new PdfDocument();
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();
+
+        // start a page
+        PdfDocument.Page page = exportFile.startPage(pageInfo);
+        Canvas canvas = page.getCanvas();
+        Paint paint = new Paint();
+        paint.setTextSize(12f);
+        canvas.drawText("Text první řádek", 80, 50, paint);
+        canvas.drawText("Text DRUHÝ řádek", 80, 200, paint);        // finish the page
+        exportFile.finishPage(page);
+        // draw text on the graphics object of the page
+
+        String directory_path = Environment.getExternalStorageDirectory().getPath() + "/Download/";
+        File file = new File(directory_path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        String targetPdf = directory_path+"test.pdf";
+        File filePath = new File(targetPdf);
+        try {
+            exportFile.writeTo(new FileOutputStream(filePath));
+            Toast.makeText(this, "Done", Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            Log.e("main", "error "+e.toString());
+            Toast.makeText(this, "Something wrong: " + e.toString(),  Toast.LENGTH_LONG).show();
+        }
+        // close the document
+        exportFile.close();
+    }
+
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case (android.R.id.home):
                 super.onBackPressed();
                 year = 0;
                 month = 0;
+                return true;
+            case (R.id.action_export):
+                exportPdf();
                 return true;
         }
         return true;

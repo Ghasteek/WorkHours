@@ -1,5 +1,6 @@
 package com.workhours;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
@@ -7,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -14,7 +16,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -681,39 +685,50 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void checkVersionFromWeb() {
-        if (isConnectingToInternet()) {
-            new DownloadTask(MainActivity.this, Utils.downloadVersionUrl);
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    // Do something after 5s = 5000ms
-                    int webVersion = 0;
-                    FileInputStream is;
-                    BufferedReader reader;
-                    File file = new File(Environment.getExternalStorageDirectory() + "/"
-                            + Utils.downloadDirectory + "/version.txt");
 
-                    if (file.exists()) {
-                        try {
-                            is = new FileInputStream(file);
-                            reader = new BufferedReader(new InputStreamReader(is));
-                            String line = reader.readLine();
-                            webVersion = Integer.parseInt(line);
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1);
+        } else {
+            Log.e(null, "Permissions granted.");
+            if (isConnectingToInternet()) {
+                new DownloadTask(MainActivity.this, Utils.downloadVersionUrl);
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Do something after 5s = 5000ms
+                        int webVersion = 0;
+                        FileInputStream is;
+                        BufferedReader reader;
+                        File file = new File(Environment.getExternalStorageDirectory() + "/"
+                                + Utils.downloadDirectory + "/version.txt");
 
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        if (file.exists()) {
+                            try {
+                                is = new FileInputStream(file);
+                                reader = new BufferedReader(new InputStreamReader(is));
+                                String line = reader.readLine();
+                                webVersion = Integer.parseInt(line);
+
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            boolean isFileDeleted = file.delete();
+                            if (isFileDeleted) { Log.e(null, "version.txt deleted");}
                         }
-                        boolean isFileDeleted = file.delete();
-                        if (isFileDeleted) { Log.e(null, "version.txt deleted");}
+                        if (Globals.version < webVersion){
+                            updateAvailable.setText(getString(R.string.updateAvailable, webVersion, MainActivity.Globals.version));
+                        }
                     }
-                    if (Globals.version < webVersion){
-                        updateAvailable.setText(getString(R.string.updateAvailable, webVersion, MainActivity.Globals.version));
-                    }
-                }
-            }, 5000);
+                }, 5000);
+            }
         }
     }
 
@@ -783,6 +798,13 @@ public class MainActivity extends AppCompatActivity
         // Create and show the AlertDialog
         AlertDialog updateDialog = builder.create();
         updateDialog.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,@NonNull String[] permissions,@NonNull int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            checkVersionFromWeb();
+        }
     }
 
     @SuppressWarnings("WeakerAccess")
