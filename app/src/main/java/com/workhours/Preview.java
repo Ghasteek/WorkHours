@@ -35,6 +35,9 @@ public class Preview extends AppCompatActivity {
     //Calendar calendar;
     public static int year;
     public static int month;
+    public static String showMonthYearString, workHoursPlanValueString, workHoursDoneValueString, workHoursMonthlyDifferenceValueString,
+                workHoursToNextMonthValueString, usedHolidayValueString, remainingHolidayValueString, publicHolidaysValueString, overtimeFromLastMonthValueString;
+    public static String yearMonthStr;
 
 
 
@@ -92,7 +95,8 @@ public class Preview extends AppCompatActivity {
         }
         String [] monthArray = getResources().getStringArray(R.array.months);
         int i = month - 1;
-        showMonthYear.setText(getString(R.string.firstRow, monthArray[i], year));
+        showMonthYearString = getString(R.string.firstRow, monthArray[i], year);
+        showMonthYear.setText(showMonthYearString);
         showData(year, month);
 
         changeSelection.setOnClickListener(new View.OnClickListener() {
@@ -144,9 +148,10 @@ public class Preview extends AppCompatActivity {
     public void showData(int year, int month) {
         String [] monthArray = getResources().getStringArray(R.array.months);
         int i = month - 1;
-        showMonthYear.setText(getString(R.string.firstRow, monthArray[i], year));
+        showMonthYearString = getString(R.string.firstRow, monthArray[i], year);
+        showMonthYear.setText(showMonthYearString);
 
-        String yearMonthStr;
+
         if (month <= 9 ) {
             yearMonthStr = year + "0" + month;
         } else { yearMonthStr = year + "" + month;}
@@ -243,12 +248,15 @@ public class Preview extends AppCompatActivity {
         if (pref.contains("defaultShift")) {defaultShiftLengthLoaded = "" + pref.getString("defaultShift", "8:00");}
         int defaultShiftLength = Tools.timeStrToInt(defaultShiftLengthLoaded);
         int workHoursPlan = workDaysInMonthCorrected * defaultShiftLength;
-        workHoursPlanValue.setText(Tools.timeIntToStr(workHoursPlan));                              // setup value of work hours plan to this month
+        workHoursPlanValueString = Tools.timeIntToStr(workHoursPlan);
+        workHoursPlanValue.setText(workHoursPlanValueString);                              // setup value of work hours plan to this month
 
-        workHoursDoneValue.setText(Tools.timeIntToStr(workHoursThisMonth));
+        workHoursDoneValueString = Tools.timeIntToStr(workHoursThisMonth);
+        workHoursDoneValue.setText(workHoursDoneValueString);
 
         int workHoursMonthlyDifference = workHoursThisMonth - workHoursPlan;
-        workHoursMonthlyDifferenceValue.setText(Tools.timeIntToStr(workHoursMonthlyDifference));
+        workHoursMonthlyDifferenceValueString = Tools.timeIntToStr(workHoursMonthlyDifference);
+        workHoursMonthlyDifferenceValue.setText(workHoursMonthlyDifferenceValueString);
 
         // získání string tohoto měsíce YYYYMM
         Calendar cal = Calendar.getInstance();
@@ -257,16 +265,24 @@ public class Preview extends AppCompatActivity {
         String todayYearMonthString = String.valueOf(todayInt).substring(0, 6);
 
         if (yearMonthStr.equals(todayYearMonthString)) {
-            workHoursToNextMonthValue.setText(Tools.timeIntToStr(temp.getInt("overtimeSum", 0)));
-        } else {workHoursToNextMonthValue.setText(Tools.timeIntToStr(overtimeToNextMonth + overtimeSUmFromDb));}
+            workHoursToNextMonthValueString =Tools.timeIntToStr(temp.getInt("overtimeSum", 0));
+            workHoursToNextMonthValue.setText(workHoursToNextMonthValueString);
+        } else {
+            workHoursToNextMonthValueString = Tools.timeIntToStr(overtimeToNextMonth + overtimeSUmFromDb);
+            workHoursToNextMonthValue.setText(workHoursToNextMonthValueString);
+            }
 
-        usedHolidayValue.setText(String.valueOf(usedHoliday));
+        usedHolidayValueString = String.valueOf(usedHoliday);
+        usedHolidayValue.setText(usedHolidayValueString);
 
-        remainingHolidayValue.setText(String.valueOf(temp.getInt("holidaySum", 0)));
+        remainingHolidayValueString = String.valueOf(temp.getInt("holidaySum", 0));
+        remainingHolidayValue.setText(remainingHolidayValueString);
 
-        publicHolidaysValue.setText(String.valueOf(usedPublicHoliday));
+        publicHolidaysValueString = String.valueOf(usedPublicHoliday);
+        publicHolidaysValue.setText(publicHolidaysValueString);
 
-        overtimeFromLastMonthValue.setText(Tools.timeIntToStr(overtimeSUmFromDb));
+        overtimeFromLastMonthValueString = Tools.timeIntToStr(overtimeSUmFromDb);
+        overtimeFromLastMonthValue.setText(overtimeFromLastMonthValueString);
     }
 
     public void exportPdf() {
@@ -278,9 +294,79 @@ public class Preview extends AppCompatActivity {
         PdfDocument.Page page = exportFile.startPage(pageInfo);
         Canvas canvas = page.getCanvas();
         Paint paint = new Paint();
+        paint.setTextSize(15f);
+        paint.setSubpixelText(true);
+        paint.setUnderlineText(true);
+        canvas.drawText(getString(R.string.exportFirstRow, showMonthYearString), 180, 50, paint);
         paint.setTextSize(12f);
-        canvas.drawText("Text první řádek", 80, 50, paint);
-        canvas.drawText("Text DRUHÝ řádek", 80, 200, paint);        // finish the page
+        paint.setSubpixelText(false);
+        paint.setUnderlineText(false);
+
+        String[] projection = {
+                ShiftsContract.ShiftEntry._ID,
+                ShiftsContract.ShiftEntry.COLUMN_DATE,
+                ShiftsContract.ShiftEntry.COLUMN_ARRIVAL,
+                ShiftsContract.ShiftEntry.COLUMN_DEPARTURE,
+                ShiftsContract.ShiftEntry.COLUMN_BREAK_LENGTH,
+                ShiftsContract.ShiftEntry.COLUMN_SHIFT_LENGTH,
+                ShiftsContract.ShiftEntry.COLUMN_HOLIDAY};
+
+        String selection = ShiftsContract.ShiftEntry.COLUMN_DATE + " LIKE ?";
+
+        String[] selectionArgs = new String[] { yearMonthStr + "%"};
+        String sortOrder =  ShiftsContract.ShiftEntry.COLUMN_DATE + " ASC";
+        Cursor cursor = getContentResolver().query(
+                ShiftsContract.ShiftEntry.CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
+                sortOrder);
+
+        canvas.drawText(getString(R.string.exportDate), 80, 90, paint);
+        canvas.drawText(getString(R.string.exportDay), 150, 90, paint);
+        canvas.drawText(getString(R.string.exportArrival), 190, 90, paint);
+        canvas.drawText(getString(R.string.exportDeparture), 240, 90, paint);
+        canvas.drawText(getString(R.string.exportBreak), 290, 90, paint);
+        canvas.drawText(getString(R.string.exportHoursDone), 340, 90, paint);
+        canvas.drawLine(70, 95, 425, 97, paint);
+        int y = 110;
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                int shiftLength = cursor.getInt(cursor.getColumnIndexOrThrow(ShiftsContract.ShiftEntry.COLUMN_SHIFT_LENGTH));
+                int date = cursor.getInt(cursor.getColumnIndexOrThrow(ShiftsContract.ShiftEntry.COLUMN_DATE));
+                int arrival = cursor.getInt(cursor.getColumnIndexOrThrow(ShiftsContract.ShiftEntry.COLUMN_ARRIVAL));
+                int departure = cursor.getInt(cursor.getColumnIndexOrThrow(ShiftsContract.ShiftEntry.COLUMN_DEPARTURE));
+                int breakLength = cursor.getInt(cursor.getColumnIndexOrThrow(ShiftsContract.ShiftEntry.COLUMN_BREAK_LENGTH));
+                int holidayType = cursor.getInt(cursor.getColumnIndexOrThrow(ShiftsContract.ShiftEntry.COLUMN_HOLIDAY));
+
+                String dayStr = Tools.getDayOfWeekStr(date);
+                String arrivalStr = "", departureStr = "", breakStr = "", shiftLengthStr = "";
+
+                if (holidayType == 0) {
+                    arrivalStr = Tools.timeIntToStr(arrival);
+                    departureStr = Tools.timeIntToStr(departure);
+                    breakStr = Tools.timeIntToStr(breakLength);
+                    shiftLengthStr = Tools.timeIntToStr(shiftLength);
+                } else if (holidayType == 1) {
+                    shiftLengthStr = "-" + pref.getString("defaultShift", "8:00");
+                }
+
+                canvas.drawText(Tools.dateIntToStr(date), 80, y, paint);
+                canvas.drawText("  " + dayStr, 150, y, paint);
+                canvas.drawText("  " + arrivalStr, 190, y, paint);
+                canvas.drawText("  " + departureStr, 240, y, paint);
+                canvas.drawText("  " + breakStr, 290, y, paint);
+                canvas.drawText("  " + shiftLengthStr, 340, y, paint);
+
+                y = y + 20;
+            }
+            cursor.close();
+        }
+
+        canvas.drawLine(70, y - 16, 425, y - 14, paint);
+        canvas.drawText("KONEC", 180, y + 4, paint);
+
         exportFile.finishPage(page);
         // draw text on the graphics object of the page
 
