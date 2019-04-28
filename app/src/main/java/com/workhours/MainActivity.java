@@ -89,15 +89,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-                                                                                                        // vypnuti floating action buttonu
-        /*FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -186,8 +177,7 @@ public class MainActivity extends AppCompatActivity
                 + Utils.downloadDirectory + "/version.txt");
         boolean isFileDeleted = file.delete();
         if (isFileDeleted) { Log.e(null, "version.txt deleted");}
-        File file2 = new File(Environment.getExternalStorageDirectory() + "/"
-                + Utils.downloadDirectory + "/workHours.apk");
+        File file2 = new File(Environment.getExternalStorageDirectory() + "/" + Utils.downloadDirectory + "/workHours.apk");
         boolean isFile2Deleted = file2.delete();
         if (isFile2Deleted) { Log.e(null, "workHours.apk deleted");}
 
@@ -579,7 +569,6 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        //noinspection SimplifiableIfStatement
         switch (item.getItemId()){                                                                     // akce po kliknutí na Settings z menu/main
             case R.id.action_settings:
                 Intent settings = new Intent(MainActivity.this, Settings.class);
@@ -588,7 +577,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_dummyData:
                 insertDummyData();
                 showInfo();
-                //displayDatabaseInfo();
                 return true;
             case R.id.action_add:
                 Intent addIntent = new Intent(MainActivity.this, Shift.class);
@@ -628,8 +616,8 @@ public class MainActivity extends AppCompatActivity
                Intent About = new Intent(MainActivity.this, About.class);
                startActivity(About);
                return true;
-            /*case R.id.nav_get:
-                checkVersionFromWeb();
+           /*case R.id.nav_get:
+                openDownloadedFolder();
                return  true;*/
        }
 
@@ -721,7 +709,7 @@ public class MainActivity extends AppCompatActivity
                                 e.printStackTrace();
                             }
                             boolean isFileDeleted = file.delete();
-                            if (isFileDeleted) { Log.e(null, "version.txt deleted");}
+                            if (isFileDeleted) { Log.e(null, "version.txt deleted. Web version: " + webVersion);}
                         }
                         if (Globals.version < webVersion){
                             updateAvailable.setText(getString(R.string.updateAvailable, webVersion, MainActivity.Globals.version));
@@ -732,29 +720,23 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
     public void makeUpdate() {
         new DownloadTask(MainActivity.this, Utils.downloadApkUrl);
-
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //openDownloadedFolder();
-                showUpdateDialog();
-            }
-        }, 10000);
+        showUpdateDialog();
     }
 
-    private void openDownloadedFolder() {
-        File folder = new File("content://" + Environment.getExternalStorageDirectory() + "/Download/");
+    private void startUpdate() {
+        File apkFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download/workHours.apk");
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        String path = folder.getPath();
-        Uri mydir = Uri.parse("content://" + path );
-        intent.setDataAndType(mydir,"file/*");
+        Uri fileUri = android.support.v4.content.FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", apkFile);
+        intent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setDataAndType(fileUri, "application/vnd.android.package-archive");
         startActivity(intent);
+        finish();
+        //todo dodělat kotrolu staženého spouboru - přidání globální isDownloaded proměnné která se nastaví do TRUE pokud se stáhne soubor a pokud se stáhne tak zobrazit manuální spuštění updatu, pokud bude stažený tak provést spuštění
     }
 
     @SuppressWarnings("unused")
@@ -779,7 +761,14 @@ public class MainActivity extends AppCompatActivity
         builder.setMessage(R.string.makeUpdateDialogMsg);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                openDownloadedFolder();
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //openDownloadedFolder();
+                        startUpdate();
+                    }
+                }, 10000);
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -802,8 +791,16 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onRequestPermissionsResult(int requestCode,@NonNull String[] permissions,@NonNull int[] grantResults) {
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            checkVersionFromWeb();
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    checkVersionFromWeb();
+                }
+                return;
+            case 2:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startUpdate();
+                }
         }
     }
 
@@ -816,7 +813,7 @@ public class MainActivity extends AppCompatActivity
         public static int timeOutMinutes;
         public static boolean isEdited;
         public static String theme;
-        public static int version = 102; //TODO S převerzováním upravit verzi i v globals!!!
-        public static String versionStr = "v1.0.2.";
+        public static int version = 103; //TODO S převerzováním upravit verzi i v globals!!!
+        public static String versionStr = "v1.0.3.";
     }
 }

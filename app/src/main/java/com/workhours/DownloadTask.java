@@ -28,6 +28,7 @@ public class DownloadTask {
         this.downloadUrl = downloadUrl;
 
         downloadFileName = downloadUrl.replace(Utils.mainUrl, "");//Create file name by picking download file name from URL
+        downloadFileName = downloadFileName.replace("?raw=true", "");
         Log.e(TAG, downloadFileName);
 
         //Start Downloading Task

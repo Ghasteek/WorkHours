@@ -1,7 +1,9 @@
 package com.workhours;
 
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Canvas;
@@ -350,6 +352,8 @@ public class Preview extends AppCompatActivity {
                     shiftLengthStr = Tools.timeIntToStr(shiftLength);
                 } else if (holidayType == 1) {
                     shiftLengthStr = "-" + pref.getString("defaultShift", "8:00");
+                } else if (holidayType == 2) {
+                    arrivalStr = getString(R.string.publicHoliday);
                 }
 
                 canvas.drawText(Tools.dateIntToStr(date), 80, y, paint);
@@ -364,8 +368,44 @@ public class Preview extends AppCompatActivity {
             cursor.close();
         }
 
-        canvas.drawLine(70, y - 16, 425, y - 14, paint);
-        canvas.drawText("KONEC", 180, y + 4, paint);
+        canvas.drawLine(70, y - 14, 425, y - 12, paint);
+        y = y + 9;
+
+        paint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText(getString(R.string.overtimeFromLastMonth), 80, y , paint);
+        paint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText(overtimeFromLastMonthValueString + " h", 340, y, paint);
+        y = y + 20;
+
+        paint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText(getString(R.string.workHoursPlan), 80, y, paint);
+        paint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText(workHoursPlanValueString + " h", 340, y, paint);
+        y = y + 20;
+
+        paint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText(getString(R.string.workHoursDone), 80, y, paint);
+        paint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText(workHoursDoneValueString + " h", 340, y, paint);
+        y = y + 20;
+
+        paint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText(getString(R.string.workHoursMonthlyDifference), 80, y, paint);
+        paint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText(workHoursMonthlyDifferenceValueString + " h", 340, y, paint);
+        y = y + 20;
+
+        paint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText(getString(R.string.usedHoliday), 80, y, paint);
+        paint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText(usedHolidayValueString + " d", 340, y, paint);
+        y = y + 20;
+
+        paint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText(getString(R.string.workHoursToNextMonth), 80, y, paint);
+        paint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText(workHoursToNextMonthValueString + " h", 340, y, paint);
+
 
         exportFile.finishPage(page);
         // draw text on the graphics object of the page
@@ -373,19 +413,57 @@ public class Preview extends AppCompatActivity {
         String directory_path = Environment.getExternalStorageDirectory().getPath() + "/Download/";
         File file = new File(directory_path);
         if (!file.exists()) {
-            file.mkdirs();
+            boolean isDirectoryMade = file.mkdirs();
+
+            if (isDirectoryMade) { Log.e(null, "Directory made");}
         }
-        String targetPdf = directory_path+"test.pdf";
+        String targetPdf = directory_path + yearMonthStr + ".pdf";
         File filePath = new File(targetPdf);
         try {
             exportFile.writeTo(new FileOutputStream(filePath));
-            Toast.makeText(this, "Done", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.exportSuccessful), Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             Log.e("main", "error "+e.toString());
-            Toast.makeText(this, "Something wrong: " + e.toString(),  Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.exportUnSuccessful), Toast.LENGTH_LONG).show();
         }
         // close the document
         exportFile.close();
+    }
+
+    @SuppressWarnings("unused")
+    private void showUpdateDialog() {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the postivie and negative buttons on the dialog.
+        String savedLayout = "light";
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (pref.contains("layout")) { savedLayout = pref.getString("layout", "light");}
+        if (savedLayout != null) {
+            switch (savedLayout) {
+                case "light":
+                    builder = new AlertDialog.Builder(this);
+                    break;
+                case "dark":
+                    builder = new AlertDialog.Builder(this, R.style.darkDialogTheme);
+                    break;
+                default:
+                    builder = new AlertDialog.Builder(this, R.style.darkDialogTheme);
+            }
+        }
+        builder.setMessage(R.string.exportDialogMsg);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                exportPdf();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+
+            }
+        });
+        // Create and show the AlertDialog
+        AlertDialog updateDialog = builder.create();
+        updateDialog.show();
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -396,7 +474,7 @@ public class Preview extends AppCompatActivity {
                 month = 0;
                 return true;
             case (R.id.action_export):
-                exportPdf();
+                showUpdateDialog();
                 return true;
         }
         return true;

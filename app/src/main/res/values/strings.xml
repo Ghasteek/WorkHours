@@ -66,6 +66,7 @@
     <string name="menuTitleSave">Uložit</string>
     <string name="menuTitleDelete">Smazat</string>
     <string name="menuTitleExportPdf">Export do PDF</string>
+    <string name="menuTitleOthers">Ostatní</string>
 
     <!-- Popisky stranek -->
     <string name="shiftsTableLabel">Měsíční výpis</string>
@@ -90,7 +91,7 @@
     <string name="shutdown">Restartovat aplikaci</string>
 
     <!-- UPDATE  dialog -->
-    <string name="makeUpdateDialogMsg">Nyní se otevře složka, ve které prosím vyhledejte a spusťte soubor workHours.apk. Tím se provede aktualizace na novou verzi.</string>
+    <string name="makeUpdateDialogMsg">Po kliknutí na OK se do 10 sekund spustí update. Kliknutím na Zrušit přerušíte update.</string>
 
     <!-- SPINNER Shift types -->
     <string name="regular_shift">Směna</string>
@@ -129,6 +130,9 @@
     <string name="remainingHoliday">Zbývající dovolená:</string>
     <string name="publicHolidays">Státní svátky:</string>
     <string name="overtimeFromLastMonth">Převod z minulého měsíce:</string>
+    <string name="exportDialogMsg">Exportovat podrobnosti tohoto měsíce do PDF? Soubor bude uložen ve složce "Download"</string>
+    <string name="exportSuccessful">Soubor vyexportován.</string>
+    <string name="exportUnSuccessful">Export selhal.</string>
 
     <!-- THEME popisky -->
     <string name="darkTheme">Tmavé téma:</string>
@@ -147,4 +151,5 @@
     <string name="exportDeparture">Odchod</string>
     <string name="exportBreak">Pauza</string>
     <string name="exportHoursDone">Odpracováno</string>
+
 </resources>

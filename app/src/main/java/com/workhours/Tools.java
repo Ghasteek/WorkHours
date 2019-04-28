@@ -94,7 +94,7 @@ public class Tools extends AppCompatActivity {
         }
         helpCal.setTime(itemDate);
         int dayOfWeek = helpCal.get(Calendar.DAY_OF_WEEK) - 1;
-        return (String.valueOf(daysOfWeek[dayOfWeek]));
+        return (daysOfWeek[dayOfWeek]);
     }
 
     public static String getWorkDaysInMonth (int monthInput, int yearInput) {

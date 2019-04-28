@@ -152,7 +152,7 @@ public class ShiftTable extends AppCompatActivity {
             monthStr = "0" + month;
         } else { monthStr = String.valueOf(month); }
 
-        String[] selectionArgs = new String[] { String.valueOf(year)  + monthStr + "%"};
+        String[] selectionArgs = new String[] { year  + "" + monthStr + "%"};
         String sortOrder =  ShiftsContract.ShiftEntry.COLUMN_DATE + " ASC";
         Cursor cursor = getContentResolver().query(
                 ShiftsContract.ShiftEntry.CONTENT_URI,
@@ -168,12 +168,11 @@ public class ShiftTable extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case (android.R.id.home):
-                onBackPressed();
-                year = 0;
-                month = 0;
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            year = 0;
+            month = 0;
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

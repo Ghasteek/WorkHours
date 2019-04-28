@@ -25,7 +25,6 @@ import com.workhours.data.ShiftsContract;
 import java.util.Calendar;
 import java.util.Date;
 
-@SuppressWarnings("WeakerAccess")
 public class Shift extends AppCompatActivity {
     EditText date;
     EditText arriveTime;
@@ -286,7 +285,7 @@ public class Shift extends AppCompatActivity {
                 ShiftsContract.ShiftEntry.COLUMN_DATE};
 
         String selection = ShiftsContract.ShiftEntry.COLUMN_DATE + "=?";
-        String selectionArgs[] = {""+Tools.dateStrToInt(dateHELP)};
+        String[] selectionArgs = {"" + Tools.dateStrToInt(dateHELP)};
         Cursor cursor = getContentResolver().query(
                 ShiftsContract.ShiftEntry.CONTENT_URI,
                 projection,

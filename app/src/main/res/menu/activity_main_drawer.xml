@@ -17,34 +17,26 @@
             android:id="@+id/nav_shiftTable"
             android:icon="@android:drawable/ic_menu_my_calendar"
             android:title="@string/action_shiftsTable" />
-        <item
-            android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/action_settings"
-            app:showAsAction="never" />
-        <item
-            android:id="@+id/nav_about"
-            android:icon="@android:drawable/ic_dialog_info"
-            android:title="@string/action_about"
-            app:showAsAction="never" />
         <!--<item
             android:id="@+id/nav_get"
             android:icon="@drawable/ic_menu_manage"
-            android:title="check"
+            android:title="update"
             app:showAsAction="never" />-->
     </group>
 
-    <!--<item android:title="Communicate">
+    <item android:title="@string/menuTitleOthers">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/action_settings"
+                app:showAsAction="never" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nav_about"
+                android:icon="@android:drawable/ic_dialog_info"
+                android:title="@string/action_about"
+                app:showAsAction="never" />
         </menu>
-    </item> -->
+    </item>
 
 </menu>
