@@ -1,6 +1,7 @@
 package com.workhours;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
@@ -57,7 +58,8 @@ public class MainActivity extends AppCompatActivity
     private Calendar calendar;
     private ImageButton showTimePickerIn, showTimePickerOut, editTodayButton;
     private EditText todayBreakInput;
-    private TextView updateAvailable;
+    @SuppressLint("StaticFieldLeak")
+    public static TextView updateAvailable, manualUpdate;
 
 
     @Override
@@ -146,6 +148,7 @@ public class MainActivity extends AppCompatActivity
         todayBreakInput = findViewById(R.id.todayBreakInputId);
         todayBreak = findViewById(R.id.todayBreakId);
         updateAvailable = findViewById(R.id.updateAvailableId);
+        manualUpdate = findViewById(R.id.manualUpdateId);
         //textView = findViewById(R.id.textViewId);
 
         View hView =  navigationView.getHeaderView(0);
@@ -155,7 +158,14 @@ public class MainActivity extends AppCompatActivity
         updateAvailable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                makeUpdate();
+                showUpdateDialog();
+            }
+        });
+
+        manualUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startUpdate();
             }
         });
 
@@ -701,7 +711,9 @@ public class MainActivity extends AppCompatActivity
                                 is = new FileInputStream(file);
                                 reader = new BufferedReader(new InputStreamReader(is));
                                 String line = reader.readLine();
-                                webVersion = Integer.parseInt(line);
+                                if (line != null) {
+                                    webVersion = Integer.parseInt(line);
+                                }
 
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
@@ -709,21 +721,20 @@ public class MainActivity extends AppCompatActivity
                                 e.printStackTrace();
                             }
                             boolean isFileDeleted = file.delete();
-                            if (isFileDeleted) { Log.e(null, "version.txt deleted. Web version: " + webVersion);}
+                            if (isFileDeleted) {
+                                Log.e(null, "version.txt deleted. Web version: " + webVersion);
+                            }
                         }
-                        if (Globals.version < webVersion){
-                            updateAvailable.setText(getString(R.string.updateAvailable, webVersion, MainActivity.Globals.version));
+                        if (Globals.version < webVersion) {
+                            updateAvailable.setText(getString(R.string.updateAvailable, webVersion));
                         }
+
                     }
                 }, 5000);
             }
         }
     }
 
-    public void makeUpdate() {
-        new DownloadTask(MainActivity.this, Utils.downloadApkUrl);
-        showUpdateDialog();
-    }
 
     private void startUpdate() {
         File apkFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download/workHours.apk");
@@ -736,7 +747,6 @@ public class MainActivity extends AppCompatActivity
         intent.setDataAndType(fileUri, "application/vnd.android.package-archive");
         startActivity(intent);
         finish();
-        //todo dodělat kotrolu staženého spouboru - přidání globální isDownloaded proměnné která se nastaví do TRUE pokud se stáhne soubor a pokud se stáhne tak zobrazit manuální spuštění updatu, pokud bude stažený tak provést spuštění
     }
 
     @SuppressWarnings("unused")
@@ -761,12 +771,14 @@ public class MainActivity extends AppCompatActivity
         builder.setMessage(R.string.makeUpdateDialogMsg);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                new DownloadTask(MainActivity.this, Utils.downloadApkUrl);
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        //openDownloadedFolder();
-                        startUpdate();
+                        if (Globals.isDownloaded) {
+                            startUpdate();
+                        }
                     }
                 }, 10000);
             }
@@ -779,7 +791,10 @@ public class MainActivity extends AppCompatActivity
                     File file2 = new File(Environment.getExternalStorageDirectory() + "/"
                             + Utils.downloadDirectory + "/workHours.apk");
                     boolean isFile2Deleted = file2.delete();
-                    if (isFile2Deleted) { Log.e(null, "workHours.apk deleted");}
+                    if (isFile2Deleted) {
+                        MainActivity.manualUpdate.setVisibility(View.INVISIBLE);
+                        Log.e(null, "workHours.apk deleted");
+                    }
                     dialog.dismiss();
                 }
             }
@@ -813,7 +828,8 @@ public class MainActivity extends AppCompatActivity
         public static int timeOutMinutes;
         public static boolean isEdited;
         public static String theme;
-        public static int version = 103; //TODO S převerzováním upravit verzi i v globals!!!
-        public static String versionStr = "v1.0.3.";
+        public static int version = 104; //TODO S převerzováním upravit verzi i v globals!!!
+        public static String versionStr = "v1.0.4.";
+        public static boolean isDownloaded;
     }
 }

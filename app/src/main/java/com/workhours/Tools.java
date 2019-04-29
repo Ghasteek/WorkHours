@@ -97,6 +97,22 @@ public class Tools extends AppCompatActivity {
         return (daysOfWeek[dayOfWeek]);
     }
 
+    public static int getMonthMax(String yyyyMMInput){
+        Calendar helpCal = Calendar.getInstance();
+        yyyyMMInput = yyyyMMInput + "01";
+        SimpleDateFormat originalFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+        Date inputYearMonth = helpCal.getTime();
+        try {
+            inputYearMonth = originalFormat.parse(yyyyMMInput);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        helpCal.setTime(inputYearMonth);
+
+        return (helpCal.getActualMaximum(Calendar.DAY_OF_MONTH));
+
+    }
+
     public static String getWorkDaysInMonth (int monthInput, int yearInput) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         String startDateInt = "01-" + monthInput + "-" + yearInput;

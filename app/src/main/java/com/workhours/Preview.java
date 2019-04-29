@@ -296,13 +296,16 @@ public class Preview extends AppCompatActivity {
         PdfDocument.Page page = exportFile.startPage(pageInfo);
         Canvas canvas = page.getCanvas();
         Paint paint = new Paint();
-        paint.setTextSize(15f);
+        paint.setTextSize(12f);
         paint.setSubpixelText(true);
         paint.setUnderlineText(true);
         canvas.drawText(getString(R.string.exportFirstRow, showMonthYearString), 180, 50, paint);
-        paint.setTextSize(12f);
+        paint.setTextSize(10f);
         paint.setSubpixelText(false);
         paint.setUnderlineText(false);
+
+// nastavení vzdálenosti řádků
+        int diff = 17;
 
         String[] projection = {
                 ShiftsContract.ShiftEntry._ID,
@@ -354,6 +357,23 @@ public class Preview extends AppCompatActivity {
                     shiftLengthStr = "-" + pref.getString("defaultShift", "8:00");
                 } else if (holidayType == 2) {
                     arrivalStr = getString(R.string.publicHoliday);
+                } else if (holidayType == 3) {
+                    arrivalStr = getString(R.string.vacation);
+                }
+
+                int day = Integer.parseInt(String.valueOf(date).substring(6));
+
+                if (dayStr.equals("Po") && day == 3) {
+                    canvas.drawText(Tools.dateIntToStr(date-2), 80, y, paint);
+                    canvas.drawText("  " + "So", 150, y, paint);
+                    y = y + diff;
+                    canvas.drawText(Tools.dateIntToStr(date-1), 80, y, paint);
+                    canvas.drawText("  " + "Ne", 150, y, paint);
+                    y = y + diff;
+                } else if (dayStr.equals("Po") && day == 2){
+                    canvas.drawText(Tools.dateIntToStr(date-1), 80, y, paint);
+                    canvas.drawText("  " + "Ne", 150, y, paint);
+                    y = y + diff;
                 }
 
                 canvas.drawText(Tools.dateIntToStr(date), 80, y, paint);
@@ -361,9 +381,26 @@ public class Preview extends AppCompatActivity {
                 canvas.drawText("  " + arrivalStr, 190, y, paint);
                 canvas.drawText("  " + departureStr, 240, y, paint);
                 canvas.drawText("  " + breakStr, 290, y, paint);
-                canvas.drawText("  " + shiftLengthStr, 340, y, paint);
+                paint.setTextAlign(Paint.Align.RIGHT);
+                canvas.drawText("  " + shiftLengthStr, 380, y, paint);
+                paint.setTextAlign(Paint.Align.LEFT);
 
-                y = y + 20;
+                y = y + diff;
+
+
+                if (dayStr.equals("Pá") && (day + 2) <= Tools.getMonthMax(yearMonthStr) ) {
+                    canvas.drawText(Tools.dateIntToStr(date+1), 80, y, paint);
+                    canvas.drawText("  " + "So", 150, y, paint);
+                    y = y + diff;
+                    canvas.drawText(Tools.dateIntToStr(date+2), 80, y, paint);
+                    canvas.drawText("  " + "Ne", 150, y, paint);
+                    y = y + diff;
+                } else if (dayStr.equals("Pá") && (day + 1) == Tools.getMonthMax(yearMonthStr)){
+                    canvas.drawText(Tools.dateIntToStr(date+1), 80, y, paint);
+                    canvas.drawText("  " + "So", 150, y, paint);
+                    y = y + diff;
+                }
+
             }
             cursor.close();
         }
@@ -375,31 +412,31 @@ public class Preview extends AppCompatActivity {
         canvas.drawText(getString(R.string.overtimeFromLastMonth), 80, y , paint);
         paint.setTextAlign(Paint.Align.RIGHT);
         canvas.drawText(overtimeFromLastMonthValueString + " h", 340, y, paint);
-        y = y + 20;
+        y = y + diff;
 
         paint.setTextAlign(Paint.Align.LEFT);
         canvas.drawText(getString(R.string.workHoursPlan), 80, y, paint);
         paint.setTextAlign(Paint.Align.RIGHT);
         canvas.drawText(workHoursPlanValueString + " h", 340, y, paint);
-        y = y + 20;
+        y = y + diff;
 
         paint.setTextAlign(Paint.Align.LEFT);
         canvas.drawText(getString(R.string.workHoursDone), 80, y, paint);
         paint.setTextAlign(Paint.Align.RIGHT);
         canvas.drawText(workHoursDoneValueString + " h", 340, y, paint);
-        y = y + 20;
+        y = y + diff;
 
         paint.setTextAlign(Paint.Align.LEFT);
         canvas.drawText(getString(R.string.workHoursMonthlyDifference), 80, y, paint);
         paint.setTextAlign(Paint.Align.RIGHT);
         canvas.drawText(workHoursMonthlyDifferenceValueString + " h", 340, y, paint);
-        y = y + 20;
+        y = y + diff;
 
         paint.setTextAlign(Paint.Align.LEFT);
         canvas.drawText(getString(R.string.usedHoliday), 80, y, paint);
         paint.setTextAlign(Paint.Align.RIGHT);
         canvas.drawText(usedHolidayValueString + " d", 340, y, paint);
-        y = y + 20;
+        y = y + diff;
 
         paint.setTextAlign(Paint.Align.LEFT);
         canvas.drawText(getString(R.string.workHoursToNextMonth), 80, y, paint);

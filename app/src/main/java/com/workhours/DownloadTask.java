@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -55,6 +56,13 @@ public class DownloadTask {
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(TAG, "Download Failed with Exception - " + e.getLocalizedMessage());
+            }
+
+            if (downloadFileName.equals("workHours.apk")) {
+                MainActivity.Globals.isDownloaded = true;
+                MainActivity.manualUpdate.setVisibility(View.VISIBLE);
+            } else if (downloadFileName.equals("version.txt")){
+                MainActivity.updateAvailable.setVisibility(View.VISIBLE);
             }
             super.onPostExecute(result);
         }

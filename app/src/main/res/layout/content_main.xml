@@ -211,7 +211,21 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"
             android:layout_marginTop="3dp"
+            android:visibility="invisible"
             android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/manualUpdateId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/updateAvailableId"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/colorAccent"
+            android:text="@string/manualUpdateLabel"
+            android:visibility="invisible"
+            android:textSize="18sp"/>
+
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

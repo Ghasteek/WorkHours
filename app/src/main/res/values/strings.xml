@@ -91,7 +91,7 @@
     <string name="shutdown">Restartovat aplikaci</string>
 
     <!-- UPDATE  dialog -->
-    <string name="makeUpdateDialogMsg">Po kliknutí na OK se do 10 sekund spustí update. Kliknutím na Zrušit přerušíte update.</string>
+    <string name="makeUpdateDialogMsg">Po kliknutí na OK se do 10 sekund spustí update. Kliknutím na Zrušit přerušíte update. Pokud se update nespustí sám, prosím vyčkejte na zobrazení \"Provést update ručně\" a klikněte na něj. Stáhne se instalační balíček, takže doporučujeme spouštět update jen na WI-FI</string>
 
     <!-- SPINNER Shift types -->
     <string name="regular_shift">Směna</string>
@@ -119,7 +119,8 @@
     <string name="departureTooltip">Zadejte čas odchodu z práce</string>
     <string name="todayShiftLabel">Dnešní směna:</string>
     <string name="arrivalNeeded">První musíte zadat čas příchodu</string>
-    <string name="updateAvailable">Je dostupná nová verze v.%1$d / %2$d</string>
+    <string name="updateAvailable">Je dostupná nová verze v.%1$d</string>
+    <string name="manualUpdateLabel">Provést update ručně</string>
 
     <!-- PREVIEW popisky -->
     <string name="workHoursPlan">Předpis práce:</string>
@@ -130,7 +131,7 @@
     <string name="remainingHoliday">Zbývající dovolená:</string>
     <string name="publicHolidays">Státní svátky:</string>
     <string name="overtimeFromLastMonth">Převod z minulého měsíce:</string>
-    <string name="exportDialogMsg">Exportovat podrobnosti tohoto měsíce do PDF? Soubor bude uložen ve složce "Download"</string>
+    <string name="exportDialogMsg">Exportovat podrobnosti tohoto měsíce do PDF? Soubor bude uložen ve složce \"Download\"</string>
     <string name="exportSuccessful">Soubor vyexportován.</string>
     <string name="exportUnSuccessful">Export selhal.</string>
 
