@@ -44,6 +44,8 @@ public class ShiftCursorAdapter extends CursorAdapter {
 
         switch (holidayType) {
             case ShiftsContract.ShiftEntry.HOLIDAY_SHIFT:
+                shiftBar.setVisibility(View.VISIBLE);
+                overtimeView.setVisibility(View.VISIBLE);
                 shiftLengthView.setText(Tools.timeIntToStr(shiftLength));
                 //holidayTypeView.setText(String.valueOf(holidayType));
 
