@@ -199,7 +199,7 @@ public class Preview extends AppCompatActivity {
                 ShiftsContract.ShiftEntry.COLUMN_HOLIDAY};
 
 
-        String selection = ShiftsContract.ShiftEntry.COLUMN_HOLIDAY + " BETWEEN ? AND ? AND " + ShiftsContract.ShiftEntry.COLUMN_DATE + " LIKE ?";
+        String selection = ShiftsContract.ShiftEntry.COLUMN_HOLIDAY + " LIKE ? AND " + ShiftsContract.ShiftEntry.COLUMN_DATE + " LIKE ?";
 
         String[] projectionHolidays = {
                 ShiftsContract.ShiftEntry.COLUMN_HOLIDAY};
@@ -207,7 +207,7 @@ public class Preview extends AppCompatActivity {
         String selectionHolidays = ShiftsContract.ShiftEntry.COLUMN_HOLIDAY + " BETWEEN ? AND ? AND " + ShiftsContract.ShiftEntry.COLUMN_DATE + " LIKE ?";
 
 
-        String[] selectionArgs = new String[] { String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_SHIFT), String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_COMPENSATION), yearMonthStr + "%" };
+        String[] selectionArgs = new String[] { String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_SHIFT), yearMonthStr + "%" };
 
         String[] selectionArgsHolidays = new String[] { String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_PUBLIC), String.valueOf(ShiftsContract.ShiftEntry.HOLIDAY_VACATION), yearMonthStr + "%" };
 
@@ -267,7 +267,7 @@ public class Preview extends AppCompatActivity {
         String todayYearMonthString = String.valueOf(todayInt).substring(0, 6);
 
         if (yearMonthStr.equals(todayYearMonthString)) {
-            workHoursToNextMonthValueString =Tools.timeIntToStr(temp.getInt("overtimeSum", 0));
+            workHoursToNextMonthValueString = Tools.timeIntToStr(overtimeToNextMonth + overtimeSUmFromDb + temp.getInt("overtimeSum", 0));
             workHoursToNextMonthValue.setText(workHoursToNextMonthValueString);
         } else {
             workHoursToNextMonthValueString = Tools.timeIntToStr(overtimeToNextMonth + overtimeSUmFromDb);
